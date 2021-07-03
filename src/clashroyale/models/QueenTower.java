@@ -1,6 +1,14 @@
 package clashroyale.models;
 
+/**
+ * The type Queen tower.
+ */
 public class QueenTower extends Tower{
+    /**
+     * Instantiates a new Queen tower.
+     *
+     * @param level the level
+     */
     public QueenTower(int level) {
         super(7.5, 0.8);
         if (level == 1) {

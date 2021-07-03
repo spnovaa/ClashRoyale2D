@@ -1,6 +1,14 @@
 package clashroyale.models;
 
+/**
+ * The type King tower.
+ */
 public class KingTower extends Tower {
+    /**
+     * Instantiates a new King tower.
+     *
+     * @param level the level
+     */
     public KingTower(int level) {
         super(7, 1);
         if (level == 1) {

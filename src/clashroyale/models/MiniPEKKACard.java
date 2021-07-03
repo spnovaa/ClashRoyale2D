@@ -1,6 +1,14 @@
 package clashroyale.models;
 
+/**
+ * The type Mini pekka card.
+ */
 public class MiniPEKKACard extends TroopsCard{
+    /**
+     * Instantiates a new Mini pekka card.
+     *
+     * @param level the level
+     */
     public MiniPEKKACard(int level) {
         super(4,  1, 1.8, Target.GROUND, Range.MELEE, Speed.FAST,false );
         if (level == 1) {

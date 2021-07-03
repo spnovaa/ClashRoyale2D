@@ -1,6 +1,14 @@
 package clashroyale.models;
 
+/**
+ * The type Giant.
+ */
 public class Giant extends TroopsCard {
+    /**
+     * Instantiates a new Giant.
+     *
+     * @param level the level
+     */
     public Giant(int level) {
         super(5, 1, 1.5, Target.BUILDINGS, Range.MELEE, Speed.SLOW, false);
         if (level == 1) {

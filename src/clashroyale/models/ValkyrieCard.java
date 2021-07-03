@@ -1,6 +1,14 @@
 package clashroyale.models;
 
+/**
+ * The type Valkyrie card.
+ */
 public class ValkyrieCard extends TroopsCard{
+    /**
+     * Instantiates a new Valkyrie card.
+     *
+     * @param level the level
+     */
     public ValkyrieCard(int level) {
         super(4,  1, 1.5, Target.GROUND, Range.MELEE, Speed.MEDIUM,true );
         if (level == 1) {

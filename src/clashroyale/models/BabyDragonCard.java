@@ -1,7 +1,16 @@
 package clashroyale.models;
 
+/**
+ * The type Baby dragon card.
+ */
 public class BabyDragonCard extends TroopsCard {
     private int range;
+
+    /**
+     * Instantiates a new Baby dragon card.
+     *
+     * @param level the level
+     */
     public BabyDragonCard(int level) {
         super(4,  1, 1.8, Target.AIR_GROUND, Range.RAMGED, Speed.FAST,true );
         range=3;

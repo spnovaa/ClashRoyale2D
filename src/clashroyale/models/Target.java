@@ -1,5 +1,23 @@
 package clashroyale.models;
 
+/**
+ * The enum Target.
+ */
 public enum Target {
-    AIR,GROUND,AIR_GROUND,BUILDINGS
+    /**
+     * Air target.
+     */
+    AIR,
+    /**
+     * Ground target.
+     */
+    GROUND,
+    /**
+     * Air ground target.
+     */
+    AIR_GROUND,
+    /**
+     * Buildings target.
+     */
+    BUILDINGS
 }

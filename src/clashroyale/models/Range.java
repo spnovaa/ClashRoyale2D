@@ -1,5 +1,15 @@
 package clashroyale.models;
 
+/**
+ * The enum Range.
+ */
 public enum Range {
-    MELEE,RAMGED
+    /**
+     * Melee range.
+     */
+    MELEE,
+    /**
+     * Ramged range.
+     */
+    RAMGED
 }

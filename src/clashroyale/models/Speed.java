@@ -1,5 +1,19 @@
 package clashroyale.models;
 
+/**
+ * The enum Speed.
+ */
 public enum Speed {
-    SLOW,MEDIUM,FAST
+    /**
+     * Slow speed.
+     */
+    SLOW,
+    /**
+     * Medium speed.
+     */
+    MEDIUM,
+    /**
+     * Fast speed.
+     */
+    FAST
 }

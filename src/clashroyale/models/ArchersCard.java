@@ -1,7 +1,16 @@
 package clashroyale.models;
 
+/**
+ * The type Archers card.
+ */
 public class ArchersCard extends TroopsCard{
     private int range;
+
+    /**
+     * Instantiates a new Archers card.
+     *
+     * @param level the level
+     */
     public ArchersCard(int level) {
         super(3,  2, 1.2, Target.AIR_GROUND, Range.RAMGED, Speed.MEDIUM,false );
         range=5;

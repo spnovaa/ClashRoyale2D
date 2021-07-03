@@ -1,7 +1,15 @@
 package clashroyale.models;
 
+/**
+ * The type Barbarians card.
+ */
 public class BarbariansCard extends TroopsCard{
 
+    /**
+     * Instantiates a new Barbarians card.
+     *
+     * @param level the level
+     */
     public BarbariansCard(int level) {
         super(5,  4, 1.5, Target.GROUND, Range.MELEE, Speed.MEDIUM,false );
         if (level == 1) {

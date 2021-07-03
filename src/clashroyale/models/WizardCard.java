@@ -1,7 +1,16 @@
 package clashroyale.models;
 
+/**
+ * The type Wizard card.
+ */
 public class WizardCard extends TroopsCard{
   private   int range;
+
+    /**
+     * Instantiates a new Wizard card.
+     *
+     * @param level the level
+     */
     public WizardCard(int level) {
         super(5,  1, 1.7, Target.AIR_GROUND, Range.RAMGED, Speed.MEDIUM,true );
         range=5;

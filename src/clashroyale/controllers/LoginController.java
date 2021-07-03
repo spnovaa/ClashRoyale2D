@@ -1,6 +1,6 @@
 package clashroyale.controllers;
 
-import java.awt.TextField;
+import javafx.scene.control.TextField;
 
 import clashroyale.models.LoginModel;
 import javafx.fxml.FXML;

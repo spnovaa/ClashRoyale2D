@@ -1,9 +1,11 @@
-package clashroyale.models;
+package clashroyale.models.buildingsmodels;
+
+import clashroyale.models.spellsmodels.Spells;
 
 /**
  * The type Fireball.
  */
-public class Fireball extends Spells{
+public class Fireball extends Spells {
     private double areaDamage;
 
     /**
@@ -13,7 +15,9 @@ public class Fireball extends Spells{
      */
     public Fireball(int level) {
         super(4, 2.5);
-        if (level==1){areaDamage=325;}
+        if (level == 1) {
+            areaDamage = 325;
+        }
         else if (level==2){areaDamage=357;}
         else if (level==3){areaDamage=393;}
         else if (level==4){areaDamage=432;}

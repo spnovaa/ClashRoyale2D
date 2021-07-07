@@ -1,16 +1,20 @@
-package clashroyale.models;
+package clashroyale.models.cardsmodels;
+
+import clashroyale.models.enums.Range;
+import clashroyale.models.enums.Speed;
+import clashroyale.models.enums.Target;
 
 /**
  * The type Mini pekka card.
  */
-public class MiniPEKKACard extends TroopsCard{
+public class MiniPEKKACard extends TroopsCard {
     /**
      * Instantiates a new Mini pekka card.
      *
      * @param level the level
      */
     public MiniPEKKACard(int level) {
-        super(4,  1, 1.8, Target.GROUND, Range.MELEE, Speed.FAST,false );
+        super(4, 1, 1.8, Target.GROUND, Range.MELEE, Speed.FAST, false);
         if (level == 1) {
             super.setDamage(325);
             super.setHp(600);

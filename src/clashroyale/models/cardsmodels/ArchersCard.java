@@ -1,9 +1,13 @@
-package clashroyale.models;
+package clashroyale.models.cardsmodels;
+
+import clashroyale.models.enums.Range;
+import clashroyale.models.enums.Speed;
+import clashroyale.models.enums.Target;
 
 /**
  * The type Archers card.
  */
-public class ArchersCard extends TroopsCard{
+public class ArchersCard extends TroopsCard {
     private int range;
 
     /**
@@ -12,8 +16,8 @@ public class ArchersCard extends TroopsCard{
      * @param level the level
      */
     public ArchersCard(int level) {
-        super(3,  2, 1.2, Target.AIR_GROUND, Range.RAMGED, Speed.MEDIUM,false );
-        range=5;
+        super(3, 2, 1.2, Target.AIR_GROUND, Range.RAMGED, Speed.MEDIUM, false);
+        range = 5;
         if (level == 1) {
             super.setDamage(33);
             super.setHp(125);

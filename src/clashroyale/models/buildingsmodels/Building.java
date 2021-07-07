@@ -1,12 +1,16 @@
-package clashroyale.models;
+package clashroyale.models.buildingsmodels;
 
-public class Building extends Card{
+import clashroyale.models.enums.Target;
+import clashroyale.models.cardsmodels.Card;
+
+public class Building extends Card {
     private int hp;
     private int damage;
     private double hitSpeed;
     private Target target;
     private double range;
     private int lifeTime;
+
     /**
      * Instantiates a new Card.
      *

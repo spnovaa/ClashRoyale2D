@@ -1,9 +1,11 @@
-package clashroyale.models;
+package clashroyale.models.buildingsmodels;
+
+import clashroyale.models.enums.Target;
 
 /**
  * The type Cannon.
  */
-public class Cannon extends Building{
+public class Cannon extends Building {
 
     /**
      * Instantiates a new Cannon.

@@ -1,9 +1,13 @@
-package clashroyale.models;
+package clashroyale.models.cardsmodels;
+
+import clashroyale.models.enums.Range;
+import clashroyale.models.enums.Speed;
+import clashroyale.models.enums.Target;
 
 /**
  * The type Barbarians card.
  */
-public class BarbariansCard extends TroopsCard{
+public class BarbariansCard extends TroopsCard {
 
     /**
      * Instantiates a new Barbarians card.

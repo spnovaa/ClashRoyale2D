@@ -1,4 +1,4 @@
-package clashroyale.models;
+package clashroyale.models.towersmodels;
 
 /**
  * The type Queen tower.

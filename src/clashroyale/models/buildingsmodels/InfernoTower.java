@@ -1,10 +1,13 @@
-package clashroyale.models;
+package clashroyale.models.buildingsmodels;
+
+import clashroyale.models.enums.Target;
 
 /**
  * The type Inferno tower.
  */
-public class InfernoTower extends Building{
+public class InfernoTower extends Building {
     private int maxDamage;
+
     /**
      * Instantiates a new Inferno tower.
      *

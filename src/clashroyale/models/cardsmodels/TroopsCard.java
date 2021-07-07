@@ -1,9 +1,13 @@
-package clashroyale.models;
+package clashroyale.models.cardsmodels;
+
+import clashroyale.models.enums.Range;
+import clashroyale.models.enums.Speed;
+import clashroyale.models.enums.Target;
 
 /**
  * The type Troops card.
  */
-public class TroopsCard extends Card{
+public class TroopsCard extends Card {
     private int hp;
     private int damage;
     private Range rangeType;

@@ -1,4 +1,4 @@
-package clashroyale.models;
+package clashroyale.models.enums;
 
 /**
  * The enum Range.

@@ -1,9 +1,11 @@
-package clashroyale.models;
+package clashroyale.models.spellsmodels;
+
+import clashroyale.models.spellsmodels.Spells;
 
 /**
  * The type Arrows.
  */
-public class Arrows extends Spells{
+public class Arrows extends Spells {
     private double areaDamage;
 
     /**
@@ -13,7 +15,9 @@ public class Arrows extends Spells{
      */
     public Arrows(int level) {
         super(3, 4);
-        if (level==1){areaDamage=144;}
+        if (level == 1) {
+            areaDamage = 144;
+        }
         else if (level==2){areaDamage=156;}
         else if (level==3){areaDamage=174;}
         else if (level==4){areaDamage=189;}

@@ -1,9 +1,11 @@
-package clashroyale.models;
+package clashroyale.models.spellsmodels;
+
+import clashroyale.models.cardsmodels.Card;
 
 /**
  * The type Spells.
  */
-public class Spells extends Card{
+public class Spells extends Card {
     private double radious;
 
     /**

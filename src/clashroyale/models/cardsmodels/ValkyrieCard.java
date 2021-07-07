@@ -1,9 +1,13 @@
-package clashroyale.models;
+package clashroyale.models.cardsmodels;
+
+import clashroyale.models.enums.Range;
+import clashroyale.models.enums.Speed;
+import clashroyale.models.enums.Target;
 
 /**
  * The type Valkyrie card.
  */
-public class ValkyrieCard extends TroopsCard{
+public class ValkyrieCard extends TroopsCard {
     /**
      * Instantiates a new Valkyrie card.
      *

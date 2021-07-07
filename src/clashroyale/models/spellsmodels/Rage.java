@@ -1,9 +1,9 @@
-package clashroyale.models;
+package clashroyale.models.spellsmodels;
 
 /**
  * The type Rage.
  */
-public class Rage extends Spells{
+public class Rage extends Spells {
     private double duration;
 
     /**
@@ -13,7 +13,9 @@ public class Rage extends Spells{
      */
     public Rage(int level) {
         super(3, 5);
-        if (level==1){duration=6;}
+        if (level == 1) {
+            duration = 6;
+        }
         else if (level==2){duration=6.5;}
         else if (level==3){duration=7;}
        else if (level==4){duration=7.5;}

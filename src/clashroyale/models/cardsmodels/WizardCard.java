@@ -1,10 +1,14 @@
-package clashroyale.models;
+package clashroyale.models.cardsmodels;
+
+import clashroyale.models.enums.Range;
+import clashroyale.models.enums.Speed;
+import clashroyale.models.enums.Target;
 
 /**
  * The type Wizard card.
  */
-public class WizardCard extends TroopsCard{
-  private   int range;
+public class WizardCard extends TroopsCard {
+    private int range;
 
     /**
      * Instantiates a new Wizard card.

@@ -1,6 +1,6 @@
-package clashroyale.models.buildingsmodels;
+package clashroyale.models.cardsmodels.buildings;
 
-import clashroyale.models.spellsmodels.Spells;
+import clashroyale.models.cardsmodels.spells.Spells;
 
 /**
  * The type Fireball.

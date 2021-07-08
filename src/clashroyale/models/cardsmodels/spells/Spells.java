@@ -1,6 +1,6 @@
-package clashroyale.models.spellsmodels;
+package clashroyale.models.cardsmodels.spells;
 
-import clashroyale.models.cardsmodels.Card;
+import clashroyale.models.cardsmodels.troops.Card;
 
 /**
  * The type Spells.

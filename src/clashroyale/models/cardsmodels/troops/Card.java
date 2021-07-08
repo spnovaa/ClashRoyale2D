@@ -1,4 +1,4 @@
-package clashroyale.models.cardsmodels;
+package clashroyale.models.cardsmodels.troops;
 
 /**
  * The type Card.

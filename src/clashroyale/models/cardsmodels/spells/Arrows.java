@@ -1,6 +1,4 @@
-package clashroyale.models.spellsmodels;
-
-import clashroyale.models.spellsmodels.Spells;
+package clashroyale.models.cardsmodels.spells;
 
 /**
  * The type Arrows.

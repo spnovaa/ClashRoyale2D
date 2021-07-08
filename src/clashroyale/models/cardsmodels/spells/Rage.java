@@ -1,4 +1,4 @@
-package clashroyale.models.spellsmodels;
+package clashroyale.models.cardsmodels.spells;
 
 /**
  * The type Rage.

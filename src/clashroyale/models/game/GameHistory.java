@@ -1,6 +1,6 @@
 package clashroyale.models.game;
 
-import clashroyale.models.cardsmodels.Card;
+import clashroyale.models.cardsmodels.troops.Card;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package clashroyale.models.buildingsmodels;
+package clashroyale.models.cardsmodels.buildings;
 
 import clashroyale.models.enums.Target;
 

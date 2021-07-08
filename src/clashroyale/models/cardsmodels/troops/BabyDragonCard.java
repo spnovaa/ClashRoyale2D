@@ -1,4 +1,4 @@
-package clashroyale.models.cardsmodels;
+package clashroyale.models.cardsmodels.troops;
 
 import clashroyale.models.enums.Range;
 import clashroyale.models.enums.Speed;

@@ -18,7 +18,7 @@ public class Player {
         this.username = username;
         this.userProfile = new Profile(0, 0, null);
         this.gameHistory = null;
-        this.battleDeck = new BattleDeck();
+        this.battleDeck = new BattleDeck(0);
     }
 
     /**

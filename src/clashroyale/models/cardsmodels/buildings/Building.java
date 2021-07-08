@@ -1,7 +1,7 @@
-package clashroyale.models.buildingsmodels;
+package clashroyale.models.cardsmodels.buildings;
 
 import clashroyale.models.enums.Target;
-import clashroyale.models.cardsmodels.Card;
+import clashroyale.models.cardsmodels.troops.Card;
 
 public class Building extends Card {
     private int hp;

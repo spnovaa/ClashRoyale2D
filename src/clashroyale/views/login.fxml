@@ -46,7 +46,8 @@
          </padding>
       </TextField>
       <Button layoutY="455.0" mnemonicParsing="false" onAction="#loginProcess" prefHeight="45.0" prefWidth="310.0"
-              style="-fx-background-color: #8E24AA; -fx-background-radius: 0;" text="Login" textFill="WHITE">
+              style="-fx-background-color: #8E24AA; -fx-background-radius: 0; -fx-border-width: 1; -fx-border-color: rgba(46, 229, 157, 0.4); -fx-border-style: solid;"
+              text="Login" textFill="WHITE">
          <font>
             <Font name="Open Sans Regular" size="18.0"/>
          </font>

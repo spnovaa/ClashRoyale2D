@@ -15,9 +15,11 @@ public class Main extends Application {
         Parent root = loader.load();
         Scene scene = new Scene(root, 310, 500);
         primaryStage.setResizable(false);
+        primaryStage.setTitle("CLash Royale 2D");
         scene.getStylesheets().add("style.css");
         primaryStage.setScene(scene);
         primaryStage.show();
+
     }
 
 

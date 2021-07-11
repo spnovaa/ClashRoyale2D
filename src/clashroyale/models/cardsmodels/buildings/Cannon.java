@@ -13,7 +13,7 @@ public class Cannon extends Building {
      * @param level the level
      */
     public Cannon(int level) {
-        super(6, 5.5, 30, 0.8, Target.GROUND);
+        super(3, 5.5, 30, 0.8, Target.GROUND);
         if (level == 1) {
             super.setDamage(60);
             super.setHp(380);

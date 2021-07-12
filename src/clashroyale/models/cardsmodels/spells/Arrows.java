@@ -12,7 +12,7 @@ public class Arrows extends Spells {
      * @param level the level
      */
     public Arrows(int level) {
-        super(3, 4);
+        super(3, 4,"ClashRoyale2D\\src\\clashroyale\\resources\\thumbCards\\thumbarrows.png");
         if (level == 1) {
             areaDamage = 144;
         }

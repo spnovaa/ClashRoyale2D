@@ -16,7 +16,7 @@ public class BabyDragonCard extends TroopsCard {
      * @param level the level
      */
     public BabyDragonCard(int level) {
-        super(4,  1, 1.8, Target.AIR_GROUND, Range.RAMGED, Speed.FAST,true );
+        super(4,  1, 1.8, Target.AIR_GROUND, Range.RAMGED, Speed.FAST,true,"ClashRoyale2D\\src\\clashroyale\\resources\\thumbCards\\thumbbaby-dragon.png" );
         range=3;
         if (level == 1) {
             super.setDamage(100);

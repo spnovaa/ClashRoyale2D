@@ -14,8 +14,8 @@ public class Spells extends Card {
      * @param cost    the cost
      * @param radious the radious
      */
-    public Spells(int cost, double radious) {
-        super(cost);
+    public Spells(int cost, double radious,String thumbImage) {
+        super(cost,thumbImage);
         this.radious = radious ;
     }
 }

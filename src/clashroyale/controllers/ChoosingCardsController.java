@@ -16,6 +16,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.control.ListCell;
 import javafx.util.Callback;
 
+/**
+ * The type Choosing cards controller.
+ */
 public class ChoosingCardsController {
 
     @FXML
@@ -28,6 +31,11 @@ public class ChoosingCardsController {
             FXCollections.observableArrayList();
     private ObservableList<Card> chosenCards;
 
+    /**
+     * Get chosen card observable list.
+     *
+     * @return the observable list
+     */
     public ObservableList<Card> getChosenCard (){
         //get from data base
         //if it is empty return null
@@ -35,13 +43,21 @@ public class ChoosingCardsController {
     }
 
 
-
-
-    //return player's level
+    /**
+     * Get level int.
+     *
+     * @return the int
+     */
+//return player's level
     public int getLevel(){
 
         return 0;}
 
+    /**
+     * Gets selection card from cards.
+     *
+     * @param event the event
+     */
     @FXML
     void getSelectionCardFromCards(MouseEvent event) {
         Card card =(Card) (chosenCardsListView.getSelectionModel().getSelectedItem());
@@ -51,6 +67,12 @@ public class ChoosingCardsController {
         }
 
     }
+
+    /**
+     * Gets chosen card selection.
+     *
+     * @param event the event
+     */
     @FXML
     void getChosenCardSelection(MouseEvent event) {
         Card card =(Card) (chosenCardsListView.getSelectionModel().getSelectedItem());
@@ -59,6 +81,9 @@ public class ChoosingCardsController {
 
     }
 
+    /**
+     * Initialize.
+     */
     public void initialize(){
         chosenCards=getChosenCard();
         cards.add(new ArchersCard(getLevel()));

@@ -44,6 +44,18 @@ public class ChoosingCardsController {
 
     @FXML
     void getSelectionCardFromCards(MouseEvent event) {
+        Card card =(Card) (chosenCardsListView.getSelectionModel().getSelectedItem());
+        if (chosenCards.size() <8){
+            chosenCards.add(card);
+            chosenCardsListView.setItems(chosenCards);
+        }
+
+    }
+    @FXML
+    void getChosenCardSelection(MouseEvent event) {
+        Card card =(Card) (chosenCardsListView.getSelectionModel().getSelectedItem());
+        chosenCards.remove(card);
+        chosenCardsListView.setItems(chosenCards);
 
     }
 

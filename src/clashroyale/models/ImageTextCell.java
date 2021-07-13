@@ -19,7 +19,7 @@ public class ImageTextCell extends ListCell<Card> {
         vbox.setAlignment(Pos.CENTER); // center VBox contents horizontally
 
         thumbImageView.setPreserveRatio(true);
-        thumbImageView.setFitHeight(100.0); // thumbnail 100 points tall
+        thumbImageView.setFitHeight(30.0); // thumbnail 30 points tall
         vbox.getChildren().add(thumbImageView); // attach to Vbox
 
         label.setWrapText(true); // wrap if text too wide to fit in label
@@ -33,7 +33,7 @@ public class ImageTextCell extends ListCell<Card> {
     @Override
     protected void updateItem(Card item, boolean empty) {
         // required to ensure that cell displays properly
-        super.updateItem(item, empty)
+        super.updateItem(item, empty);
 
         if (empty || item == null) {
             setGraphic(null); // don't display anything

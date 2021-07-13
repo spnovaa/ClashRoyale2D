@@ -28,8 +28,8 @@ public class TroopsCard extends Card {
      * @param speed        the speed
      * @param isAreaSplash the is area splash
      */
-    public TroopsCard(int cost,int count,double hitSpeed,Target target,Range rangeType,Speed speed,boolean isAreaSplash,String thumbImage) {
-        super(cost,thumbImage);
+    public TroopsCard(String title,int cost,int count,double hitSpeed,Target target,Range rangeType,Speed speed,boolean isAreaSplash,String thumbImage) {
+        super(title,cost,thumbImage);
         this.count = count;
         this.hitSpeed = hitSpeed;
         this.rangeType=rangeType;

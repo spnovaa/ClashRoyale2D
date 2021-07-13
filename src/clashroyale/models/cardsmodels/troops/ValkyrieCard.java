@@ -14,7 +14,7 @@ public class ValkyrieCard extends TroopsCard {
      * @param level the level
      */
     public ValkyrieCard(int level) {
-        super(4,  1, 1.5, Target.GROUND, Range.MELEE, Speed.MEDIUM,true,"ClashRoyale2D\\src\\clashroyale\\resources\\thumbCards\\thumbvalkyrie.png" );
+        super("valkyrie",4,  1, 1.5, Target.GROUND, Range.MELEE, Speed.MEDIUM,true,"ClashRoyale2D\\src\\clashroyale\\resources\\thumbCards\\thumbvalkyrie.png" );
         if (level == 1) {
             super.setDamage(120);
             super.setHp(880);

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" id="pane" maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="310.0"
+            xmlns="http://javafx.com/javafx/16" fx:controller="clashroyale.controllers.MenuController">
+   <children>
+      <ImageView fitHeight="155.0" fitWidth="155.0" opacity="0.85" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/ui/ui_tex.png"/>
+         </image>
+         <effect>
+            <ColorAdjust brightness="-0.19" contrast="0.45" hue="0.05" saturation="1.0"/>
+         </effect>
+      </ImageView>
+      <ImageView fitHeight="155.0" fitWidth="155.0" layoutX="155.0" opacity="0.85" pickOnBounds="true"
+                 preserveRatio="true">
+         <image>
+            <Image url="@../resources/ui/ui_tex.png"/>
+         </image>
+         <effect>
+            <ColorAdjust brightness="-0.19" contrast="0.45" hue="0.05" saturation="1.0"/>
+         </effect>
+      </ImageView>
+      <ImageView fitHeight="155.0" fitWidth="155.0" layoutY="155.0" opacity="0.85" pickOnBounds="true"
+                 preserveRatio="true">
+         <image>
+            <Image url="@../resources/ui/ui_tex.png"/>
+         </image>
+         <effect>
+            <ColorAdjust brightness="-0.19" contrast="0.45" hue="0.05" saturation="1.0"/>
+         </effect>
+      </ImageView>
+      <ImageView fitHeight="155.0" fitWidth="155.0" layoutX="155.0" layoutY="155.0" opacity="0.85" pickOnBounds="true"
+                 preserveRatio="true">
+         <image>
+            <Image url="@../resources/ui/ui_tex.png"/>
+         </image>
+         <effect>
+            <ColorAdjust brightness="-0.19" contrast="0.45" hue="0.05" saturation="1.0"/>
+         </effect>
+      </ImageView>
+      <ImageView fitHeight="155.0" fitWidth="155.0" layoutY="310.0" opacity="0.85" pickOnBounds="true"
+                 preserveRatio="true">
+         <image>
+            <Image url="@../resources/ui/ui_tex.png"/>
+         </image>
+         <effect>
+            <ColorAdjust brightness="-0.19" contrast="0.45" hue="0.05" saturation="1.0"/>
+         </effect>
+      </ImageView>
+      <ImageView fitHeight="155.0" fitWidth="155.0" layoutX="155.0" layoutY="310.0" opacity="0.85" pickOnBounds="true"
+                 preserveRatio="true">
+         <image>
+            <Image url="@../resources/ui/ui_tex.png"/>
+         </image>
+         <effect>
+            <ColorAdjust brightness="-0.19" contrast="0.45" hue="0.05" saturation="1.0"/>
+         </effect>
+      </ImageView>
+      <Rectangle arcHeight="5.0" fill="#344356" height="76.0" layoutY="424.0" stroke="#2a394c" strokeType="INSIDE"
+                 width="103.0"/>
+      <Rectangle arcHeight="5.0" fill="#344356" height="76.0" layoutX="207.0" layoutY="424.0" stroke="#2a394c"
+                 strokeType="INSIDE" width="103.0"/>
+      <Rectangle arcHeight="5.0" fill="#344356" height="76.0" layoutX="103.0" layoutY="424.0" stroke="#2a394c"
+                 strokeType="INSIDE" width="104.0"/>
+      <ImageView fitHeight="76.0" fitWidth="76.0" layoutX="14.0" layoutY="407.0" pickOnBounds="true"
+                 preserveRatio="true">
+         <image>
+            <Image url="@../resources/ui/cards.png"/>
+         </image>
+      </ImageView>
+      <ImageView fitHeight="76.0" fitWidth="76.0" layoutX="117.0" layoutY="407.0" pickOnBounds="true"
+                 preserveRatio="true">
+         <image>
+            <Image url="@../resources/ui/swords.png"/>
+         </image>
+      </ImageView>
+      <Label layoutX="127.0" layoutY="478.0" text="Battle" textFill="#ebe7e7">
+         <font>
+            <Font name="Supercell-Magic Regular" size="12.0"/>
+         </font>
+      </Label>
+      <Label layoutX="26.0" layoutY="478.0" text="Cards" textFill="#ebe7e7">
+         <font>
+            <Font name="Supercell-Magic Regular" size="12.0"/>
+         </font>
+      </Label>
+      <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="62.0" layoutY="77.0" pickOnBounds="true"
+                 preserveRatio="true">
+         <image>
+            <Image url="@../resources/ui/arena.png"/>
+         </image>
+         <effect>
+            <DropShadow blurType="GAUSSIAN" height="30.0" offsetX="-10.0" offsetY="10.0" radius="22.0" spread="0.23"
+                        width="60.0"/>
+         </effect>
+      </ImageView>
+      <ImageView fitHeight="110.0" fitWidth="110.0" layoutX="115.0" layoutY="122.0" pickOnBounds="true"
+                 preserveRatio="true">
+         <image>
+            <Image url="@../resources/ui/sword_badge.png"/>
+         </image>
+         <effect>
+            <DropShadow height="121.57" offsetY="5.0" radius="61.7675" spread="0.3" width="127.5">
+               <color>
+                  <Color red="1.0" green="0.7450980544090271" blue="0.1568627506494522"/>
+               </color>
+            </DropShadow>
+         </effect>
+      </ImageView>
+      <Rectangle arcHeight="25.0" arcWidth="25.0" fill="#ffb928" height="75.0" layoutX="27.0" layoutY="304.0"
+                 strokeDashOffset="100.0" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeMiterLimit="100.0"
+                 width="125.0">
+         <stroke>
+            <RadialGradient centerX="0.48888888888888893" centerY="0.5" cycleMethod="REFLECT" focusAngle="90.0"
+                            focusDistance="-0.023255813953488413" radius="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color/>
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0"/>
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+         </stroke>
+         <effect>
+            <InnerShadow blurType="ONE_PASS_BOX" height="28.75" offsetY="-2.0" radius="12.9375" width="25.0">
+               <color>
+                  <Color red="0.03921568766236305" green="0.3529411852359772" blue="0.6666666865348816"/>
+               </color>
+            </InnerShadow>
+         </effect>
+      </Rectangle>
+      <Label layoutX="43.0" layoutY="321.0" text="Battle" textFill="WHITE" wrapText="true">
+         <font>
+            <Font name="Supercell-Magic Regular" size="20.0"/>
+         </font>
+         <effect>
+            <DropShadow blurType="TWO_PASS_BOX" height="5.0" offsetX="1.0" offsetY="2.0" radius="1.0" width="1.0">
+               <color>
+                  <Color red="0.34117648005485535" green="0.2078431397676468"/>
+               </color>
+            </DropShadow>
+         </effect>
+      </Label>
+      <Rectangle arcHeight="25.0" arcWidth="25.0" fill="#4baaff" height="75.0" layoutX="156.0" layoutY="304.0"
+                 strokeDashOffset="100.0" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeMiterLimit="100.0"
+                 width="125.0">
+         <stroke>
+            <RadialGradient centerX="0.5" centerY="0.5" focusAngle="90.0" focusDistance="-0.023255813953488413"
+                            radius="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color/>
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0"/>
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+         </stroke>
+         <effect>
+            <InnerShadow blurType="ONE_PASS_BOX" height="32.5" offsetY="-2.0" radius="13.875" width="25.0">
+               <color>
+                  <Color red="0.03921568766236305" green="0.3529411852359772" blue="0.6666666865348816"/>
+               </color>
+            </InnerShadow>
+         </effect>
+      </Rectangle>
+      <Label layoutX="200.0" layoutY="321.0" text="1V1" textFill="WHITE" wrapText="true">
+         <font>
+            <Font name="Supercell-Magic Regular" size="20.0"/>
+         </font>
+         <effect>
+            <DropShadow height="0.0" offsetX="1.0" offsetY="2.0" radius="0.0" width="2.0">
+               <color>
+                  <Color green="0.19607843458652496" blue="0.3921568691730499"/>
+               </color>
+            </DropShadow>
+         </effect>
+      </Label>
+   </children>
+</AnchorPane>

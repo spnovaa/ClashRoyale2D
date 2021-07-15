@@ -15,7 +15,7 @@ public class BarbariansCard extends TroopsCard {
      * @param level the level
      */
     public BarbariansCard(int level) {
-        super(5,  4, 1.5, Target.GROUND, Range.MELEE, Speed.MEDIUM,false );
+        super("barbarian",5,  4, 1.5, Target.GROUND, Range.MELEE, Speed.MEDIUM,false,"ClashRoyale2D\\src\\clashroyale\\resources\\thumbCards\\thumbbarbarians.png" );
         if (level == 1) {
             super.setDamage(75);
             super.setHp(300);

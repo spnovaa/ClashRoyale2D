@@ -14,7 +14,7 @@ public class MiniPEKKACard extends TroopsCard {
      * @param level the level
      */
     public MiniPEKKACard(int level) {
-        super(4, 1, 1.8, Target.GROUND, Range.MELEE, Speed.FAST, false);
+        super("miniPEKKA",4, 1, 1.8, Target.GROUND, Range.MELEE, Speed.FAST, false,"ClashRoyale2D\\src\\clashroyale\\resources\\thumbCards\\thumbmini-pekka.png");
         if (level == 1) {
             super.setDamage(325);
             super.setHp(600);

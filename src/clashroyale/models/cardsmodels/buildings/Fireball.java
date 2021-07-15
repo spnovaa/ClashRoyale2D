@@ -14,7 +14,7 @@ public class Fireball extends Spells {
      * @param level the level
      */
     public Fireball(int level) {
-        super(4, 2.5);
+        super("fireball",4, 2.5,"ClashRoyale2D\\src\\clashroyale\\resources\\thumbCards\\thumbfireball.png");
         if (level == 1) {
             areaDamage = 325;
         }

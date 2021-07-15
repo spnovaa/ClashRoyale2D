@@ -14,7 +14,7 @@ public class GiantCard extends TroopsCard {
      * @param level the level
      */
     public GiantCard(int level) {
-        super(5, 1, 1.5, Target.BUILDINGS, Range.MELEE, Speed.SLOW, false);
+        super("giant",5, 1, 1.5, Target.BUILDINGS, Range.MELEE, Speed.SLOW, false,"ClashRoyale2D\\src\\clashroyale\\resources\\thumbCards\\thumbgiant.png");
         if (level == 1) {
             super.setDamage(126);
             super.setHp(2000);

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="310.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clashroyale.controllers.ChoosingCardsController">
+   <children>
+      <ImageView fitHeight="500.0" fitWidth="310.0" opacity="0.68" pickOnBounds="true">
+         <image>
+            <Image url="@../resources/ChoosingCards.jpg" />
+         </image></ImageView>
+      <ListView fx:id="cardsListView" disable="true" layoutX="14.0" layoutY="14.0" onMouseClicked="#getSelectionCardFromCards" prefHeight="400.0" prefWidth="130.0">
+         <padding>
+            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+         </padding>
+      </ListView>
+      <ListView fx:id="chosenCardsListView" disable="true" layoutX="166.0" layoutY="14.0" onMouseClicked="#getChosenCardSelection" prefHeight="400.0" prefWidth="130.0">
+         <padding>
+            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+         </padding>
+      </ListView>
+      <ImageView fitHeight="70.0" fitWidth="130.0" layoutX="196.0" layoutY="416.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/cardsq.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="70.0" fitWidth="130.0" layoutX="52.0" layoutY="416.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/cards.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

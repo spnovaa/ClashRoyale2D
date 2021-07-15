@@ -16,8 +16,8 @@ public class Building extends Card {
      *
      * @param cost the cost
      */
-    public Building(int cost,double range,int lifeTime,double hitSpeed,Target target) {
-        super(cost);
+    public Building(String title,int cost,double range,int lifeTime,double hitSpeed,Target target,String thumbImage) {
+        super(title,cost,thumbImage);
         this.hitSpeed = hitSpeed;
         this.range=range;
         this.target=target;

@@ -14,7 +14,7 @@ public class InfernoTower extends Building {
      * @param level the level
      */
     public InfernoTower(int level) {
-        super(5, 6, 40, 0.4, Target.AIR_GROUND);
+        super("infernoTower",5, 6, 40, 0.4, Target.AIR_GROUND,"ClashRoyale2D\\src\\clashroyale\\resources\\thumbCards\\thumbinferno-tower.png");
         if (level == 1) {
             super.setDamage(20);
             super.setHp(800);

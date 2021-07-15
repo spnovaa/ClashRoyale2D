@@ -12,7 +12,7 @@ public class Rage extends Spells {
      * @param level the level
      */
     public Rage(int level) {
-        super(3, 5);
+        super("rage",3, 5,"ClashRoyale2D\\src\\clashroyale\\resources\\thumbCards\\thumbrage.png");
         if (level == 1) {
             duration = 6;
         }

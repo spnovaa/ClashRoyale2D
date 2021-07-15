@@ -1,5 +1,6 @@
 package clashroyale.controllers;
 
+import clashroyale.models.UserModel;
 import clashroyale.views.AppAlerts;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +12,6 @@ import clashroyale.models.LoginModel;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,12 +22,18 @@ public class LoginController extends Application {
     private Scene menu;
     private MenuController menuController;
     private Stage stage;
+    public UserModel userModel;
+    private LoginModel loginModel;
+
+    public LoginController() {
+        loginModel = new LoginModel();
+        userModel = new UserModel();
+    }
 
     @FXML
     private TextField username;
     @FXML
     private TextField password;
-    private LoginModel loginModel = new LoginModel();
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -40,7 +46,7 @@ public class LoginController extends Application {
     @FXML
     public void loginProcess() {
         //tries to login the given username and password first and shows the appropriate massage.
-        int loginResult = loginModel.tryToLogin(username.getText(), password.getText());
+        int loginResult = loginModel.tryToLogin(username.getText(), password.getText(), userModel);
 
         if (loginResult == 0) {
             int regResult = loginModel.tryToRegister(username.getText(), password.getText());
@@ -79,8 +85,8 @@ public class LoginController extends Application {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/Menu.fxml"));
                 Parent menuRoot = loader.load();
                 menuController = loader.getController();
+                menuController.setUserModel(userModel);
                 menuController.start(stage);
-
                 menu = new Scene(menuRoot);
 
             } catch (Exception exception) {

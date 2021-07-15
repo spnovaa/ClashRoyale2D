@@ -1,11 +1,13 @@
 package clashroyale.models.game;
 
+import clashroyale.models.UserModel;
+
 /**
  * The type Playground.
  */
 public class Playground {
-    private Player player1;
-    private Player player2;
+    private UserModel player1;
+    private UserModel player2;
     private int rightBorderStatus;
     private int leftBorderStatus;
     private LeftTime leftTime;
@@ -16,7 +18,7 @@ public class Playground {
      * @param player1 the player 1
      * @param player2 the player 2
      */
-    public Playground(Player player1, Player player2) {
+    public Playground(UserModel player1, UserModel player2) {
         this.player1 = player1;
         this.player2 = player2;
         rightBorderStatus = 0;
@@ -29,7 +31,7 @@ public class Playground {
      *
      * @return the player 1
      */
-    public Player getPlayer1() {
+    public UserModel getPlayer1() {
         return player1;
     }
 
@@ -38,7 +40,7 @@ public class Playground {
      *
      * @param player1 the player 1
      */
-    public void setPlayer1(Player player1) {
+    public void setPlayer1(UserModel player1) {
         this.player1 = player1;
     }
 
@@ -47,7 +49,7 @@ public class Playground {
      *
      * @return the player 2
      */
-    public Player getPlayer2() {
+    public UserModel getPlayer2() {
         return player2;
     }
 
@@ -56,7 +58,7 @@ public class Playground {
      *
      * @param player2 the player 2
      */
-    public void setPlayer2(Player player2) {
+    public void setPlayer2(UserModel player2) {
         this.player2 = player2;
     }
 

@@ -16,7 +16,7 @@ public class ArchersCard extends TroopsCard {
      * @param level the level
      */
     public ArchersCard(int level) {
-        super("archer",3, 2, 1.2, Target.AIR_GROUND, Range.RAMGED, Speed.MEDIUM, false,"ClashRoyale2D\\src\\clashroyale\\resources\\thumbCards\\thumbarchers.png");
+        super("archer", 3, 2, 1.2, Target.AIR_GROUND, Range.RAMGED, Speed.MEDIUM, false, "/thumbCards/thumbarchers.png");
         range = 5;
         if (level == 1) {
             super.setDamage(33);

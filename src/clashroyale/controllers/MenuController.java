@@ -1,11 +1,81 @@
 package clashroyale.controllers;
 
+import clashroyale.models.UserModel;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ * The type Menu controller.
+ */
 public class MenuController extends Application {
+    private Scene botSelectionScene;
+    private Scene battleDeckScene;
+    private ChoosingRobotController choosingRobotController;
+    private ChoosingCardsController choosingCardsController;
+    private Stage stage;
+    private UserModel userModel;
+
     @Override
     public void start(Stage stage) throws Exception {
+        this.stage = stage;
+    }
 
+    /**
+     * Go to bot selection.
+     */
+    public void goToBotSelection() {
+        if (botSelectionScene == null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/ChoosingRobot.fxml"));
+                Parent choosingBotRoot = loader.load();
+                choosingRobotController = loader.getController();
+                choosingRobotController.setUserModel(userModel);
+                choosingRobotController.start(stage);
+
+                botSelectionScene = new Scene(choosingBotRoot);
+
+            } catch (Exception exception) {
+                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, exception);
+                exception.printStackTrace();
+            }
+        }
+        stage.setScene(botSelectionScene);
+    }
+
+    /**
+     * Go to battle deck.
+     */
+    public void goToBattleDeck() {
+        if (battleDeckScene == null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/ChoosingCards.fxml"));
+                Parent choosingBotRoot = loader.load();
+                choosingCardsController = loader.getController();
+                choosingCardsController.setUserModel(userModel);
+                choosingCardsController.start(stage);
+
+                battleDeckScene = new Scene(choosingBotRoot);
+
+            } catch (Exception exception) {
+                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, exception);
+                exception.printStackTrace();
+            }
+        }
+        stage.setScene(battleDeckScene);
+    }
+
+    /**
+     * Sets user model.
+     *
+     * @param userModel the user model
+     */
+    public void setUserModel(UserModel userModel) {
+        this.userModel = userModel;
     }
 }

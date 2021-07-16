@@ -47,11 +47,7 @@ public class GameView extends Group {
 
             }
         } else if (title.equals("infernoTower")) {
-            if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
-
-            } else {
-
-            }
+            image = new Image(getClass().getResourceAsStream("../resources/chr/inferno/building_inferno_tower_sprite_2.png"));
 
         } else if (title.equals("arrows")) {
             if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
@@ -73,45 +69,47 @@ public class GameView extends Group {
             }
         } else if (title.equals("archer")) {
             if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
-                image = new Image(getClass().getResourceAsStream("../resources/chr/archer/chr_archer_sprite_177.png"));
+                image = new Image(getClass().getResourceAsStream("../resources/chr/archer/chr_archer_sprite_000.png"));
             } else {
-
+                image = new Image(getClass().getResourceAsStream("../resources/chr/archer/chr_archer_sprite_069.png"));
             }
         } else if (title.equals("babyDragon")) {
             if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
+                image = new Image(getClass().getResourceAsStream("../resources/chr/babydragon/chr_baby_dragon_sprite_003.png"));
 
             } else {
-
+                image = new Image(getClass().getResourceAsStream("../resources/chr/babydragon/chr_baby_dragon_sprite_111.png"));
             }
         } else if (title.equals("barbarian")) {
             if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
-
+                image = new Image(getClass().getResourceAsStream("../resources/chr/barbar/chr_barbarian_sprite_0252.png"));
             } else {
-
+                image = new Image(getClass().getResourceAsStream("../resources/chr/barbar/chr_barbarian_sprite_0251.png"));
             }
         } else if (title.equals("giant")) {
             if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
+                image = new Image(getClass().getResourceAsStream("../resources/chr/giant/chr_giant_sprite_000.png"));
 
             } else {
-
+                image = new Image(getClass().getResourceAsStream("../resources/chr/giant/chr_giant_sprite_134.png"));
             }
         } else if (title.equals("miniPEKKA")) {
             if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
-
+                image = new Image(getClass().getResourceAsStream("../resources/chr/mimipekka/chr_mini_pekka_sprite_002.png"));
             } else {
-
+                image = new Image(getClass().getResourceAsStream("../resources/chr/mimipekka/chr_mini_pekka_sprite_104.png"));
             }
         } else if (title.equals("valkyrie")) {
             if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
-
+                image = new Image(getClass().getResourceAsStream("../resources/chr/valkyrie/chr_valkyrie_sprite_004.png"));
             } else {
-
+                image = new Image(getClass().getResourceAsStream("../resources/chr/valkyrie/chr_valkyrie_sprite_060.png"));
             }
         } else if (title.equals("wizard")) {
             if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
-
+                image = new Image(getClass().getResourceAsStream("../resources/chr/wizard/chr_wizard_sprite_004.png"));
             } else {
-
+                image = new Image(getClass().getResourceAsStream("../resources/chr/wizard/chr_wizard_sprite_070.png"));
             }
         }
 

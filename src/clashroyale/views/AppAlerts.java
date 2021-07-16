@@ -5,7 +5,7 @@ import javafx.scene.control.Alert;
 /**
  * The type App alerts.
  */
-public class شAppAlerts {
+public class AppAlerts {
     private String title;
     private String headerText;
     private String contentText;

@@ -1,7 +1,7 @@
 package clashroyale.models.game;
 
 import clashroyale.models.cardsmodels.buildings.Cannon;
-import clashroyale.models.cardsmodels.buildings.Fireball;
+import clashroyale.models.cardsmodels.spells.Fireball;
 import clashroyale.models.cardsmodels.buildings.InfernoTower;
 import clashroyale.models.cardsmodels.troops.*;
 import clashroyale.models.cardsmodels.spells.Arrows;

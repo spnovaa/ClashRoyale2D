@@ -1,7 +1,7 @@
 package clashroyale.models;
 
 import clashroyale.models.cardsmodels.buildings.Cannon;
-import clashroyale.models.cardsmodels.buildings.Fireball;
+import clashroyale.models.cardsmodels.spells.Fireball;
 import clashroyale.models.cardsmodels.buildings.InfernoTower;
 import clashroyale.models.cardsmodels.spells.Arrows;
 import clashroyale.models.cardsmodels.spells.Rage;
@@ -27,6 +27,7 @@ public class UserModel {
     private ArrayList<Card> chosenCardsList;
     private GameHistory gameHistory;
     private BattleDeck battleDeck;
+    private Card chosenToDeployCard;
 
     /**
      * Instantiates a new User model.
@@ -224,5 +225,13 @@ public class UserModel {
      */
     public void setCards(ArrayList<Card> cards) {
         this.cards = cards;
+    }
+
+    public Card getChosenToDeployCard() {
+        return chosenToDeployCard;
+    }
+
+    public void setChosenToDeployCard(Card chosenToDeployCard) {
+        this.chosenToDeployCard = chosenToDeployCard;
     }
 }

@@ -34,5 +34,7 @@ public class WizardCard extends TroopsCard {
             super.setDamage(189);
             super.setHp(496);
         }
+        super.setPositionX(0);
+        super.setPositionY(0);
     }
 }

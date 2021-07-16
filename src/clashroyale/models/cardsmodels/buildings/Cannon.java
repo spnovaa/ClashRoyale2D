@@ -32,5 +32,7 @@ public class Cannon extends Building {
             super.setDamage(87);
             super.setHp(554);
         }
+        super.setPositionX(0);
+        super.setPositionY(0);
     }
 }

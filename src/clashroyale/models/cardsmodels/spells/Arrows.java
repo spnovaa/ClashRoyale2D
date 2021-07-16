@@ -15,10 +15,16 @@ public class Arrows extends Spells {
         super("arrows", 3, 4, "/thumbCards/thumbarrows.png");
         if (level == 1) {
             areaDamage = 144;
+        } else if (level == 2) {
+            areaDamage = 156;
+        } else if (level == 3) {
+            areaDamage = 174;
+        } else if (level == 4) {
+            areaDamage = 189;
+        } else if (level == 5) {
+            areaDamage = 210;
         }
-        else if (level==2){areaDamage=156;}
-        else if (level==3){areaDamage=174;}
-        else if (level==4){areaDamage=189;}
-        else if (level==5){areaDamage=210;}
+        super.setPositionX(0);
+        super.setPositionY(0);
     }
 }

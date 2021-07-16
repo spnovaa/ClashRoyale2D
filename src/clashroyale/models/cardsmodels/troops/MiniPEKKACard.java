@@ -31,5 +31,7 @@ public class MiniPEKKACard extends TroopsCard {
             super.setDamage(474);
             super.setHp(876);
         }
+        super.setPositionX(0);
+        super.setPositionY(0);
     }
 }

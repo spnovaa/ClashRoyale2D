@@ -31,5 +31,7 @@ public class GiantCard extends TroopsCard {
             super.setDamage(183);
             super.setHp(2920);
         }
+        super.setPositionX(0);
+        super.setPositionY(0);
     }
 }

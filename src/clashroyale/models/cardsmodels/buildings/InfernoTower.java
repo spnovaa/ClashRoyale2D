@@ -26,15 +26,17 @@ public class InfernoTower extends Building {
         } else if (level == 3) {
             super.setDamage(24);
             super.setHp(968);
-            maxDamage=484;
+            maxDamage = 484;
         } else if (level == 4) {
             super.setDamage(26);
             super.setHp(1064);
-            maxDamage=532;
+            maxDamage = 532;
         } else if (level == 5) {
             super.setDamage(29);
             super.setHp(1168);
             maxDamage = 584;
         }
+        super.setPositionX(0);
+        super.setPositionY(0);
     }
 }

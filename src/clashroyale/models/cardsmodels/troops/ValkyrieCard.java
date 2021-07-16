@@ -31,5 +31,7 @@ public class ValkyrieCard extends TroopsCard {
             super.setDamage(175);
             super.setHp(1248);
         }
+        super.setPositionX(0);
+        super.setPositionY(0);
     }
 }

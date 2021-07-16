@@ -16,8 +16,10 @@ import java.util.logging.Logger;
 public class MenuController extends Application {
     private Scene botSelectionScene;
     private Scene battleDeckScene;
+    private Scene arenaScene;
     private ChoosingRobotController choosingRobotController;
     private ChoosingCardsController choosingCardsController;
+    private GameController gameController;
     private Stage stage;
     private UserModel userModel;
 
@@ -68,6 +70,26 @@ public class MenuController extends Application {
             }
         }
         stage.setScene(battleDeckScene);
+    }
+
+    public void goToArena() {
+        if (arenaScene == null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/Arena.fxml"));
+                Parent goToArenaRoot = loader.load();
+                gameController = loader.getController();
+                gameController.setUserModel(userModel);
+                stage.setHeight(630);
+                stage.setWidth(375);
+                gameController.start(stage);
+                arenaScene = new Scene(goToArenaRoot);
+                gameController.setGameScene(arenaScene);
+            } catch (Exception exception) {
+                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, exception);
+                exception.printStackTrace();
+            }
+        }
+        stage.setScene(arenaScene);
     }
 
     /**

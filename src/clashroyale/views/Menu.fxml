@@ -82,8 +82,8 @@
                 <Image url="@../resources/ui/cards.png"/>
             </image>
         </ImageView>
-        <ImageView fitHeight="76.0" fitWidth="76.0" layoutX="117.0" layoutY="407.0" pickOnBounds="true"
-                   preserveRatio="true">
+        <ImageView fitHeight="76.0" fitWidth="76.0" layoutX="117.0" layoutY="407.0" onMouseClicked="#goToArena"
+                   pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../resources/ui/swords.png"/>
             </image>

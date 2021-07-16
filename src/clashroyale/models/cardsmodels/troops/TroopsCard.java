@@ -16,6 +16,8 @@ public class TroopsCard extends Card {
     private Target target;
     private boolean isAreaSplash;
     private int count;
+    private float positionX;
+    private float positionY;
 
     /**
      * Instantiates a new Troops card.
@@ -56,4 +58,75 @@ public class TroopsCard extends Card {
         this.damage = damage;
     }
 
+    public int getHp() {
+        return hp;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public Range getRangeType() {
+        return rangeType;
+    }
+
+    public void setRangeType(Range rangeType) {
+        this.rangeType = rangeType;
+    }
+
+    public double getHitSpeed() {
+        return hitSpeed;
+    }
+
+    public void setHitSpeed(double hitSpeed) {
+        this.hitSpeed = hitSpeed;
+    }
+
+    public Speed getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(Speed speed) {
+        this.speed = speed;
+    }
+
+    public Target getTarget() {
+        return target;
+    }
+
+    public void setTarget(Target target) {
+        this.target = target;
+    }
+
+    public boolean isAreaSplash() {
+        return isAreaSplash;
+    }
+
+    public void setAreaSplash(boolean areaSplash) {
+        isAreaSplash = areaSplash;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public float getPositionX() {
+        return positionX;
+    }
+
+    public void setPositionX(float positionX) {
+        this.positionX = positionX;
+    }
+
+    public float getPositionY() {
+        return positionY;
+    }
+
+    public void setPositionY(float positionY) {
+        this.positionY = positionY;
+    }
 }

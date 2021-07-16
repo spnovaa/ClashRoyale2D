@@ -34,5 +34,7 @@ public class ArchersCard extends TroopsCard {
             super.setDamage(58);
             super.setHp(182);
         }
+        super.setPositionX(0);
+        super.setPositionY(0);
     }
 }

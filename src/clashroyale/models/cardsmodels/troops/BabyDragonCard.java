@@ -34,5 +34,7 @@ public class BabyDragonCard extends TroopsCard {
             super.setDamage(146);
             super.setHp(1168);
         }
+        super.setPositionX(0);
+        super.setPositionY(0);
     }
 }

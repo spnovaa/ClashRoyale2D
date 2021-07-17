@@ -2,13 +2,16 @@ package clashroyale.views;
 
 import clashroyale.models.UserModel;
 import clashroyale.models.cardsmodels.troops.Card;
+import clashroyale.models.game.LeftTime;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-
+import java.util.concurrent.TimeUnit;
 import java.util.LinkedList;
 import java.util.Queue;
+
 
 /**
  * The type Game view.
@@ -26,6 +29,7 @@ public class GameView extends Group {
      * The Cards que.
      */
     Queue<Card> cardsQue;
+    private Label textTime;
     private ImageView imageView;
     private Image image;
     private AnchorPane anchorPane;
@@ -34,8 +38,9 @@ public class GameView extends Group {
     private ImageView displayedCard3;
     private ImageView displayedCard4;
     private ImageView nextCard;
-
+    private int flag=0;
     private int chosenCardIndex;
+    private LeftTime leftTime ;
 
     /**
      * Instantiates a new Game view.
@@ -44,6 +49,7 @@ public class GameView extends Group {
      */
     public GameView(UserModel userModel) {
         this.userModel = userModel;
+        leftTime = new LeftTime();
     }
 
     /**
@@ -264,8 +270,20 @@ public class GameView extends Group {
         this.chosenCardIndex = chosenCardIndex;
     }
 
+    public void setTextTime(Label textTime) {
+        this.textTime = textTime;
+    }
+
     public void updateTimer() {
-        //*************************************
-        //*************************************
+        flag++;
+        if (flag%5==0){
+                if (leftTime.getMinutes()!=0 && leftTime.getSeconds()!=0){
+            leftTime.decrease();}}
+
+        String time1;
+        if (leftTime.getSeconds()<10){  time1 = leftTime.getMinutes()+":0"+leftTime.getSeconds();}
+        else {   time1 = leftTime.getMinutes()+":"+leftTime.getSeconds();}
+        textTime.setText(time1);
+
     }
 }

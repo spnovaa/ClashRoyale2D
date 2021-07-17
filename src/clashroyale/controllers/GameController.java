@@ -2,6 +2,7 @@ package clashroyale.controllers;
 
 import clashroyale.models.UserModel;
 import clashroyale.models.cardsmodels.troops.Card;
+import clashroyale.models.game.LeftTime;
 import clashroyale.views.GameView;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -12,9 +13,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.application.Platform;
+import javafx.scene.control.Label;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -56,6 +59,11 @@ public class GameController extends Application {
      */
     @FXML
     ImageView nextCard;
+    /**
+     * The left time.
+     */
+    @FXML
+    private Label time;
     private Stage stage;
     private UserModel userModel;
     private Scene gameScene;
@@ -101,6 +109,7 @@ public class GameController extends Application {
         this.gameScene = gameScene;
         addClickedLocationListener();
         gameView = new GameView(userModel);
+        gameView.setTextTime(time);
         gameView.setAnchorPane(anchorPane);
         gameView.instantiateCardsQueImageViews(displayedCard1, displayedCard2, displayedCard3, displayedCard4, nextCard);
         gameView.prepareArena();
@@ -187,7 +196,8 @@ public class GameController extends Application {
     }
 
     private void updateGame() {
-        gameView.updateTimer();
-    }
+
+        gameView.updateTimer();}
+
 
 }

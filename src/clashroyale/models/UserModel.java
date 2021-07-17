@@ -65,7 +65,7 @@ public class UserModel {
             Connection con = new DbConnect().getConnection();
             if (con == null) throw new SQLException("CONNECTION FAILED!");
             Statement statement = con.createStatement();
-            String query = "SELECT * FROM chosencards WHERE user_id ='" + id + "'";
+            String query = "SELECT * FROM chosen cards WHERE user_id ='" + id + "'";
             ResultSet resultSet = statement.executeQuery(query);
             if (resultSet.next()) {
                 for (int i = 1; i < 9; i++) {

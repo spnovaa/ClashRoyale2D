@@ -263,4 +263,9 @@ public class GameView extends Group {
     public void setChosenCardIndex(int chosenCardIndex) {
         this.chosenCardIndex = chosenCardIndex;
     }
+
+    public void updateTimer() {
+        //*************************************
+        //*************************************
+    }
 }

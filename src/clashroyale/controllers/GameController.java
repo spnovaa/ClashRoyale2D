@@ -11,6 +11,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.application.Platform;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 /**
  * The type Game controller.
@@ -60,6 +65,9 @@ public class GameController extends Application {
     private int userMinY;
     private int userMaxY;
 
+    private final static double FRAMES_PER_SECOND = 5.0;
+    private Timer timer;
+
     @Override
     public void start(Stage stage) throws Exception {
         this.stage = stage;
@@ -96,6 +104,7 @@ public class GameController extends Application {
         gameView.setAnchorPane(anchorPane);
         gameView.instantiateCardsQueImageViews(displayedCard1, displayedCard2, displayedCard3, displayedCard4, nextCard);
         gameView.prepareArena();
+        startTimer();
     }
 
     /**
@@ -155,4 +164,30 @@ public class GameController extends Application {
         gameView.setChosenCardIndex(4);
         userModel.setChosenToDeployCard((Card) displayedCard4.getUserData());
     }
+
+
+    /**
+     * Schedules the model to update based on the timer.
+     */
+    private void startTimer() {
+        this.timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        updateGame();
+                    }
+
+                });
+            }
+        };
+
+        long frameTimeInMilliseconds = (long) (1000.0 / FRAMES_PER_SECOND);
+        this.timer.schedule(timerTask, 0, frameTimeInMilliseconds);
+    }
+
+    private void updateGame() {
+        gameView.updateTimer();
+    }
+
 }

@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,7 +23,6 @@ public class MenuController extends Application {
     private GameController gameController;
     private Stage stage;
     private UserModel userModel;
-
     @Override
     public void start(Stage stage) throws Exception {
         this.stage = stage;
@@ -91,6 +91,7 @@ public class MenuController extends Application {
         }
         stage.setScene(arenaScene);
     }
+
 
     /**
      * Sets user model.

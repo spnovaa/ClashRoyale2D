@@ -46,5 +46,41 @@
                 <Image url="@../resources/ui/0.png"/>
             </image>
         </ImageView>
+        <ImageView fitHeight="104.0" fitWidth="92.0" layoutX="40.0" layoutY="322.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@../resources/ui/building_tower_sprite_200.png"/>
+            </image>
+        </ImageView>
+        <ImageView fitHeight="104.0" fitWidth="92.0" layoutX="227.0" layoutY="322.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@../resources/ui/building_tower_sprite_200.png"/>
+            </image>
+        </ImageView>
+        <ImageView fitHeight="104.0" fitWidth="92.0" layoutX="227.0" layoutY="59.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@../resources/ui/building_tower_sprite_189.png"/>
+            </image>
+        </ImageView>
+        <ImageView fitHeight="104.0" fitWidth="92.0" layoutX="39.0" layoutY="59.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@../resources/ui/building_tower_sprite_189.png"/>
+            </image>
+        </ImageView>
+        <ImageView fitHeight="146.0" fitWidth="122.0" layoutX="119.0" layoutY="344.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@../resources/ui/building_tower_sprite_199.png"/>
+            </image>
+        </ImageView>
+        <ImageView fitHeight="214.0" fitWidth="188.0" layoutX="89.0" layoutY="-28.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@../resources/ui/building_tower_sprite_009.png"/>
+            </image>
+        </ImageView>
     </children>
 </AnchorPane>

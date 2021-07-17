@@ -5,7 +5,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 
-
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="anchorPane" prefHeight="630.0" prefWidth="360.0"
             style="-fx-background-color: rgb(0,0,0);" xmlns="http://javafx.com/javafx/16"
             fx:controller="clashroyale.controllers.GameController">
@@ -18,25 +17,25 @@
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#263238" height="146.0" layoutY="485.0" stroke="BLACK"
                    strokeType="INSIDE" width="360.0"/>
         <ImageView fx:id="displayedCard1" fitHeight="140.0" fitWidth="70.0" layoutX="276.0" layoutY="505.0"
-                   pickOnBounds="true" preserveRatio="true">
+                   onMouseClicked="#setChosenCardIndexOne" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../resources/ui/0.png"/>
             </image>
         </ImageView>
         <ImageView fx:id="displayedCard2" fitHeight="140.0" fitWidth="70.0" layoutX="206.0" layoutY="505.0"
-                   pickOnBounds="true" preserveRatio="true">
+                   onMouseClicked="#setChosenCardIndexTwo" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../resources/ui/0.png"/>
             </image>
         </ImageView>
         <ImageView fx:id="displayedCard3" fitHeight="140.0" fitWidth="70.0" layoutX="136.0" layoutY="505.0"
-                   pickOnBounds="true" preserveRatio="true">
+                   onMouseClicked="#setChosenCardIndexThree" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../resources/ui/0.png"/>
             </image>
         </ImageView>
         <ImageView fx:id="displayedCard4" fitHeight="140.0" fitWidth="70.0" layoutX="66.0" layoutY="505.0"
-                   pickOnBounds="true" preserveRatio="true">
+                   onMouseClicked="#setChosenCardIndexFour" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../resources/ui/0.png"/>
             </image>
@@ -45,6 +44,42 @@
                    preserveRatio="true">
             <image>
                 <Image url="@../resources/ui/0.png"/>
+            </image>
+        </ImageView>
+        <ImageView fitHeight="104.0" fitWidth="92.0" layoutX="40.0" layoutY="322.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@../resources/ui/building_tower_sprite_200.png"/>
+            </image>
+        </ImageView>
+        <ImageView fitHeight="104.0" fitWidth="92.0" layoutX="227.0" layoutY="322.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@../resources/ui/building_tower_sprite_200.png"/>
+            </image>
+        </ImageView>
+        <ImageView fitHeight="104.0" fitWidth="92.0" layoutX="227.0" layoutY="59.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@../resources/ui/building_tower_sprite_189.png"/>
+            </image>
+        </ImageView>
+        <ImageView fitHeight="104.0" fitWidth="92.0" layoutX="39.0" layoutY="59.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@../resources/ui/building_tower_sprite_189.png"/>
+            </image>
+        </ImageView>
+        <ImageView fitHeight="146.0" fitWidth="122.0" layoutX="119.0" layoutY="344.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@../resources/ui/building_tower_sprite_199.png"/>
+            </image>
+        </ImageView>
+        <ImageView fitHeight="214.0" fitWidth="188.0" layoutX="89.0" layoutY="-28.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@../resources/ui/building_tower_sprite_009.png"/>
             </image>
         </ImageView>
     </children>

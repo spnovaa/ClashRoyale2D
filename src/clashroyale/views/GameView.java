@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+
 import java.util.concurrent.TimeUnit;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -38,9 +39,9 @@ public class GameView extends Group {
     private ImageView displayedCard3;
     private ImageView displayedCard4;
     private ImageView nextCard;
-    private int flag=0;
+    private int flag;
     private int chosenCardIndex;
-    private LeftTime leftTime ;
+    private LeftTime leftTime;
 
     /**
      * Instantiates a new Game view.
@@ -272,17 +273,25 @@ public class GameView extends Group {
 
     public void setTextTime(Label textTime) {
         this.textTime = textTime;
+        flag = 0;
     }
 
     public void updateTimer() {
         flag++;
-        if (flag%5==0){
-                if (leftTime.getMinutes()!=0 && leftTime.getSeconds()!=0){
-            leftTime.decrease();}}
+        if (flag % 5 == 0) {
+            int minutes = leftTime.getMinutes();
+            int seconds = leftTime.getSeconds();
+            if (!(minutes == 0 && seconds == 0)) {
+                leftTime.decrease();
+            }
+        }
 
         String time1;
-        if (leftTime.getSeconds()<10){  time1 = leftTime.getMinutes()+":0"+leftTime.getSeconds();}
-        else {   time1 = leftTime.getMinutes()+":"+leftTime.getSeconds();}
+        if (leftTime.getSeconds() < 10) {
+            time1 = leftTime.getMinutes() + ":0" + leftTime.getSeconds();
+        } else {
+            time1 = leftTime.getMinutes() + ":" + leftTime.getSeconds();
+        }
         textTime.setText(time1);
 
     }

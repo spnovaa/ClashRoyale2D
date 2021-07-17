@@ -63,7 +63,7 @@ public class GameController extends Application {
      * The left time.
      */
     @FXML
-    private Label time;
+    Label time;
     private Stage stage;
     private UserModel userModel;
     private Scene gameScene;
@@ -196,8 +196,7 @@ public class GameController extends Application {
     }
 
     private void updateGame() {
-
-        gameView.updateTimer();}
-
+        gameView.updateTimer();
+    }
 
 }

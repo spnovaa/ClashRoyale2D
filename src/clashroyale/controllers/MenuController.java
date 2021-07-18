@@ -1,5 +1,6 @@
 package clashroyale.controllers;
 
+import clashroyale.models.GameModel;
 import clashroyale.models.UserModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -79,6 +80,8 @@ public class MenuController extends Application {
                 Parent goToArenaRoot = loader.load();
                 gameController = loader.getController();
                 gameController.setUserModel(userModel);
+                GameModel gameModel = new GameModel(userModel);
+                gameController.setGameModel(gameModel);
                 stage.setHeight(630);
                 stage.setWidth(375);
                 gameController.start(stage);

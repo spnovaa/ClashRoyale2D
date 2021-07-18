@@ -1,8 +1,9 @@
 package clashroyale.controllers;
 
+import clashroyale.models.GameModel;
 import clashroyale.models.UserModel;
 import clashroyale.models.cardsmodels.troops.Card;
-import clashroyale.models.game.LeftTime;
+import clashroyale.models.towersmodels.Tower;
 import clashroyale.views.GameView;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -15,9 +16,9 @@ import javafx.stage.Stage;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -63,17 +64,17 @@ public class GameController extends Application {
      * The left time.
      */
     @FXML
-    private Label time;
+    Label time;
     private Stage stage;
     private UserModel userModel;
+    private final static double FRAMES_PER_SECOND = 15.0;
     private Scene gameScene;
 
     private int userMinX;
     private int userMaxX;
     private int userMinY;
     private int userMaxY;
-
-    private final static double FRAMES_PER_SECOND = 5.0;
+    private GameModel gameModel;
     private Timer timer;
 
     @Override
@@ -125,7 +126,9 @@ public class GameController extends Application {
             public void handle(MouseEvent event) {
                 float x = (float) event.getSceneX();
                 float y = (float) event.getSceneY();
-                deployClickedAt(x, y);
+                boolean isCardDeployed = deployClickedAt(x, y);
+
+
             }
         });
 
@@ -137,9 +140,17 @@ public class GameController extends Application {
      * @param x clicked x
      * @param y clicked y
      */
-    private void deployClickedAt(float x, float y) {
-        if (userModel.getChosenToDeployCard() != null && y < userMaxY && y > userMinY && x > userMinX && x < userMaxX)
-            gameView.deployTroops(x, y, userModel.getChosenToDeployCard());
+    private boolean deployClickedAt(float x, float y) {
+        Card chosen = userModel.getChosenToDeployCard();
+        if (chosen != null && y < userMaxY && y > userMinY && x > userMinX && x < userMaxX) {
+            gameView.deployTroops(x, y, chosen);
+            chosen.setCenterPositionX(x);
+            chosen.setCenterPositionY(y);
+            gameModel.getArenaExistingCards().add(chosen);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -196,8 +207,14 @@ public class GameController extends Application {
     }
 
     private void updateGame() {
+        gameView.updateTimer();
+        gameModel.updateGameModel();
+        ArrayList<Card> existingCards = gameModel.getArenaExistingCards();
+        ArrayList<Tower> existingTowers = gameModel.getArenaExistingTowers();
+        gameView.updateLivingAssets(existingCards, existingTowers);
+    }
 
-        gameView.updateTimer();}
-
-
+    public void setGameModel(GameModel gameModel) {
+        this.gameModel = gameModel;
+    }
 }

@@ -9,8 +9,8 @@ public class KingTower extends Tower {
      *
      * @param level the level
      */
-    public KingTower(int level) {
-        super(7, 1);
+    public KingTower(int level, String username, float centerX, float centerY, float radius) {
+        super(7, 1, username, centerX, centerY, radius);
         if (level == 1) {
             super.setDamage(50);
             super.setHp(2400);

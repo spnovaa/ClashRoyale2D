@@ -9,8 +9,8 @@ public class QueenTower extends Tower{
      *
      * @param level the level
      */
-    public QueenTower(int level) {
-        super(7.5, 0.8);
+    public QueenTower(int level, String username, float centerX, float centerY, float radius) {
+        super(7.5, 0.8, username, centerX, centerY, radius);
         if (level == 1) {
             super.setDamage(50);
             super.setHp(1400);

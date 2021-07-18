@@ -28,6 +28,7 @@ public class UserModel {
     private GameHistory gameHistory;
     private BattleDeck battleDeck;
     private Card chosenToDeployCard;
+    private String botType;
 
     /**
      * Instantiates a new User model.
@@ -65,7 +66,7 @@ public class UserModel {
             Connection con = new DbConnect().getConnection();
             if (con == null) throw new SQLException("CONNECTION FAILED!");
             Statement statement = con.createStatement();
-            String query = "SELECT * FROM chosen cards WHERE user_id ='" + id + "'";
+            String query = "SELECT * FROM chosencards WHERE user_id ='" + id + "'";
             ResultSet resultSet = statement.executeQuery(query);
             if (resultSet.next()) {
                 for (int i = 1; i < 9; i++) {
@@ -74,7 +75,6 @@ public class UserModel {
                         chosenCardsList.add(card);
                     }
                 }
-
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -233,5 +233,13 @@ public class UserModel {
 
     public void setChosenToDeployCard(Card chosenToDeployCard) {
         this.chosenToDeployCard = chosenToDeployCard;
+    }
+
+    public String getBotType() {
+        return botType;
+    }
+
+    public void setBotType(String botType) {
+        this.botType = botType;
     }
 }

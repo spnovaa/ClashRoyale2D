@@ -2,6 +2,7 @@ package clashroyale.controllers;
 
 import clashroyale.models.GameModel;
 import clashroyale.models.UserModel;
+import clashroyale.models.cardsmodels.spells.Spells;
 import clashroyale.models.cardsmodels.troops.Card;
 import clashroyale.models.towersmodels.Tower;
 import clashroyale.views.GameView;
@@ -146,7 +147,11 @@ public class GameController extends Application {
             gameView.deployTroops(x, y, chosen);
             chosen.setCenterPositionX(x);
             chosen.setCenterPositionY(y);
-            gameModel.getArenaExistingCards().add(chosen);
+            if (chosen instanceof Spells){
+                gameModel.getArenaExistingSpellCards().add(chosen);
+            }
+            else {
+            gameModel.getArenaExistingCards().add(chosen);}
             return true;
         } else {
             return false;

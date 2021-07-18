@@ -18,6 +18,7 @@ public class GameModel {
     private int playerTwoLostHP;
 
     private ArrayList<Card> arenaExistingCards;
+    private ArrayList<Card> arenaExistingSpellCards;
     private ArrayList<Tower> arenaExistingTowers;
     private KingTower userKingTower;
     private QueenTower userRightQueenTower;
@@ -57,6 +58,7 @@ public class GameModel {
         this.playerOneUsername = userModel.getUsername();
         this.botUsername = "simpleBot";
         arenaExistingCards = new ArrayList<>();
+        arenaExistingSpellCards= new ArrayList<>();
         arenaExistingTowers = new ArrayList<>();
         playerOneCrowns = 0;
         playerTwoCrowns = 0;
@@ -279,6 +281,14 @@ public class GameModel {
 
     public void setArenaExistingCards(ArrayList<Card> arenaExistingCards) {
         this.arenaExistingCards = arenaExistingCards;
+    }
+
+    public ArrayList<Card> getArenaExistingSpellCards() {
+        return arenaExistingSpellCards;
+    }
+
+    public void setArenaExistingSpellCards(ArrayList<Card> arenaExistingSpellCards) {
+        this.arenaExistingSpellCards = arenaExistingSpellCards;
     }
 
     public ArrayList<Tower> getArenaExistingTowers() {

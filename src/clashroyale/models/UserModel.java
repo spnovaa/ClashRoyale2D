@@ -28,6 +28,7 @@ public class UserModel {
     private GameHistory gameHistory;
     private BattleDeck battleDeck;
     private Card chosenToDeployCard;
+    private String botType;
 
     /**
      * Instantiates a new User model.
@@ -232,5 +233,13 @@ public class UserModel {
 
     public void setChosenToDeployCard(Card chosenToDeployCard) {
         this.chosenToDeployCard = chosenToDeployCard;
+    }
+
+    public String getBotType() {
+        return botType;
+    }
+
+    public void setBotType(String botType) {
+        this.botType = botType;
     }
 }

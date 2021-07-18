@@ -2,6 +2,7 @@ package clashroyale.models;
 
 import clashroyale.models.cardsmodels.buildings.Building;
 import clashroyale.models.cardsmodels.troops.Card;
+import clashroyale.models.cardsmodels.troops.TroopsCard;
 import clashroyale.models.towersmodels.KingTower;
 import clashroyale.models.towersmodels.QueenTower;
 import clashroyale.models.towersmodels.Tower;
@@ -137,30 +138,68 @@ public class GameModel {
     }
 
     private void attackCardToTower(Card attackerCard, Tower targetTower) {
+        int hp = 0;
+        if (attackerCard instanceof TroopsCard) {
+            hp = targetTower.getHp() - ((TroopsCard) attackerCard).getDamage();
+        } else if (attackerCard instanceof Building) {
+            hp = targetTower.getHp() - ((Building) attackerCard).getDamage();
+        }
+        targetTower.setHp(hp);
 
     }
 
-    private void attackTowerToCard() {
-
+    private void attackTowerToCard(Tower attackerTower, Card targetCard) {
+        if (targetCard instanceof TroopsCard) {
+            ((TroopsCard) targetCard).setHp(((TroopsCard) targetCard).getHp() - attackerTower.getDamage());
+        } else if (targetCard instanceof Building) {
+            ((Building) targetCard).setHp(((Building) targetCard).getHp() - attackerTower.getDamage());
+        }
     }
 
     private void attackCardToCard(Card attackerCard, Card targetCard) {
 
+        if (targetCard instanceof TroopsCard) {
+            if (attackerCard instanceof TroopsCard) {
+                ((TroopsCard) targetCard).setHp(((TroopsCard) targetCard).getHp() - ((TroopsCard) attackerCard).getDamage());
+            } else if (attackerCard instanceof Building) {
+                ((TroopsCard) targetCard).setHp(((TroopsCard) targetCard).getHp() - ((Building) attackerCard).getDamage());
+            }
+        } else if (targetCard instanceof Building) {
+            if (attackerCard instanceof TroopsCard) {
+                ((Building) targetCard).setHp(((Building) targetCard).getHp() - ((TroopsCard) attackerCard).getDamage());
+            } else if (attackerCard instanceof Building) {
+                ((Building) targetCard).setHp(((Building) targetCard).getHp() - ((Building) attackerCard).getDamage());
+            }
+        }
     }
 
     private void attackTowerToTower(Tower attackerTower, Tower targetTower) {
-
+        targetTower.setHp(targetTower.getHp() - attackerTower.getDamage());
     }
 
     private void attackCardToBuilding(Card attackerCard, Building targetBuilding) {
-
+        int damage=0;
+        if (attackerCard instanceof TroopsCard){
+            damage = ((TroopsCard)attackerCard).getDamage();
+        }
+       else if (attackerCard instanceof Building){
+           damage = ((Building)attackerCard).getDamage();
+       }
+       targetBuilding.setHp(targetBuilding.getHp() - damage);
     }
 
     private void attackBuildingToCard(Building attackerBuilding, Card targetCard) {
+        if (targetCard instanceof TroopsCard){
+            ((TroopsCard)targetCard).setHp( ((TroopsCard)targetCard).getHp() - attackerBuilding.getDamage());
+        }
+        else if (targetCard instanceof Building){
+            ((Building)targetCard).setHp( ((Building)targetCard).getHp() - attackerBuilding.getDamage());
+        }
 
     }
 
     private void attackBuildingToBuilding(Building attackerBuilding, Building targetBuilding) {
+        targetBuilding.setHp(targetBuilding.getHp() - attackerBuilding.getDamage());
 
     }
 
@@ -192,15 +231,15 @@ public class GameModel {
     }
 
     private void killCard(Card card) {
-
+        card.setAlive(false);
     }
 
     private void killTower(Tower tower) {
-
+        tower.setAlive(false);
     }
 
     private void killBuilding(Building building) {
-
+        building.setAlive(false);
     }
 
     private void increasePlayersRightBorder(String username) {

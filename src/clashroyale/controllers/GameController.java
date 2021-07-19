@@ -225,7 +225,8 @@ public class GameController extends Application {
         gameModel.updateGameModel();
         ArrayList<TroopsCard> existingTroops = gameModel.getArenaExistingTroops();
         ArrayList<Tower> existingTowers = gameModel.getArenaExistingTowers();
-        gameView.updateLivingAssets(existingTroops, existingTowers);
+        ArrayList<Spells> existingSpells = gameModel.getArenaExistingSpellCards();
+        gameView.updateLivingAssets(existingTroops, existingTowers,existingSpells);
     }
 
     public void setGameModel(GameModel gameModel) {

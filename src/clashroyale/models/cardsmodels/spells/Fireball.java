@@ -11,8 +11,8 @@ public class Fireball extends Spells {
      *
      * @param level the level
      */
-    public Fireball(int level) {
-        super("fireball", 4, 2.5, "/thumbCards/thumbfireball.png");
+    public Fireball(int level, String relatedUser) {
+        super("fireball", 4, 2.5, "/thumbCards/thumbfireball.png", relatedUser);
         if (level == 1) {
             areaDamage = 325;
         } else if (level == 2) {

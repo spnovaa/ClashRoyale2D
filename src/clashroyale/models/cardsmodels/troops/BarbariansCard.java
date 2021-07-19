@@ -14,8 +14,9 @@ public class BarbariansCard extends TroopsCard {
      *
      * @param level the level
      */
-    public BarbariansCard(int level) {
-        super("barbarian", 5, 4, 1.5, Target.GROUND, Range.MELEE, Speed.MEDIUM, false, "/thumbCards/thumbbarbarians.png");
+    public BarbariansCard(int level, String relatedUser) {
+        super("barbarian", 5, 4, 1.5, Target.GROUND, Range.MELEE, Speed.MEDIUM,
+                false, "/thumbCards/thumbbarbarians.png", relatedUser);
         if (level == 1) {
             super.setDamage(75);
             super.setHp(300);

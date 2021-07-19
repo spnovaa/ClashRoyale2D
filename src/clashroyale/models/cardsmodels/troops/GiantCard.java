@@ -13,8 +13,9 @@ public class GiantCard extends TroopsCard {
      *
      * @param level the level
      */
-    public GiantCard(int level) {
-        super("giant", 5, 1, 1.5, Target.BUILDINGS, Range.MELEE, Speed.SLOW, false, "/thumbCards/thumbgiant.png");
+    public GiantCard(int level, String relatedUser) {
+        super("giant", 5, 1, 1.5, Target.BUILDINGS, Range.MELEE, Speed.SLOW,
+                false, "/thumbCards/thumbgiant.png", relatedUser);
         if (level == 1) {
             super.setDamage(126);
             super.setHp(2000);

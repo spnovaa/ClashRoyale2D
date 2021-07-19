@@ -13,8 +13,9 @@ public class MiniPEKKACard extends TroopsCard {
      *
      * @param level the level
      */
-    public MiniPEKKACard(int level) {
-        super("miniPEKKA", 4, 1, 1.8, Target.GROUND, Range.MELEE, Speed.FAST, false, "/thumbCards/thumbmini-pekka.png");
+    public MiniPEKKACard(int level, String relatedUser) {
+        super("miniPEKKA", 4, 1, 1.8, Target.GROUND, Range.MELEE, Speed.FAST,
+                false, "/thumbCards/thumbmini-pekka.png", relatedUser);
         if (level == 1) {
             super.setDamage(325);
             super.setHp(600);

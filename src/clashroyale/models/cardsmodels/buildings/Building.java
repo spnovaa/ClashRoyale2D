@@ -12,19 +12,22 @@ public class Building extends Card {
     private int lifeTime;
     private float positionX;
     private float positionY;
+    private String relatedUser;
 
     /**
      * Instantiates a new Card.
      *
      * @param cost the cost
      */
-    public Building(String title, int cost, double range, int lifeTime, double hitSpeed, Target target, String thumbImage) {
-        super(title, cost, thumbImage);
+    public Building(String title, int cost, double range, int lifeTime, double hitSpeed, Target target,
+                    String thumbImage, String relatedUser) {
+        super(title, cost, thumbImage, relatedUser);
         this.hitSpeed = hitSpeed;
         this.range = range;
-        this.target=target;
-        this.lifeTime=lifeTime;
+        this.target = target;
+        this.lifeTime = lifeTime;
     }
+
     /**
      * Sets hp.
      *
@@ -97,5 +100,13 @@ public class Building extends Card {
 
     public void setPositionY(int positionY) {
         this.positionY = positionY;
+    }
+
+    public String getRelatedUser() {
+        return relatedUser;
+    }
+
+    public void setRelatedUser(String relatedUser) {
+        this.relatedUser = relatedUser;
     }
 }

@@ -47,18 +47,18 @@ public class UserModel {
     }
 
     private void addAllCards() {
-        cards.add(new ArchersCard(getLevel()));
-        cards.add(new BarbariansCard(getLevel()));
-        cards.add(new BabyDragonCard(getLevel()));
-        cards.add(new GiantCard(getLevel()));
-        cards.add(new MiniPEKKACard(getLevel()));
-        cards.add(new ValkyrieCard(getLevel()));
-        cards.add(new WizardCard(getLevel()));
-        cards.add(new Cannon(getLevel()));
-        cards.add(new InfernoTower(getLevel()));
-        cards.add(new Fireball(getLevel()));
-        cards.add(new Rage(getLevel()));
-        cards.add(new Arrows(getLevel()));
+        cards.add(new ArchersCard(getLevel(), username));
+        cards.add(new BarbariansCard(getLevel(), username));
+        cards.add(new BabyDragonCard(getLevel(), username));
+        cards.add(new GiantCard(getLevel(), username));
+        cards.add(new MiniPEKKACard(getLevel(), username));
+        cards.add(new ValkyrieCard(getLevel(), username));
+        cards.add(new WizardCard(getLevel(), username));
+        cards.add(new Cannon(getLevel(), username));
+        cards.add(new InfernoTower(getLevel(), username));
+        cards.add(new Fireball(getLevel(), username));
+        cards.add(new Rage(getLevel(), username));
+        cards.add(new Arrows(getLevel(), username));
     }
 
     private void getChosenCardsFromDB() {

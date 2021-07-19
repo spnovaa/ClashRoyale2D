@@ -15,8 +15,9 @@ public class WizardCard extends TroopsCard {
      *
      * @param level the level
      */
-    public WizardCard(int level) {
-        super("wizard", 5, 1, 1.7, Target.AIR_GROUND, Range.RANGED5, Speed.MEDIUM, true, "/thumbCards/thumbwizard.png");
+    public WizardCard(int level, String relatedUser) {
+        super("wizard", 5, 1, 1.7, Target.AIR_GROUND, Range.RANGED5, Speed.MEDIUM,
+                true, "/thumbCards/thumbwizard.png", relatedUser);
         range = 5;
         if (level == 1) {
             super.setDamage(130);

@@ -10,6 +10,7 @@ public class Spells extends Card {
     private float positionX;
     private float positionY;
     private Boolean isAlive;
+    private String relatedUser;
 
     /**
      * Instantiates a new Card.
@@ -17,10 +18,10 @@ public class Spells extends Card {
      * @param cost    the cost
      * @param radious the radious
      */
-    public Spells(String title, int cost, double radious, String thumbImage) {
-        super(title, cost, thumbImage);
+    public Spells(String title, int cost, double radious, String thumbImage, String relatedUser) {
+        super(title, cost, thumbImage, relatedUser);
         this.radious = radious;
-        isAlive=true;
+        isAlive = true;
     }
 
     public double getRadious() {
@@ -53,5 +54,13 @@ public class Spells extends Card {
 
     public void setAlive(Boolean alive) {
         isAlive = alive;
+    }
+
+    public String getRelatedUser() {
+        return relatedUser;
+    }
+
+    public void setRelatedUser(String relatedUser) {
+        this.relatedUser = relatedUser;
     }
 }

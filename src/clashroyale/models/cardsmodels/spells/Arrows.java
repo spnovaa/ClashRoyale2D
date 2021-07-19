@@ -11,8 +11,8 @@ public class Arrows extends Spells {
      *
      * @param level the level
      */
-    public Arrows(int level) {
-        super("arrows", 3, 4, "/thumbCards/thumbarrows.png");
+    public Arrows(int level, String relatedUser) {
+        super("arrows", 3, 4, "/thumbCards/thumbarrows.png", relatedUser);
         if (level == 1) {
             areaDamage = 144;
         } else if (level == 2) {

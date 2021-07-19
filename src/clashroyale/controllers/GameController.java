@@ -207,7 +207,6 @@ public class GameController extends Application {
                     public void run() {
                         updateGame();
                     }
-
                 });
             }
         };

@@ -15,8 +15,9 @@ public class BabyDragonCard extends TroopsCard {
      *
      * @param level the level
      */
-    public BabyDragonCard(int level) {
-        super("babyDragon", 4, 1, 1.8, Target.AIR_GROUND, Range.RANGED3, Speed.FAST, true, "/thumbCards/thumbbaby-dragon.png");
+    public BabyDragonCard(int level, String relatedUser) {
+        super("babyDragon", 4, 1, 1.8, Target.AIR_GROUND, Range.RANGED3,
+                Speed.FAST, true, "/thumbCards/thumbbaby-dragon.png", relatedUser);
         range = 3;
         if (level == 1) {
             super.setDamage(100);

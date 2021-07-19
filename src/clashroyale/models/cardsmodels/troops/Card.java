@@ -14,18 +14,21 @@ public class Card {
     private float radius;
     private String uuid;
     private boolean isAlive;
+    private String relatedUser;
+
     /**
      * Instantiates a new Card.
      *
      * @param cost       the cost
      * @param thumbImage the thumb image
      */
-    public Card(String title, int cost, String thumbImage) {
+    public Card(String title, int cost, String thumbImage, String relatedUser) {
         this.title = title;
         this.cost = cost;
         this.thumbImage = thumbImage;
         isAlive = true;
         uuid = UUID.randomUUID().toString();
+        this.relatedUser = relatedUser;
     }
 
     /**
@@ -100,5 +103,13 @@ public class Card {
 
     public void setAlive(boolean alive) {
         isAlive = alive;
+    }
+
+    public String getRelatedUser() {
+        return relatedUser;
+    }
+
+    public void setRelatedUser(String relatedUser) {
+        this.relatedUser = relatedUser;
     }
 }

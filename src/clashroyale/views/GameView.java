@@ -280,7 +280,6 @@ public class GameView extends Group {
     }
 
     public void updateLivingAssets(ArrayList<TroopsCard> existingTroops, ArrayList<Tower> existingTowers) {
-
         for (ImageView asset : battleCards) {
             TroopsCard oldCard;
             Tower oldTower;
@@ -293,8 +292,8 @@ public class GameView extends Group {
                             asset.setImage(null);
                             asset.setUserData(null);
                         } else {
-                            asset.setX(card.getCenterPositionX());
-                            asset.setY(card.getCenterPositionY());
+                            asset.setX(card.getCenterPositionX() - (float) TROOPS_SIZE / 2);
+                            asset.setY(card.getCenterPositionY() - (float) TROOPS_SIZE / 2);
                             asset.setUserData(card);
                         }
                     }

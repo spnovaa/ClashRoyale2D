@@ -16,6 +16,8 @@ public class TroopsCard extends Card {
     private Target target;
     private boolean isAreaSplash;
     private int count;
+    private String relatedUser;
+
 //    private float positionX;
 //    private float positionY;
 
@@ -30,14 +32,16 @@ public class TroopsCard extends Card {
      * @param speed        the speed
      * @param isAreaSplash the is area splash
      */
-    public TroopsCard(String title, int cost, int count, double hitSpeed, Target target, Range rangeType, Speed speed, boolean isAreaSplash, String thumbImage) {
-        super(title, cost, thumbImage);
+    public TroopsCard(String title, int cost, int count, double hitSpeed, Target target, Range rangeType,
+                      Speed speed, boolean isAreaSplash, String thumbImage, String relatedUser) {
+        super(title, cost, thumbImage, relatedUser);
         this.count = count;
         this.hitSpeed = hitSpeed;
         this.rangeType = rangeType;
         this.isAreaSplash = isAreaSplash;
         this.speed = speed;
         this.target = target;
+        this.relatedUser = relatedUser;
     }
 
     /**
@@ -113,7 +117,17 @@ public class TroopsCard extends Card {
     public void setCount(int count) {
         this.count = count;
     }
-//
+
+    @Override
+    public String getRelatedUser() {
+        return relatedUser;
+    }
+
+    @Override
+    public void setRelatedUser(String relatedUser) {
+        this.relatedUser = relatedUser;
+    }
+    //
 //    public float getPositionX() {
 //        return positionX;
 //    }

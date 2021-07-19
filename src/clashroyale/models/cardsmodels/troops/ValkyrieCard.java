@@ -13,8 +13,9 @@ public class ValkyrieCard extends TroopsCard {
      *
      * @param level the level
      */
-    public ValkyrieCard(int level) {
-        super("valkyrie", 4, 1, 1.5, Target.GROUND, Range.MELEE, Speed.MEDIUM, true, "/thumbCards/thumbvalkyrie.png");
+    public ValkyrieCard(int level, String relatedUser) {
+        super("valkyrie", 4, 1, 1.5, Target.GROUND, Range.MELEE, Speed.MEDIUM,
+                true, "/thumbCards/thumbvalkyrie.png", relatedUser);
         if (level == 1) {
             super.setDamage(120);
             super.setHp(880);

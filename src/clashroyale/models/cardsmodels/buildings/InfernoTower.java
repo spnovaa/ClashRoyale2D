@@ -13,16 +13,17 @@ public class InfernoTower extends Building {
      *
      * @param level the level
      */
-    public InfernoTower(int level) {
-        super("infernoTower", 5, 6, 40, 0.4, Target.AIR_GROUND, "/thumbCards/thumbinferno-tower.png");
+    public InfernoTower(int level, String relatedUser) {
+        super("infernoTower", 5, 6, 40, 0.4, Target.AIR_GROUND,
+                "/thumbCards/thumbinferno-tower.png", relatedUser);
         if (level == 1) {
             super.setDamage(20);
             super.setHp(800);
-            maxDamage=400;
+            maxDamage = 400;
         } else if (level == 2) {
             super.setDamage(22);
             super.setHp(880);
-            maxDamage=440;
+            maxDamage = 440;
         } else if (level == 3) {
             super.setDamage(24);
             super.setHp(968);

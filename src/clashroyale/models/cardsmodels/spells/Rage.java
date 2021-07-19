@@ -11,8 +11,8 @@ public class Rage extends Spells {
      *
      * @param level the level
      */
-    public Rage(int level) {
-        super("rage", 3, 5, "/thumbCards/thumbrage.png");
+    public Rage(int level, String relatedUser) {
+        super("rage", 3, 5, "/thumbCards/thumbrage.png", relatedUser);
         if (level == 1) {
             duration = 6;
         } else if (level == 2) {

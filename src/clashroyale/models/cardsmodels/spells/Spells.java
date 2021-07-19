@@ -10,6 +10,7 @@ public class Spells extends Card {
     private float positionX;
     private float positionY;
     private Boolean isAlive;
+    private int time;
     private String relatedUser;
 
     /**
@@ -22,6 +23,7 @@ public class Spells extends Card {
         super(title, cost, thumbImage, relatedUser);
         this.radious = radious;
         isAlive = true;
+        time=45;
     }
 
     public double getRadious() {
@@ -62,5 +64,12 @@ public class Spells extends Card {
 
     public void setRelatedUser(String relatedUser) {
         this.relatedUser = relatedUser;
+    }
+    public void  decreaseTime(){
+        time--;
+    }
+
+    public int getTime() {
+        return time;
     }
 }

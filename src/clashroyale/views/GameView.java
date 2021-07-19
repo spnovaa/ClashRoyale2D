@@ -1,6 +1,7 @@
 package clashroyale.views;
 
 import clashroyale.models.UserModel;
+import clashroyale.models.cardsmodels.spells.Spells;
 import clashroyale.models.cardsmodels.troops.Card;
 import clashroyale.models.cardsmodels.troops.TroopsCard;
 import clashroyale.models.game.LeftTime;
@@ -222,18 +223,21 @@ public class GameView extends Group {
             imageView.setY(y - (float) 50 / 2);
             imageView.setFitWidth(50);
             imageView.setFitHeight(50);
+            imageView.setUserData(chosenToDeployCard);
         }
         else  if (title.equals("fireball")){
             imageView.setX(x - (float) 25 / 2);
             imageView.setY(y - (float) 25 / 2);
             imageView.setFitWidth(25);
             imageView.setFitHeight(25);
+            imageView.setUserData(chosenToDeployCard);
         }
         else  if (title.equals("arrows")){
             imageView.setX(x - (float) 40 / 2);
             imageView.setY(y - (float) 40 / 2);
             imageView.setFitWidth(40);
             imageView.setFitHeight(40);
+            imageView.setUserData(chosenToDeployCard);
         }
         else {
         imageView.setX(x - (float) TROOPS_SIZE / 2);
@@ -301,7 +305,7 @@ public class GameView extends Group {
 
     }
 
-    public void updateLivingAssets(ArrayList<TroopsCard> existingTroops, ArrayList<Tower> existingTowers) {
+    public void updateLivingAssets(ArrayList<TroopsCard> existingTroops, ArrayList<Tower> existingTowers,ArrayList<Spells> existingSpells) {
         for (ImageView asset : battleCards) {
             TroopsCard oldCard;
             Tower oldTower;
@@ -320,12 +324,20 @@ public class GameView extends Group {
                         }
                     }
                 }
-            } else {
+            } else if (userData instanceof Tower){
                 oldTower = (Tower) userData;
                 for (Tower tower : existingTowers) {
                     if (tower.getUuid().equals(oldTower.getUuid()) && !tower.isAlive()) {
                         asset.setImage(null);
                         asset.setUserData(null);
+                    }
+                }
+
+            }
+            else if (userData instanceof Spells){
+                for(Spells spell : existingSpells){
+                    if (spell.equals(userData) && !spell.isAlive()){
+                        asset.setImage(null);
                     }
                 }
             }

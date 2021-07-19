@@ -183,7 +183,12 @@ public class GameModel {
         }
 
         for (Spells card : arenaExistingSpellCards) {
-            spellAction(card);
+            if (card.isAlive()){
+                card.decreaseTime();
+            }
+            if (card.getTime()<=0){
+                card.setAlive(false);
+            }
 
         }
 

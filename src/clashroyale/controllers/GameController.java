@@ -154,6 +154,7 @@ public class GameController extends Application {
             if (chosen instanceof Spells) {
                 //add to existing spells
                 gameModel.getArenaExistingSpellCards().add((Spells) chosen);
+                gameModel.spellAction((Spells) chosen);
             } else if (chosen instanceof TroopsCard) {
                 //add to existing troops
                 gameModel.getArenaExistingTroops().add((TroopsCard) chosen);

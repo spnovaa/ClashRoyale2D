@@ -2,8 +2,10 @@ package clashroyale.controllers;
 
 import clashroyale.models.GameModel;
 import clashroyale.models.UserModel;
+import clashroyale.models.cardsmodels.buildings.Building;
 import clashroyale.models.cardsmodels.spells.Spells;
 import clashroyale.models.cardsmodels.troops.Card;
+import clashroyale.models.cardsmodels.troops.TroopsCard;
 import clashroyale.models.towersmodels.Tower;
 import clashroyale.views.GameView;
 import javafx.application.Application;
@@ -128,8 +130,6 @@ public class GameController extends Application {
                 float x = (float) event.getSceneX();
                 float y = (float) event.getSceneY();
                 boolean isCardDeployed = deployClickedAt(x, y);
-
-
             }
         });
 
@@ -147,11 +147,16 @@ public class GameController extends Application {
             gameView.deployTroops(x, y, chosen);
             chosen.setCenterPositionX(x);
             chosen.setCenterPositionY(y);
-            if (chosen instanceof Spells){
+            if (chosen instanceof Spells) {
+                //add to existing spells
                 gameModel.getArenaExistingSpellCards().add(chosen);
+            } else if (chosen instanceof TroopsCard) {
+                //add to existing troops
+                gameModel.getArenaExistingTroops().add((TroopsCard) chosen);
+            } else {
+                //add to existing buildings
+                gameModel.getArenaExistingBuildings().add((Building) chosen);
             }
-            else {
-            gameModel.getArenaExistingCards().add(chosen);}
             return true;
         } else {
             return false;
@@ -214,9 +219,9 @@ public class GameController extends Application {
     private void updateGame() {
         gameView.updateTimer();
         gameModel.updateGameModel();
-        ArrayList<Card> existingCards = gameModel.getArenaExistingCards();
+        ArrayList<TroopsCard> existingTroops = gameModel.getArenaExistingTroops();
         ArrayList<Tower> existingTowers = gameModel.getArenaExistingTowers();
-        gameView.updateLivingAssets(existingCards, existingTowers);
+        gameView.updateLivingAssets(existingTroops, existingTowers);
     }
 
     public void setGameModel(GameModel gameModel) {

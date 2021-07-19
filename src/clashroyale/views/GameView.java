@@ -2,6 +2,7 @@ package clashroyale.views;
 
 import clashroyale.models.UserModel;
 import clashroyale.models.cardsmodels.troops.Card;
+import clashroyale.models.cardsmodels.troops.TroopsCard;
 import clashroyale.models.game.LeftTime;
 import clashroyale.models.towersmodels.Tower;
 import javafx.scene.Group;
@@ -217,6 +218,7 @@ public class GameView extends Group {
         imageView.setY(y - (float) TROOPS_SIZE / 2);
         imageView.setFitWidth(TROOPS_SIZE);
         imageView.setFitHeight(TROOPS_SIZE);
+        imageView.setUserData(chosenToDeployCard);
         anchorPane.getChildren().add(imageView);
         battleCards.add(imageView);
         replaceDeployedCardWithNext();
@@ -277,31 +279,35 @@ public class GameView extends Group {
 
     }
 
-    public void updateLivingAssets(ArrayList<Card> existingCards, ArrayList<Tower> existingTowers) {
+    public void updateLivingAssets(ArrayList<TroopsCard> existingTroops, ArrayList<Tower> existingTowers) {
+
         for (ImageView asset : battleCards) {
-            Card oldCard;
+            TroopsCard oldCard;
             Tower oldTower;
             Object userData = asset.getUserData();
-            if (userData instanceof Card) {
-                oldCard = (Card) userData;
-                for (Card card : existingCards) {
+            if (userData instanceof TroopsCard) {
+                oldCard = (TroopsCard) userData;
+                for (TroopsCard card : existingTroops) {
                     if (card.getUuid().equals(oldCard.getUuid())) {
                         if (!card.isAlive()) {
                             asset.setImage(null);
+                            asset.setUserData(null);
                         } else {
-                            asset.setX(card.getCenterPositionX() - card.getRadius());
-                            asset.setY(card.getCenterPositionY() - card.getRadius());
+                            asset.setX(card.getCenterPositionX());
+                            asset.setY(card.getCenterPositionY());
+                            asset.setUserData(card);
                         }
                     }
                 }
             } else {
                 oldTower = (Tower) userData;
                 for (Tower tower : existingTowers) {
-                    if (tower.getUuid().equals(oldTower.getUuid()) && !tower.isAlive())
+                    if (tower.getUuid().equals(oldTower.getUuid()) && !tower.isAlive()) {
                         asset.setImage(null);
+                        asset.setUserData(null);
+                    }
                 }
             }
-
         }
     }
 

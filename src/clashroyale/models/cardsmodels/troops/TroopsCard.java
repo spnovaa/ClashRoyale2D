@@ -16,8 +16,8 @@ public class TroopsCard extends Card {
     private Target target;
     private boolean isAreaSplash;
     private int count;
-    private float positionX;
-    private float positionY;
+//    private float positionX;
+//    private float positionY;
 
     /**
      * Instantiates a new Troops card.
@@ -30,14 +30,14 @@ public class TroopsCard extends Card {
      * @param speed        the speed
      * @param isAreaSplash the is area splash
      */
-    public TroopsCard(String title,int cost,int count,double hitSpeed,Target target,Range rangeType,Speed speed,boolean isAreaSplash,String thumbImage) {
-        super(title,cost,thumbImage);
+    public TroopsCard(String title, int cost, int count, double hitSpeed, Target target, Range rangeType, Speed speed, boolean isAreaSplash, String thumbImage) {
+        super(title, cost, thumbImage);
         this.count = count;
         this.hitSpeed = hitSpeed;
-        this.rangeType=rangeType;
-        this.isAreaSplash=isAreaSplash;
-        this.speed=speed;
-        this.target=target;
+        this.rangeType = rangeType;
+        this.isAreaSplash = isAreaSplash;
+        this.speed = speed;
+        this.target = target;
     }
 
     /**
@@ -113,20 +113,20 @@ public class TroopsCard extends Card {
     public void setCount(int count) {
         this.count = count;
     }
-
-    public float getPositionX() {
-        return positionX;
-    }
-
-    public void setPositionX(float positionX) {
-        this.positionX = positionX;
-    }
-
-    public float getPositionY() {
-        return positionY;
-    }
-
-    public void setPositionY(float positionY) {
-        this.positionY = positionY;
-    }
+//
+//    public float getPositionX() {
+//        return positionX;
+//    }
+//
+//    public void setPositionX(float positionX) {
+//        this.positionX = positionX;
+//    }
+//
+//    public float getPositionY() {
+//        return positionY;
+//    }
+//
+//    public void setPositionY(float positionY) {
+//        this.positionY = positionY;
+//    }
 }

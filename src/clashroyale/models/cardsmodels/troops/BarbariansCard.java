@@ -32,7 +32,7 @@ public class BarbariansCard extends TroopsCard {
             super.setDamage(102);
             super.setHp(480);
         }
-        super.setPositionX(0);
-        super.setPositionY(0);
+        super.setCenterPositionX(0);
+        super.setCenterPositionY(0);
     }
 }

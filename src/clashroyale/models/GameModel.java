@@ -3,9 +3,12 @@ package clashroyale.models;
 import clashroyale.models.cardsmodels.buildings.Building;
 import clashroyale.models.cardsmodels.troops.Card;
 import clashroyale.models.cardsmodels.troops.TroopsCard;
+import clashroyale.models.enums.Range;
+import clashroyale.models.enums.Speed;
 import clashroyale.models.towersmodels.KingTower;
 import clashroyale.models.towersmodels.QueenTower;
 import clashroyale.models.towersmodels.Tower;
+import javafx.geometry.Point2D;
 
 import java.util.ArrayList;
 
@@ -17,12 +20,15 @@ public class GameModel {
     private int playerOneLostHP;
     private int playerTwoLostHP;
 
-    private ArrayList<Card> arenaExistingCards;
+    private ArrayList<TroopsCard> arenaExistingTroops;
     private ArrayList<Card> arenaExistingSpellCards;
     private ArrayList<Tower> arenaExistingTowers;
+    private ArrayList<Building> arenaExistingBuildings;
+
     private KingTower userKingTower;
     private QueenTower userRightQueenTower;
     private QueenTower userLeftQueenTower;
+
     private int userLevel;
     private String playerOneUsername;
 
@@ -31,21 +37,24 @@ public class GameModel {
     private QueenTower botLeftQueenTower;
     private String botUsername;
 
+    private float minDist;
+    private float fieldCenterX;
     private float bridgeWidth;
+    private float bridgesStartY;     //-> bottom
+    private float bridgesEndY;       //-> top
 
     private float leftBridgeX;
-    private float leftBridgeStartY;     //-> bottom
-    private float leftBridgeEndY;       //-> top
-
     private float rightBridgeX;
-    private float rightBridgeStartY;     //-> bottom
-    private float rightBridgeEndY;       //-> top
 
     private float playerOneRightBorderY;
     private float playerOneLeftBorderY;
 
     private float playerTwoRightBorderY;
     private float playerTwoLeftBorderY;
+
+    private float slowStepSize;
+    private float mediumStepSize;
+    private float fastStepSize;
 
     //---------------------------------------------------------------------------------------------------------
     //---------------------------------------------------------------------------------------------------------
@@ -57,13 +66,23 @@ public class GameModel {
         this.userModel = userModel;
         this.playerOneUsername = userModel.getUsername();
         this.botUsername = "simpleBot";
-        arenaExistingCards = new ArrayList<>();
-        arenaExistingSpellCards= new ArrayList<>();
+
+        minDist = 1;
+
+        arenaExistingTroops = new ArrayList<>();
+        arenaExistingSpellCards = new ArrayList<>();
         arenaExistingTowers = new ArrayList<>();
+        arenaExistingBuildings = new ArrayList<>();
+
         playerOneCrowns = 0;
         playerTwoCrowns = 0;
         playerTwoLostHP = 0;
         playerOneLostHP = 0;
+
+        slowStepSize = 10;
+        mediumStepSize = 15;
+        fastStepSize = 20;
+
         userLevel = userModel.getLevel();
         initializeBorders();
         initializeUserTowers();
@@ -72,15 +91,14 @@ public class GameModel {
     }
 
     private void initializeBridges() {
+        fieldCenterX = 190;
+
         bridgeWidth = 30;
+        bridgesStartY = 260;
+        bridgesEndY = bridgesStartY - bridgeWidth;
 
-        leftBridgeStartY = 260;
         leftBridgeX = 85;
-        leftBridgeEndY = leftBridgeStartY - bridgeWidth;
-
-        rightBridgeStartY = 260;
         rightBridgeX = 275;
-        rightBridgeEndY = rightBridgeStartY - bridgeWidth;
 
     }
 
@@ -116,27 +134,109 @@ public class GameModel {
     //---------------------------------------------------------------------------------------------------------
 
     public void updateGameModel() {
+        for (TroopsCard card : arenaExistingTroops) {
+            float cardX = card.getCenterPositionX();
+            float cardY = card.getCenterPositionY();
 
+            if (cardY > bridgesStartY) {                    //card is in user's field
+                if (cardX >= fieldCenterX) {
+                    moveCardToRightBridge(card);            //card is in right half
+                } else {                                       //card is in left half
+                    moveCardToLeftBridge(card);
+                }
+            } else if (cardY < bridgesEndY) {               //card is in enemy's field
+                if (cardX >= fieldCenterX) {                //card is in the right side
+                    if (botRightQueenTower.isAlive())       // right queen tower is alive and card is in right side
+                        moveCardToRightQueenTower(card);
+                    else {                                  //card is in right side but right queen tower is dead
+                        if (botLeftQueenTower.isAlive())    //if left queen tower stands, move in that direction
+                            moveCardToLeftQueenTower(card);
+                        else                                //both queen towers are gone. move in king towers direction
+                            moveCardToKingTower(card);
+                    }
+                } else {                                    //card is in the left side of the field
+                    if (botLeftQueenTower.isAlive())        // left queen tower is alive and card is in left side
+                        moveCardToLeftQueenTower(card);
+                    else {                                  //card is in right side but right queen tower is dead
+                        if (botRightQueenTower.isAlive())   //if right queen tower stands, move in that direction
+                            moveCardToRightQueenTower(card);
+                        else                                //both queen towers are gone. move in king towers direction
+                            moveCardToKingTower(card);
+                    }
+                }
+            } else {                                        //card is on the bridge
+                if (cardX >= fieldCenterX) {
+                    passCardFromRightBridge(card);
+                } else
+                    passCardFromLeftBridge(card);
+            }
+        }
     }
 
-    private void moveCardToBridge() {
-
+    private void moveCardToRightBridge(TroopsCard card) {
+        stepToTarget(card, rightBridgeX, bridgesStartY, true);
+//        System.out.println("Moving Card To Right Bridge");
     }
 
-    private void passCardFromBridge(Card cardToMove) {
-
+    private void moveCardToLeftBridge(TroopsCard card) {
+        stepToTarget(card, leftBridgeX, bridgesStartY, true);
+//        System.out.println("Moving Card To Left Bridge");
     }
 
-    private void moveCardToLeftQueenTower(Card cardToMove) {
-
+    private void passCardFromRightBridge(TroopsCard cardToMove) {
+        stepToTarget(cardToMove, rightBridgeX, bridgesEndY, true);
+//        System.out.println("Passing Card from Right Bridge");
     }
 
-    private void moveCardToRightQueenTower(Card cardToMove) {
-
+    private void passCardFromLeftBridge(TroopsCard cardToMove) {
+        stepToTarget(cardToMove, leftBridgeX, bridgesEndY, true);
+//        System.out.println("Passing Card From Left Bridge");
     }
 
-    private void moveCardToKingTower(Card cardToMove) {
+    private void moveCardToLeftQueenTower(TroopsCard cardToMove) {
+        stepToTarget(cardToMove, botLeftQueenTower.getCenterPositionX(), botLeftQueenTower.getCenterPositionY(), false);
+//        System.out.println("Moving Card To Left Queen");
+    }
 
+    private void moveCardToRightQueenTower(TroopsCard cardToMove) {
+        stepToTarget(cardToMove, botRightQueenTower.getCenterPositionX(), botRightQueenTower.getCenterPositionY(), false);
+//        System.out.println("Moving Card To Right Queen");
+    }
+
+    private void moveCardToKingTower(TroopsCard cardToMove) {
+        stepToTarget(cardToMove, botKingTower.getCenterPositionX(), botKingTower.getCenterPositionY(), false);
+//        System.out.println("Moving Card To King");
+    }
+
+    private void stepToTarget(TroopsCard card, float targetX, float targetY, boolean isPassable) {
+        float currentX = card.getCenterPositionX();
+        float currentY = card.getCenterPositionY();
+        float rangeSize = getRangeSize(card.getRangeType());
+        float speedSize = getSpeedSize(card.getSpeed());
+        Point2D current = new Point2D(currentX, currentY);
+        Point2D target = new Point2D(targetX, targetY);
+        if (current.distance(target) > minDist) {
+            //if card's range is farther than targets center
+            double distance = current.distance(target);
+//            System.out.println("target:" + targetX + "," + targetY);
+//            System.out.println("current:" + currentX + "," + currentY);
+//            System.out.println("distance:" + distance + "\n\n");
+
+            float distanceX = targetX - currentX;
+            float distanceY = targetY - currentY;
+            System.out.println("distance: x:" + distanceX + " y: " + distanceY);
+            double xRatio = distanceX / distance;
+            double yRatio = distanceY / distance;
+
+            float stepX = (float) (speedSize * xRatio);
+            float stepY = (float) (speedSize * yRatio);
+//            System.out.println("stepX: "+ stepX + " StepY: "+stepY);
+            card.setCenterPositionX(currentX + stepX);
+            card.setCenterPositionY(currentY + stepY);
+        } else if (isPassable) {
+            card.setCenterPositionX(currentX + targetX);
+            card.setCenterPositionY(currentY + targetY);
+        }
     }
 
     private void attackCardToTower(Card attackerCard, Tower targetTower) {
@@ -180,22 +280,20 @@ public class GameModel {
     }
 
     private void attackCardToBuilding(Card attackerCard, Building targetBuilding) {
-        int damage=0;
-        if (attackerCard instanceof TroopsCard){
-            damage = ((TroopsCard)attackerCard).getDamage();
+        int damage = 0;
+        if (attackerCard instanceof TroopsCard) {
+            damage = ((TroopsCard) attackerCard).getDamage();
+        } else if (attackerCard instanceof Building) {
+            damage = ((Building) attackerCard).getDamage();
         }
-       else if (attackerCard instanceof Building){
-           damage = ((Building)attackerCard).getDamage();
-       }
-       targetBuilding.setHp(targetBuilding.getHp() - damage);
+        targetBuilding.setHp(targetBuilding.getHp() - damage);
     }
 
     private void attackBuildingToCard(Building attackerBuilding, Card targetCard) {
-        if (targetCard instanceof TroopsCard){
-            ((TroopsCard)targetCard).setHp( ((TroopsCard)targetCard).getHp() - attackerBuilding.getDamage());
-        }
-        else if (targetCard instanceof Building){
-            ((Building)targetCard).setHp( ((Building)targetCard).getHp() - attackerBuilding.getDamage());
+        if (targetCard instanceof TroopsCard) {
+            ((TroopsCard) targetCard).setHp(((TroopsCard) targetCard).getHp() - attackerBuilding.getDamage());
+        } else if (targetCard instanceof Building) {
+            ((Building) targetCard).setHp(((Building) targetCard).getHp() - attackerBuilding.getDamage());
         }
 
     }
@@ -260,6 +358,27 @@ public class GameModel {
         }
     }
 
+    private float getRangeSize(Range range) {
+        float size = 0;
+        if (range.equals(Range.RANGED3))
+            size = 3 * minDist;
+        else if (range.equals(Range.RANGED5))
+            size = 5 * minDist;
+        else if (range.equals(Range.RANGED6))
+            size = 6 * minDist;
+        return size;
+    }
+
+    private float getSpeedSize(Speed speed) {
+        float size = 1;
+        if (speed.equals(Speed.SLOW))
+            size = minDist;
+        else if (speed.equals(Speed.MEDIUM))
+            size = 2;
+        else if (speed.equals(Speed.FAST))
+            size = 3;
+        return (size);
+    }
 
     //---------------------------------------------------------------------------------------------------------
     //---------------------------------------------------------------------------------------------------------
@@ -275,12 +394,12 @@ public class GameModel {
         this.userModel = userModel;
     }
 
-    public ArrayList<Card> getArenaExistingCards() {
-        return arenaExistingCards;
+    public ArrayList<TroopsCard> getArenaExistingTroops() {
+        return arenaExistingTroops;
     }
 
-    public void setArenaExistingCards(ArrayList<Card> arenaExistingCards) {
-        this.arenaExistingCards = arenaExistingCards;
+    public void setArenaExistingTroops(ArrayList<TroopsCard> arenaExistingTroops) {
+        this.arenaExistingTroops = arenaExistingTroops;
     }
 
     public ArrayList<Card> getArenaExistingSpellCards() {
@@ -387,20 +506,12 @@ public class GameModel {
         this.leftBridgeX = leftBridgeX;
     }
 
-    public float getLeftBridgeStartY() {
-        return leftBridgeStartY;
+    public float getBridgesEndY() {
+        return bridgesEndY;
     }
 
-    public void setLeftBridgeStartY(float leftBridgeStartY) {
-        this.leftBridgeStartY = leftBridgeStartY;
-    }
-
-    public float getLeftBridgeEndY() {
-        return leftBridgeEndY;
-    }
-
-    public void setLeftBridgeEndY(float leftBridgeEndY) {
-        this.leftBridgeEndY = leftBridgeEndY;
+    public void setBridgesEndY(float bridgesEndY) {
+        this.bridgesEndY = bridgesEndY;
     }
 
     public float getRightBridgeX() {
@@ -411,20 +522,19 @@ public class GameModel {
         this.rightBridgeX = rightBridgeX;
     }
 
-    public float getRightBridgeStartY() {
-        return rightBridgeStartY;
+    public float getBridgesStartY() {
+        return bridgesStartY;
     }
 
-    public void setRightBridgeStartY(float rightBridgeStartY) {
-        this.rightBridgeStartY = rightBridgeStartY;
+    public void setBridgesStartY(float bridgesStartY) {
+        this.bridgesStartY = bridgesStartY;
     }
 
-    public float getRightBridgeEndY() {
-        return rightBridgeEndY;
+    public ArrayList<Building> getArenaExistingBuildings() {
+        return arenaExistingBuildings;
     }
 
-    public void setRightBridgeEndY(float rightBridgeEndY) {
-        this.rightBridgeEndY = rightBridgeEndY;
+    public void setArenaExistingBuildings(ArrayList<Building> arenaExistingBuildings) {
+        this.arenaExistingBuildings = arenaExistingBuildings;
     }
-
 }

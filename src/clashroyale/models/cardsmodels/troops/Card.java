@@ -14,7 +14,6 @@ public class Card {
     private float radius;
     private String uuid;
     private boolean isAlive;
-
     /**
      * Instantiates a new Card.
      *

@@ -8,8 +8,8 @@ import clashroyale.models.enums.Target;
  * The type Troops card.
  */
 public class TroopsCard extends Card {
-    private int hp;
-    private int damage;
+    private double hp;
+    private Double damage;
     private Range rangeType;
     private double hitSpeed;
     private Speed speed;
@@ -49,7 +49,7 @@ public class TroopsCard extends Card {
      *
      * @param hp the hp
      */
-    public void setHp(int hp) {
+    public void setHp(double hp) {
         this.hp = hp;
     }
 
@@ -58,15 +58,15 @@ public class TroopsCard extends Card {
      *
      * @param damage the damage
      */
-    public void setDamage(int damage) {
+    public void setDamage(double damage) {
         this.damage = damage;
     }
 
-    public int getHp() {
+    public double getHp() {
         return hp;
     }
 
-    public int getDamage() {
+    public double getDamage() {
         return damage;
     }
 

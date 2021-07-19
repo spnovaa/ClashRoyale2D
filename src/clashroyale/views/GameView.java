@@ -10,6 +10,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -162,10 +164,11 @@ public class GameView extends Group {
         } else if (title.equals("infernoTower")) {
             image = new Image(getClass().getResourceAsStream("../resources/chr/inferno/building_inferno_tower_sprite_2.png"));
         } else if (title.equals("arrows")) {
-
+            image = new Image(getClass().getResourceAsStream("../resources/red-circle-hq-transparent-background-24.png"));
         } else if (title.equals("fireball")) {
-
+            image = new Image(getClass().getResourceAsStream("../resources/1175678-middle.png"));
         } else if (title.equals("rage")) {
+            image = new Image(getClass().getResourceAsStream("../resources/486-4869578_circle-texture-png-circle.png"));
 
         } else if (title.equals("archer")) {
             if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
@@ -214,10 +217,29 @@ public class GameView extends Group {
         System.out.println(x + "  " + y);
         System.out.println(image.getWidth());
         imageView = new ImageView(image);
+        if (title.equals("rage")){
+            imageView.setX(x - (float) 50 / 2);
+            imageView.setY(y - (float) 50 / 2);
+            imageView.setFitWidth(50);
+            imageView.setFitHeight(50);
+        }
+        else  if (title.equals("fireball")){
+            imageView.setX(x - (float) 25 / 2);
+            imageView.setY(y - (float) 25 / 2);
+            imageView.setFitWidth(25);
+            imageView.setFitHeight(25);
+        }
+        else  if (title.equals("arrows")){
+            imageView.setX(x - (float) 40 / 2);
+            imageView.setY(y - (float) 40 / 2);
+            imageView.setFitWidth(40);
+            imageView.setFitHeight(40);
+        }
+        else {
         imageView.setX(x - (float) TROOPS_SIZE / 2);
         imageView.setY(y - (float) TROOPS_SIZE / 2);
         imageView.setFitWidth(TROOPS_SIZE);
-        imageView.setFitHeight(TROOPS_SIZE);
+        imageView.setFitHeight(TROOPS_SIZE);}
         imageView.setUserData(chosenToDeployCard);
         anchorPane.getChildren().add(imageView);
         battleCards.add(imageView);

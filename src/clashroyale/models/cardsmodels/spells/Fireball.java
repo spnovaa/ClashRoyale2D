@@ -28,4 +28,11 @@ public class Fireball extends Spells {
         super.setPositionY(0);
     }
 
+    public double getAreaDamage() {
+        return areaDamage;
+    }
+
+    public void setAreaDamage(double areaDamage) {
+        this.areaDamage = areaDamage;
+    }
 }

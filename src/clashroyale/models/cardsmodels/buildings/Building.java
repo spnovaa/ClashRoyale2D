@@ -4,8 +4,8 @@ import clashroyale.models.enums.Target;
 import clashroyale.models.cardsmodels.troops.Card;
 
 public class Building extends Card {
-    private int hp;
-    private int damage;
+    private double hp;
+    private double damage;
     private double hitSpeed;
     private Target target;
     private double range;
@@ -33,7 +33,7 @@ public class Building extends Card {
      *
      * @param hp the hp
      */
-    public void setHp(int hp) {
+    public void setHp(double hp) {
         this.hp = hp;
     }
 
@@ -42,15 +42,15 @@ public class Building extends Card {
      *
      * @param damage the damage
      */
-    public void setDamage(int damage) {
+    public void setDamage(double damage) {
         this.damage = damage;
     }
 
-    public int getHp() {
+    public double getHp() {
         return hp;
     }
 
-    public int getDamage() {
+    public double getDamage() {
         return damage;
     }
 

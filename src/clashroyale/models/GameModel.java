@@ -1,6 +1,10 @@
 package clashroyale.models;
 
 import clashroyale.models.cardsmodels.buildings.Building;
+import clashroyale.models.cardsmodels.spells.Arrows;
+import clashroyale.models.cardsmodels.spells.Fireball;
+import clashroyale.models.cardsmodels.spells.Rage;
+import clashroyale.models.cardsmodels.spells.Spells;
 import clashroyale.models.cardsmodels.troops.Card;
 import clashroyale.models.cardsmodels.troops.TroopsCard;
 import clashroyale.models.enums.Range;
@@ -25,7 +29,7 @@ public class GameModel {
     private final float unitSize = 20;
 
     private ArrayList<TroopsCard> arenaExistingTroops;
-    private ArrayList<Card> arenaExistingSpellCards;
+    private ArrayList<Spells> arenaExistingSpellCards;
     private ArrayList<Tower> arenaExistingTowers;
     private ArrayList<Building> arenaExistingBuildings;
 
@@ -177,8 +181,107 @@ public class GameModel {
                     passCardFromLeftBridge(card);
             }
         }
-    }
 
+        for (Spells card : arenaExistingSpellCards) {
+            spellAction(card);
+
+        }
+
+    }
+     public void  spellAction(Spells spell){
+         Point2D cardPosition = new Point2D(spell.getCenterPositionX(), spell.getCenterPositionY());
+         for (TroopsCard troopsCard :arenaExistingTroops){
+             Point2D troopCardPosition = new Point2D(troopsCard.getCenterPositionX(), troopsCard.getCenterPositionY());
+             float distance = (float) cardPosition.distance(troopCardPosition);
+             if (distance <= spell.getRadius()*10){
+                 if (spell instanceof Fireball){
+                     if (!troopsCard.getRelatedUser().equals(spell)){
+                         troopsCard.setHp(troopsCard.getHp() - ((Fireball)spell).getAreaDamage());
+                         if (troopsCard.getHp() <=0){
+                             killCard(troopsCard);
+                         }
+                     }
+                 }
+                 else   if (spell instanceof Rage){
+                     if (troopsCard.getRelatedUser().equals(spell)){
+                     troopsCard.setDamage(troopsCard.getDamage()*1.4);
+                     troopsCard.setHitSpeed(troopsCard.getHitSpeed()*1.4);
+                     //speed
+                     }
+                     else if (spell instanceof Arrows){
+                         if (!troopsCard.getRelatedUser().equals(spell)){
+                             killCard(troopsCard);
+                         }
+                     }
+                 }
+             }
+         }
+         for (Tower tower:arenaExistingTowers){
+             Point2D towerPosition = new Point2D(tower.getCenterPositionX(), tower.getCenterPositionY());
+             float distance1 = (float) cardPosition.distance(towerPosition);
+             if (distance1 <= spell.getRadius()*10){
+                 Point2D troopCardPosition = new Point2D(tower.getCenterPositionX(), tower.getCenterPositionY());
+                 float distance = (float) cardPosition.distance(troopCardPosition);
+                 if (distance <= spell.getRadius()*10){
+                     if (spell instanceof Fireball){
+                         if (!tower.getRelatedUser().equals(spell)){
+                             tower.setHp(tower.getHp() - ((Fireball)spell).getAreaDamage());
+                             if (tower.getHp() <=0){
+                                killTower(tower);
+                             }
+                         }
+                     }
+                     else   if (spell instanceof Rage){
+                         if (tower.getRelatedUser().equals(spell)){
+                            tower.setDamage(tower.getDamage()*1.4);
+                             tower.setHitSpeed(tower.getHitSpeed()*1.4);
+                             //speed
+                         }
+                         else if (spell instanceof Arrows){
+                             if (!tower.getRelatedUser().equals(spell)){
+                                 killTower(tower);
+                             }
+                         }
+                     }
+                 }
+             }
+         }
+         for (Building building:arenaExistingBuildings){
+             Point2D buildingPosition = new Point2D(building.getCenterPositionX(),building.getCenterPositionY());
+             float distance2 = (float) cardPosition.distance(buildingPosition);
+             if (distance2 <= spell.getRadius()*10){
+                 Point2D towerPosition = new Point2D(building.getCenterPositionX(), building.getCenterPositionY());
+                 float distance1 = (float) cardPosition.distance(towerPosition);
+                 if (distance1 <= spell.getRadius()*10){
+                     Point2D troopCardPosition = new Point2D(building.getCenterPositionX(), building.getCenterPositionY());
+                     float distance = (float) cardPosition.distance(troopCardPosition);
+                     if (distance <= spell.getRadius()*10){
+                         if (spell instanceof Fireball){
+                             if (!building.getRelatedUser().equals(spell)){
+                                 building.setHp(building.getHp() - ((Fireball)spell).getAreaDamage());
+                                 if (building.getHp() <=0){
+                                     killBuilding(building);
+                                 }
+                             }
+                         }
+                         else   if (spell instanceof Rage){
+                             if (building.getRelatedUser().equals(spell)){
+                                 building.setDamage(building.getDamage()*1.4);
+                                 building.setHitSpeed(building.getHitSpeed()*1.4);
+                                 //speed
+                             }
+//                             else if (spell instanceof Arrows){
+//                                 if (!building.getRelatedUser().equals(spell)){
+//                                     killBuilding(building);
+//                                 }
+//                             }
+                         }
+                     }
+                 }
+             }
+         }
+
+     }
     private void moveCardToRightBridge(TroopsCard card) {
         stepToTarget(card, rightBridgeX, bridgesStartY, true);
 //        System.out.println("Moving Card To Right Bridge");
@@ -352,7 +455,7 @@ public class GameModel {
 
     private void attackCardToTower(Card attackerCard, Tower targetTower) {
         System.out.println(attackerCard.getTitle() + " is Attacking " + targetTower.getUuid());
-        int hp = 0;
+        double hp = 0;
         if (attackerCard instanceof TroopsCard) {
             System.out.println("troop damage :" + ((TroopsCard) attackerCard).getDamage());
             System.out.println("TowerHp : " + targetTower.getHp());
@@ -401,7 +504,7 @@ public class GameModel {
     }
 
     private void attackCardToBuilding(Card attackerCard, Building targetBuilding) {
-        int damage = 0;
+        double damage = 0;
         if (attackerCard instanceof TroopsCard) {
             damage = ((TroopsCard) attackerCard).getDamage();
         } else if (attackerCard instanceof Building) {
@@ -540,11 +643,11 @@ public class GameModel {
         this.arenaExistingTroops = arenaExistingTroops;
     }
 
-    public ArrayList<Card> getArenaExistingSpellCards() {
+    public ArrayList<Spells> getArenaExistingSpellCards() {
         return arenaExistingSpellCards;
     }
 
-    public void setArenaExistingSpellCards(ArrayList<Card> arenaExistingSpellCards) {
+    public void setArenaExistingSpellCards(ArrayList<Spells> arenaExistingSpellCards) {
         this.arenaExistingSpellCards = arenaExistingSpellCards;
     }
 

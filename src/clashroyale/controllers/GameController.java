@@ -144,12 +144,16 @@ public class GameController extends Application {
     private boolean deployClickedAt(float x, float y) {
         Card chosen = userModel.getChosenToDeployCard();
         if (chosen != null && y < userMaxY && y > userMinY && x > userMinX && x < userMaxX) {
+//            if (chosen instanceof Spells){
+//                gameView.deploySpells(x, y, chosen);
+//            }
+//            else {
             gameView.deployTroops(x, y, chosen);
             chosen.setCenterPositionX(x);
             chosen.setCenterPositionY(y);
             if (chosen instanceof Spells) {
                 //add to existing spells
-                gameModel.getArenaExistingSpellCards().add(chosen);
+                gameModel.getArenaExistingSpellCards().add((Spells) chosen);
             } else if (chosen instanceof TroopsCard) {
                 //add to existing troops
                 gameModel.getArenaExistingTroops().add((TroopsCard) chosen);

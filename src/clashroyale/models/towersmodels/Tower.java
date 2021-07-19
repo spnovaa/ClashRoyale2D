@@ -6,8 +6,8 @@ import java.util.UUID;
  * The type Tower.
  */
 public class Tower {
-    private int hp;
-    private int damage;
+    private double hp;
+    private double damage;
     private double range;
     private double hitSpeed;
     private String relatedUser;
@@ -39,7 +39,7 @@ public class Tower {
      *
      * @param hp the hp
      */
-    public void setHp(int hp) {
+    public void setHp(double hp) {
         this.hp = hp;
     }
 
@@ -48,7 +48,7 @@ public class Tower {
      *
      * @param damage the damage
      */
-    public void setDamage(int damage) {
+    public void setDamage(double damage) {
         this.damage = damage;
     }
 
@@ -57,7 +57,7 @@ public class Tower {
      *
      * @return the hp
      */
-    public int getHp() {
+    public double getHp() {
         return hp;
     }
 
@@ -66,7 +66,7 @@ public class Tower {
      *
      * @return the damage
      */
-    public int getDamage() {
+    public double getDamage() {
         return damage;
     }
 

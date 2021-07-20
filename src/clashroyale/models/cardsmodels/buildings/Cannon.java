@@ -15,7 +15,7 @@ public class Cannon extends Building {
      * @param level the level
      */
     public Cannon(int level, String relatedUser) {
-        super("cannon", 3, 5.5, 30, 0.8, Target.GROUND,
+        super("cannon", 3, 5.5, 30*15, 0.8, Target.GROUND,
                 "/thumbCards/thumbcannon.png", relatedUser);
         if (level == 1) {
             super.setDamage(60);

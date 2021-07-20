@@ -1,6 +1,8 @@
 package clashroyale.models;
 
 import clashroyale.models.cardsmodels.buildings.Building;
+import clashroyale.models.cardsmodels.buildings.Cannon;
+import clashroyale.models.cardsmodels.buildings.InfernoTower;
 import clashroyale.models.cardsmodels.spells.Arrows;
 import clashroyale.models.cardsmodels.spells.Fireball;
 import clashroyale.models.cardsmodels.spells.Rage;
@@ -191,6 +193,76 @@ public class GameModel {
             }
 
         }
+
+
+        for (Building building : arenaExistingBuildings){
+            if (building.isAlive()){
+                Point2D cardPosition = new Point2D(building.getCenterPositionX(), building.getCenterPositionY());
+                if (building instanceof InfernoTower){
+                    for (TroopsCard troopsCard : arenaExistingTroops) {
+                        if (!troopsCard.getRelatedUser().equals(building.getRelatedUser())){
+                        Point2D troopCardPosition = new Point2D(troopsCard.getCenterPositionX(), troopsCard.getCenterPositionY());
+                        float distance = (float) cardPosition.distance(troopCardPosition);
+                        System.out.println("distance " + distance);
+                        if (distance <= building.getRange() * 10) {
+                            troopsCard.setHp(troopsCard.getHp() - building.getDamage());
+                            if (troopsCard.getHp() <= 0) {
+                                killCard(troopsCard);
+                            }
+                        }}
+                        }
+                    for (Tower tower :arenaExistingTowers) {
+                        if (!tower.getRelatedUser().equals(building.getRelatedUser())){
+                        Point2D troopCardPosition = new Point2D(tower.getCenterPositionX(), tower.getCenterPositionY());
+                        float distance = (float) cardPosition.distance(troopCardPosition);
+                        System.out.println("distance " + distance);
+                        if (distance <= building.getRange() * 10) {
+                            tower.setHp(tower.getHp() - building.getDamage());
+                            if (tower.getHp() <= 0) {
+                                killTower(tower);
+                            }
+                        }
+                    }}
+                    int increaseDamage= (((InfernoTower)building).getMaxDamage()-((InfernoTower)building).getMinDamage())/building.getFixLifeTime();
+                    building.setDamage(building.getDamage() + increaseDamage);
+                }
+                else if (building instanceof Cannon){
+                    for (TroopsCard troopsCard : arenaExistingTroops) {
+                        if (!troopsCard.getRelatedUser().equals(building.getRelatedUser())){
+                            Point2D troopCardPosition = new Point2D(troopsCard.getCenterPositionX(), troopsCard.getCenterPositionY());
+                            float distance = (float) cardPosition.distance(troopCardPosition);
+                            System.out.println("distance " + distance);
+                            if (distance <= building.getRange() * 10) {
+                                troopsCard.setHp(troopsCard.getHp() - building.getDamage());
+                                if (troopsCard.getHp() <= 0) {
+                                    killCard(troopsCard);
+                                }
+                            }}
+                    }
+                    for (Tower tower :arenaExistingTowers) {
+                        if (!tower.getRelatedUser().equals(building.getRelatedUser())){
+                            Point2D troopCardPosition = new Point2D(tower.getCenterPositionX(), tower.getCenterPositionY());
+                            float distance = (float) cardPosition.distance(troopCardPosition);
+                            System.out.println("distance " + distance);
+                            if (distance <= building.getRange() * 10) {
+                                tower.setHp(tower.getHp() - building.getDamage());
+                                if (tower.getHp() <= 0) {
+                                    killTower(tower);
+                                }
+                            }
+                        }}
+
+
+
+                }
+            }
+            building.decreaseLifeTime();
+            if (building.getLifeTime()<=0){
+                building.setAlive(false);
+            }
+        }
+
+
 
     }
 

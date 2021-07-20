@@ -41,9 +41,13 @@ public class UserModel {
     private Card findByTitle(String string) {
         for (Card card : cards) {
             card.setRelatedUser(username);
-            if (card.getTitle().equals(string))
+            if (card instanceof Rage)
+                System.out.println(card.getTitle() + " level " + ((Rage) card).getDuration());
+            if (card.getTitle().equals(string)) {
                 return card;
+            }
         }
+        System.out.println("Returned null");
         return null;
     }
 

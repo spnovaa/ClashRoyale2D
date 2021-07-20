@@ -174,15 +174,7 @@ public class GameController extends Application {
             chosen.setCenterPositionY(y);
             if (chosen instanceof Spells) {
                 //add to existing spells
-                gameModel.getArenaExistingSpellCards().add((Spells) chosen);
-                if (chosen instanceof Rage){ gameModel.spellAction((Rage) chosen);
-                    System.out.println("gggg");}
-               else if (chosen instanceof Fireball){ gameModel.spellAction((Fireball) chosen);
-                    System.out.println("gggg");}
-               else if (chosen instanceof Arrows){ gameModel.spellAction((Arrows) chosen);
-                    System.out.println("gggg");}
-
-
+                gameModel.spellAction(chosen);
             } else if (chosen instanceof TroopsCard) {
                 //add to existing troops
                 gameModel.getArenaExistingTroops().add((TroopsCard) chosen);

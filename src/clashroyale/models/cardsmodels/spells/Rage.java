@@ -27,4 +27,8 @@ public class Rage extends Spells {
         super.setPositionX(0);
         super.setPositionY(0);
     }
+
+    public double getDuration() {
+        return duration;
+    }
 }

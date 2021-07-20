@@ -22,6 +22,7 @@ public class Spells extends Card {
     public Spells(String title, int cost, double radious, String thumbImage, String relatedUser) {
         super(title, cost, thumbImage, relatedUser);
         this.radious = radious;
+        System.out.println("Radius " + radious + "Set For " + title);
         isAlive = true;
         time=45;
     }

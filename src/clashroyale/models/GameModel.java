@@ -194,12 +194,25 @@ public class GameModel {
 
     }
 
-    public void spellAction(Spells spell) {
-        Point2D cardPosition = new Point2D(spell.getCenterPositionX(), spell.getCenterPositionY());
+    public void spellAction(Card temp) {
+        String title = temp.getTitle();
+        Spells spell;
+        if (title.equalsIgnoreCase("rage"))
+            spell = (Rage) temp;
+        else if (title.equalsIgnoreCase("arrows"))
+            spell = (Arrows) temp;
+        else
+            spell = (Fireball) temp;
+
+        Point2D cardPosition = new Point2D(temp.getCenterPositionX(), temp.getCenterPositionY());
+
         for (TroopsCard troopsCard : arenaExistingTroops) {
             Point2D troopCardPosition = new Point2D(troopsCard.getCenterPositionX(), troopsCard.getCenterPositionY());
             float distance = (float) cardPosition.distance(troopCardPosition);
-            if (distance <= spell.getRadius() * 10) {
+            System.out.println("distance " + distance);
+            System.out.println("spell radius : " + spell.getRadious() * 10);
+            if (distance <= spell.getRadious() * 10) {
+                System.out.println("Troop " + troopsCard.getTitle() + " is detected in " + spell.getTitle() + " range");
                 if (spell instanceof Fireball) {
                     if (!troopsCard.getRelatedUser().equals(spell.getRelatedUser())) {
                         troopsCard.setHp(troopsCard.getHp() - ((Fireball) spell).getAreaDamage());
@@ -208,25 +221,24 @@ public class GameModel {
                         }
                     }
                 } else if (spell instanceof Rage) {
+                    System.out.println(troopsCard.getRelatedUser() + " and " + spell.getRelatedUser());
                     if (troopsCard.getRelatedUser().equals(spell.getRelatedUser())) {
                         troopsCard.setDamage(troopsCard.getDamage() * 1.4);
                         troopsCard.setHitSpeed(troopsCard.getHitSpeed() * 1.4);
                         //speed
-                        if (troopsCard.getSpeed().equals(Speed.SLOW)){
+                        if (troopsCard.getSpeed().equals(Speed.SLOW)) {
                             troopsCard.setSpeed(Speed.SLOW_AMPLIFIED);
                             System.out.println("dddddddd");
-                        }
-                        else  if (troopsCard.getSpeed().equals(Speed.MEDIUM)){
+                        } else if (troopsCard.getSpeed().equals(Speed.MEDIUM)) {
                             troopsCard.setSpeed(Speed.MEDIUM_AMPLIFIED);
                             System.out.println("ddddddd");
-                        }
-                        else  if (troopsCard.getSpeed().equals(Speed.FAST)){
+                        } else if (troopsCard.getSpeed().equals(Speed.FAST)) {
                             troopsCard.setSpeed(Speed.FAST_AMPLIFIED);
                         }
-                    } else if (spell instanceof Arrows) {
-                        if (!troopsCard.getRelatedUser().equals(spell)) {
-                            killCard(troopsCard);
-                        }
+                    }
+                } else {
+                    if (!troopsCard.getRelatedUser().equals(spell.getRelatedUser())) {
+                        killCard(troopsCard);
                     }
                 }
             }
@@ -234,10 +246,10 @@ public class GameModel {
         for (Tower tower : arenaExistingTowers) {
             Point2D towerPosition = new Point2D(tower.getCenterPositionX(), tower.getCenterPositionY());
             float distance1 = (float) cardPosition.distance(towerPosition);
-            if (distance1 <= spell.getRadius() * 10) {
+            if (distance1 <= spell.getRadious() * 10) {
                 Point2D troopCardPosition = new Point2D(tower.getCenterPositionX(), tower.getCenterPositionY());
                 float distance = (float) cardPosition.distance(troopCardPosition);
-                if (distance <= spell.getRadius() * 10) {
+                if (distance <= spell.getRadious() * 10) {
                     if (spell instanceof Fireball) {
                         if (!tower.getRelatedUser().equals(spell.getRelatedUser())) {
                             tower.setHp(tower.getHp() - ((Fireball) spell).getAreaDamage());
@@ -262,22 +274,22 @@ public class GameModel {
         for (Building building : arenaExistingBuildings) {
             Point2D buildingPosition = new Point2D(building.getCenterPositionX(), building.getCenterPositionY());
             float distance2 = (float) cardPosition.distance(buildingPosition);
-            if (distance2 <= spell.getRadius() * 10) {
+            if (distance2 <= spell.getRadious() * 10) {
                 Point2D towerPosition = new Point2D(building.getCenterPositionX(), building.getCenterPositionY());
                 float distance1 = (float) cardPosition.distance(towerPosition);
-                if (distance1 <= spell.getRadius() * 10) {
+                if (distance1 <= spell.getRadious() * 10) {
                     Point2D troopCardPosition = new Point2D(building.getCenterPositionX(), building.getCenterPositionY());
                     float distance = (float) cardPosition.distance(troopCardPosition);
-                    if (distance <= spell.getRadius() * 10) {
+                    if (distance <= spell.getRadious() * 10) {
                         if (spell instanceof Fireball) {
-                            if (!building.getRelatedUser().equals(spell)) {
+                            if (!building.getRelatedUser().equals(spell.getRelatedUser())) {
                                 building.setHp(building.getHp() - ((Fireball) spell).getAreaDamage());
                                 if (building.getHp() <= 0) {
                                     killBuilding(building);
                                 }
                             }
                         } else if (spell instanceof Rage) {
-                            if (building.getRelatedUser().equals(spell)) {
+                            if (building.getRelatedUser().equals(spell.getRelatedUser())) {
                                 building.setDamage(building.getDamage() * 1.4);
                                 building.setHitSpeed(building.getHitSpeed() * 1.4);
                                 //speed

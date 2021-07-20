@@ -111,18 +111,18 @@ public class GameModel {
     }
 
     private void initializeUserTowers() {
-        userKingTower = new KingTower(userLevel, playerOneUsername, 180, 420, 35);
-        userRightQueenTower = new QueenTower(userLevel, playerOneUsername, 270, 375, 20);
-        userLeftQueenTower = new QueenTower(userLevel, playerOneUsername, 85, 375, 20);
+        userKingTower = new KingTower(userLevel, playerOneUsername, 180, 420, 35, "userKingTower");
+        userRightQueenTower = new QueenTower(userLevel, playerOneUsername, 270, 375, 20, "userRightQueenTower");
+        userLeftQueenTower = new QueenTower(userLevel, playerOneUsername, 85, 375, 20, "userLeftQueenTower");
         arenaExistingTowers.add(userKingTower);
         arenaExistingTowers.add(userRightQueenTower);
         arenaExistingTowers.add(userLeftQueenTower);
     }
 
     private void initializeBotTowers() {
-        botKingTower = new KingTower(userLevel, botUsername, 180, 75, 35);
-        botRightQueenTower = new QueenTower(userLevel, botUsername, 270, 115, 20);
-        botLeftQueenTower = new QueenTower(userLevel, botUsername, 85, 115, 20);
+        botKingTower = new KingTower(userLevel, botUsername, 180, 75, 35, "botKingTower");
+        botRightQueenTower = new QueenTower(userLevel, botUsername, 270, 115, 20, "botRightQueenTower");
+        botLeftQueenTower = new QueenTower(userLevel, botUsername, 85, 115, 20, "botLeftQueenTower");
         arenaExistingTowers.add(botKingTower);
         arenaExistingTowers.add(botRightQueenTower);
         arenaExistingTowers.add(botLeftQueenTower);
@@ -459,22 +459,22 @@ public class GameModel {
     }
 
     private void attackCardToTower(Card attackerCard, Tower targetTower) {
-        System.out.println(attackerCard.getTitle() + " is Attacking " + targetTower.getUuid());
+//        System.out.println(attackerCard.getTitle() + " is Attacking " + targetTower.getUuid());
         double hp = 0;
         if (attackerCard instanceof TroopsCard) {
-            System.out.println("troop damage :" + ((TroopsCard) attackerCard).getDamage());
-            System.out.println("TowerHp : " + targetTower.getHp());
+//            System.out.println("troop damage :" + ((TroopsCard) attackerCard).getDamage());
+//            System.out.println("TowerHp : " + targetTower.getHp());
             hp = targetTower.getHp() - ((TroopsCard) attackerCard).getDamage();
         } else if (attackerCard instanceof Building) {
             hp = targetTower.getHp() - ((Building) attackerCard).getDamage();
         }
-        System.out.println(" Tower Hp : " + hp);
+//        System.out.println(" Tower Hp : " + hp);
         if (hp >= 0)
             targetTower.setHp(hp);
         else {
             targetTower.setHp(0);
             targetTower.setAlive(false);
-            System.out.println("Tower " + targetTower.getUuid() + " is now dead");
+//            System.out.println("Tower " + targetTower.getUuid() + " is now dead");
         }
 
     }
@@ -783,4 +783,10 @@ public class GameModel {
     public void setArenaExistingBuildings(ArrayList<Building> arenaExistingBuildings) {
         this.arenaExistingBuildings = arenaExistingBuildings;
     }
+
+
+    public ArrayList<Tower> getArenaTowers() {
+        return arenaExistingTowers;
+    }
+
 }

@@ -68,6 +68,20 @@ public class GameController extends Application {
      */
     @FXML
     Label time;
+
+    @FXML
+    ImageView botKing;
+    @FXML
+    ImageView userKing;
+    @FXML
+    ImageView botRightQueen;
+    @FXML
+    ImageView userRightQueen;
+    @FXML
+    ImageView botLeftQueen;
+    @FXML
+    ImageView userLeftQueen;
+
     private Stage stage;
     private UserModel userModel;
     private final static double FRAMES_PER_SECOND = 15.0;
@@ -79,6 +93,8 @@ public class GameController extends Application {
     private int userMaxY;
     private GameModel gameModel;
     private Timer timer;
+
+    private ArrayList<Tower> arenaTowers;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -93,6 +109,7 @@ public class GameController extends Application {
         userMaxX = 340;
         userMinY = 255;
         userMaxY = 450;
+        arenaTowers = new ArrayList<>();
     }
 
     /**
@@ -116,7 +133,11 @@ public class GameController extends Application {
         gameView.setTextTime(time);
         gameView.setAnchorPane(anchorPane);
         gameView.instantiateCardsQueImageViews(displayedCard1, displayedCard2, displayedCard3, displayedCard4, nextCard);
+        gameView.instantiateTowers(botKing, botLeftQueen, botRightQueen, userKing, userLeftQueen, userRightQueen);
+        arenaTowers = gameModel.getArenaTowers();
+        gameView.setArenaTowers(arenaTowers);
         gameView.prepareArena();
+        System.out.println(userModel.getLevel());
         startTimer();
     }
 

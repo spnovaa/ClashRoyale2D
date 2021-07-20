@@ -16,6 +16,7 @@ public class Tower {
     private float radius;
     private boolean isAlive;
     private String uuid;
+    private String title;
 
     /**
      * Instantiates a new Tower.
@@ -23,7 +24,8 @@ public class Tower {
      * @param range    the range
      * @param hitSpeed the hit speed
      */
-    public Tower(double range, double hitSpeed, String relatedUser, float centerPositionX, float centerPositionY, float radius) {
+    public Tower(double range, double hitSpeed, String relatedUser, float centerPositionX, float centerPositionY,
+                 float radius, String title) {
         this.range = range;
         this.hitSpeed = hitSpeed;
         this.relatedUser = relatedUser;
@@ -32,6 +34,7 @@ public class Tower {
         this.radius = radius;
         isAlive = true;
         uuid = UUID.randomUUID().toString();
+        this.title = title;
     }
 
     /**
@@ -144,4 +147,11 @@ public class Tower {
         this.uuid = uuid;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

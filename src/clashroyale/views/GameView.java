@@ -50,11 +50,20 @@ public class GameView extends Group {
     private ImageView displayedCard2;
     private ImageView displayedCard3;
     private ImageView displayedCard4;
+
+    private ImageView botKing;
+    private ImageView botLeftQueen;
+    private ImageView botRightQueen;
+    private ImageView userKing;
+    private ImageView userLeftQueen;
+    private ImageView userRightQueen;
+
     private ImageView nextCard;
     private int flag;
     private int chosenCardIndex;
     private LeftTime leftTime;
     private ArrayList<ImageView> battleCards;
+    private ArrayList<Tower> arenaTowers;
 
     //---------------------------------------------------------------------------------------------------------
     //---------------------------------------------------------------------------------------------------------
@@ -90,6 +99,17 @@ public class GameView extends Group {
         this.displayedCard4 = displayedCard4;
         this.nextCard = nextCard;
 
+    }
+
+    public void instantiateTowers(ImageView botKing, ImageView botLeftQueen, ImageView botRightQueen,
+                                  ImageView userKing, ImageView userLeftQueen, ImageView userRightQueen) {
+        arenaTowers = new ArrayList<>();
+        this.botKing = botKing;
+        this.botLeftQueen = botLeftQueen;
+        this.botRightQueen = botRightQueen;
+        this.userKing = userKing;
+        this.userLeftQueen = userLeftQueen;
+        this.userRightQueen = userRightQueen;
     }
 
     /**
@@ -309,9 +329,9 @@ public class GameView extends Group {
         for (ImageView asset : battleCards) {
             TroopsCard oldCard;
             Tower oldTower;
-            Object userData = asset.getUserData();
-            if (userData instanceof TroopsCard) {
-                oldCard = (TroopsCard) userData;
+
+            if (asset.getUserData() instanceof TroopsCard) {
+                oldCard = (TroopsCard) asset.getUserData();
                 for (TroopsCard card : existingTroops) {
                     if (card.getUuid().equals(oldCard.getUuid())) {
                         if (!card.isAlive()) {
@@ -324,25 +344,30 @@ public class GameView extends Group {
                         }
                     }
                 }
-            } else if (userData instanceof Tower){
-                oldTower = (Tower) userData;
-                for (Tower tower : existingTowers) {
-                    if (tower.getUuid().equals(oldTower.getUuid()) && !tower.isAlive()) {
-                        asset.setImage(null);
-                        asset.setUserData(null);
-                    }
-                }
-
-            }
-            else if (userData instanceof Spells){
-                for(Spells spell : existingSpells){
-                    if (spell.equals(userData) && !spell.isAlive()){
+            } else if (asset.getUserData() instanceof Spells) {
+                for (Spells spell : existingSpells) {
+                    if (spell.equals(asset.getUserData()) && !spell.isAlive()) {
                         asset.setImage(null);
                     }
                 }
             }
         }
+
+        for (Tower tower : existingTowers) {
+            if (!tower.isAlive()) {
+                switch (tower.getTitle()) {
+                    case "userKingTower" -> userKing.setImage(null);
+                    case "userRightQueenTower" -> userRightQueen.setImage(null);
+                    case "userLeftQueenTower" -> userLeftQueen.setImage(null);
+                    case "botKingTower" -> botKing.setImage(null);
+                    case "botLeftQueenTower" -> botLeftQueen.setImage(null);
+                    case "botRightQueenTower" -> botRightQueen.setImage(null);
+                }
+            }
+
+        }
     }
+
 
     //---------------------------------------------------------------------------------------------------------
     //---------------------------------------------------------------------------------------------------------
@@ -403,4 +428,17 @@ public class GameView extends Group {
         flag = 0;
     }
 
+    public void setArenaTowers(ArrayList<Tower> arenaTowers) {
+        this.arenaTowers = arenaTowers;
+        for (Tower tower : arenaTowers) {
+            switch (tower.getTitle()) {
+                case "userKingTower" -> userKing.setUserData(tower);
+                case "userRightQueenTower" -> userRightQueen.setUserData(tower);
+                case "userLeftQueenTower" -> userLeftQueen.setUserData(tower);
+                case "botKingTower" -> botKing.setUserData(tower);
+                case "botLeftQueenTower" -> botLeftQueen.setUserData(tower);
+                case "botRightQueenTower" -> botRightQueen.setUserData(tower);
+            }
+        }
+    }
 }

@@ -23,6 +23,8 @@ public class LoginModel {
             if (resultSet.next()) {
                 if (resultSet.getString("password").equals(password)) {
                     userModel.setUsername(username);
+                    userModel.setLevel(Integer.parseInt(resultSet.getString("level")));
+                    System.out.println(Integer.parseInt(resultSet.getString("level")));
                     userModel.setId(resultSet.getString("id"));
                     return 1;
                 } else

@@ -185,11 +185,11 @@ public class GameView extends Group {
         } else if (title.equals("infernoTower")) {
             image = new Image(getClass().getResourceAsStream("../resources/chr/inferno/building_inferno_tower_sprite_2.png"));
         } else if (title.equals("arrows")) {
-            image = new Image(getClass().getResourceAsStream("../resources/red-circle-hq-transparent-background-24.png"));
+            image = new Image(getClass().getResourceAsStream("../resources/Ski_trail_rating_symbol_red_circle.png"));
         } else if (title.equals("fireball")) {
-            image = new Image(getClass().getResourceAsStream("../resources/1175678-middle.png"));
+            image = new Image(getClass().getResourceAsStream("../resources/index.png"));
         } else if (title.equals("rage")) {
-            image = new Image(getClass().getResourceAsStream("../resources/486-4869578_circle-texture-png-circle.png"));
+            image = new Image(getClass().getResourceAsStream("../resources/images.png"));
 
         } else if (title.equals("archer")) {
             if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {

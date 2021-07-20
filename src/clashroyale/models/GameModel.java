@@ -224,7 +224,7 @@ public class GameModel {
                             troopsCard.setSpeed(Speed.FAST_AMPLIFIED);
                         }
                     } else if (spell instanceof Arrows) {
-                        if (!troopsCard.getRelatedUser().equals(spell)) {
+                        if (!troopsCard.getRelatedUser().equals(spell.getRelatedUser())) {
                             killCard(troopsCard);
                         }
                     }

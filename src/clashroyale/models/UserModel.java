@@ -40,6 +40,7 @@ public class UserModel {
 
     private Card findByTitle(String string) {
         for (Card card : cards) {
+            card.setRelatedUser(username);
             if (card.getTitle().equals(string))
                 return card;
         }

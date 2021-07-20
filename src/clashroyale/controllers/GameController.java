@@ -175,9 +175,12 @@ public class GameController extends Application {
             if (chosen instanceof Spells) {
                 //add to existing spells
                 gameModel.getArenaExistingSpellCards().add((Spells) chosen);
-                if (chosen instanceof Rage){ gameModel.spellAction((Rage) chosen);}
-               else if (chosen instanceof Fireball){ gameModel.spellAction((Fireball) chosen);}
-               else if (chosen instanceof Arrows){ gameModel.spellAction((Arrows) chosen);}
+                if (chosen instanceof Rage){ gameModel.spellAction((Rage) chosen);
+                    System.out.println("gggg");}
+               else if (chosen instanceof Fireball){ gameModel.spellAction((Fireball) chosen);
+                    System.out.println("gggg");}
+               else if (chosen instanceof Arrows){ gameModel.spellAction((Arrows) chosen);
+                    System.out.println("gggg");}
 
 
             } else if (chosen instanceof TroopsCard) {

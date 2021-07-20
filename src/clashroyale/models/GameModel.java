@@ -201,7 +201,7 @@ public class GameModel {
             float distance = (float) cardPosition.distance(troopCardPosition);
             if (distance <= spell.getRadius() * 10) {
                 if (spell instanceof Fireball) {
-                    if (!troopsCard.getRelatedUser().equals(spell)) {
+                    if (!troopsCard.getRelatedUser().equals(spell.getRelatedUser())) {
                         troopsCard.setHp(troopsCard.getHp() - ((Fireball) spell).getAreaDamage());
                         if (troopsCard.getHp() <= 0) {
                             killCard(troopsCard);

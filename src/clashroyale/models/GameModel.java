@@ -183,110 +183,107 @@ public class GameModel {
         }
 
         for (Spells card : arenaExistingSpellCards) {
-            if (card.isAlive()){
+            if (card.isAlive()) {
                 card.decreaseTime();
             }
-            if (card.getTime()<=0){
+            if (card.getTime() <= 0) {
                 card.setAlive(false);
             }
 
         }
 
     }
-     public void  spellAction(Spells spell){
-         Point2D cardPosition = new Point2D(spell.getCenterPositionX(), spell.getCenterPositionY());
-         for (TroopsCard troopsCard :arenaExistingTroops){
-             Point2D troopCardPosition = new Point2D(troopsCard.getCenterPositionX(), troopsCard.getCenterPositionY());
-             float distance = (float) cardPosition.distance(troopCardPosition);
-             if (distance <= spell.getRadius()*10){
-                 if (spell instanceof Fireball){
-                     if (!troopsCard.getRelatedUser().equals(spell)){
-                         troopsCard.setHp(troopsCard.getHp() - ((Fireball)spell).getAreaDamage());
-                         if (troopsCard.getHp() <=0){
-                             killCard(troopsCard);
-                         }
-                     }
-                 }
-                 else   if (spell instanceof Rage){
-                     if (troopsCard.getRelatedUser().equals(spell)){
-                     troopsCard.setDamage(troopsCard.getDamage()*1.4);
-                     troopsCard.setHitSpeed(troopsCard.getHitSpeed()*1.4);
-                     //speed
-                     }
-                     else if (spell instanceof Arrows){
-                         if (!troopsCard.getRelatedUser().equals(spell)){
-                             killCard(troopsCard);
-                         }
-                     }
-                 }
-             }
-         }
-         for (Tower tower:arenaExistingTowers){
-             Point2D towerPosition = new Point2D(tower.getCenterPositionX(), tower.getCenterPositionY());
-             float distance1 = (float) cardPosition.distance(towerPosition);
-             if (distance1 <= spell.getRadius()*10){
-                 Point2D troopCardPosition = new Point2D(tower.getCenterPositionX(), tower.getCenterPositionY());
-                 float distance = (float) cardPosition.distance(troopCardPosition);
-                 if (distance <= spell.getRadius()*10){
-                     if (spell instanceof Fireball){
-                         if (!tower.getRelatedUser().equals(spell)){
-                             tower.setHp(tower.getHp() - ((Fireball)spell).getAreaDamage());
-                             if (tower.getHp() <=0){
+
+    public void spellAction(Spells spell) {
+        Point2D cardPosition = new Point2D(spell.getCenterPositionX(), spell.getCenterPositionY());
+        for (TroopsCard troopsCard : arenaExistingTroops) {
+            Point2D troopCardPosition = new Point2D(troopsCard.getCenterPositionX(), troopsCard.getCenterPositionY());
+            float distance = (float) cardPosition.distance(troopCardPosition);
+            if (distance <= spell.getRadius() * 10) {
+                if (spell instanceof Fireball) {
+                    if (!troopsCard.getRelatedUser().equals(spell)) {
+                        troopsCard.setHp(troopsCard.getHp() - ((Fireball) spell).getAreaDamage());
+                        if (troopsCard.getHp() <= 0) {
+                            killCard(troopsCard);
+                        }
+                    }
+                } else if (spell instanceof Rage) {
+                    if (troopsCard.getRelatedUser().equals(spell)) {
+                        troopsCard.setDamage(troopsCard.getDamage() * 1.4);
+                        troopsCard.setHitSpeed(troopsCard.getHitSpeed() * 1.4);
+                        //speed
+                    } else if (spell instanceof Arrows) {
+                        if (!troopsCard.getRelatedUser().equals(spell)) {
+                            killCard(troopsCard);
+                        }
+                    }
+                }
+            }
+        }
+        for (Tower tower : arenaExistingTowers) {
+            Point2D towerPosition = new Point2D(tower.getCenterPositionX(), tower.getCenterPositionY());
+            float distance1 = (float) cardPosition.distance(towerPosition);
+            if (distance1 <= spell.getRadius() * 10) {
+                Point2D troopCardPosition = new Point2D(tower.getCenterPositionX(), tower.getCenterPositionY());
+                float distance = (float) cardPosition.distance(troopCardPosition);
+                if (distance <= spell.getRadius() * 10) {
+                    if (spell instanceof Fireball) {
+                        if (!tower.getRelatedUser().equals(spell)) {
+                            tower.setHp(tower.getHp() - ((Fireball) spell).getAreaDamage());
+                            if (tower.getHp() <= 0) {
                                 killTower(tower);
-                             }
-                         }
-                     }
-                     else   if (spell instanceof Rage){
-                         if (tower.getRelatedUser().equals(spell)){
-                            tower.setDamage(tower.getDamage()*1.4);
-                             tower.setHitSpeed(tower.getHitSpeed()*1.4);
-                             //speed
-                         }
-                         else if (spell instanceof Arrows){
-                             if (!tower.getRelatedUser().equals(spell)){
-                                 killTower(tower);
-                             }
-                         }
-                     }
-                 }
-             }
-         }
-         for (Building building:arenaExistingBuildings){
-             Point2D buildingPosition = new Point2D(building.getCenterPositionX(),building.getCenterPositionY());
-             float distance2 = (float) cardPosition.distance(buildingPosition);
-             if (distance2 <= spell.getRadius()*10){
-                 Point2D towerPosition = new Point2D(building.getCenterPositionX(), building.getCenterPositionY());
-                 float distance1 = (float) cardPosition.distance(towerPosition);
-                 if (distance1 <= spell.getRadius()*10){
-                     Point2D troopCardPosition = new Point2D(building.getCenterPositionX(), building.getCenterPositionY());
-                     float distance = (float) cardPosition.distance(troopCardPosition);
-                     if (distance <= spell.getRadius()*10){
-                         if (spell instanceof Fireball){
-                             if (!building.getRelatedUser().equals(spell)){
-                                 building.setHp(building.getHp() - ((Fireball)spell).getAreaDamage());
-                                 if (building.getHp() <=0){
-                                     killBuilding(building);
-                                 }
-                             }
-                         }
-                         else   if (spell instanceof Rage){
-                             if (building.getRelatedUser().equals(spell)){
-                                 building.setDamage(building.getDamage()*1.4);
-                                 building.setHitSpeed(building.getHitSpeed()*1.4);
-                                 //speed
-                             }
+                            }
+                        }
+                    } else if (spell instanceof Rage) {
+                        if (tower.getRelatedUser().equals(spell)) {
+                            tower.setDamage(tower.getDamage() * 1.4);
+                            tower.setHitSpeed(tower.getHitSpeed() * 1.4);
+                            //speed
+                        } else if (spell instanceof Arrows) {
+                            if (!tower.getRelatedUser().equals(spell)) {
+                                killTower(tower);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (Building building : arenaExistingBuildings) {
+            Point2D buildingPosition = new Point2D(building.getCenterPositionX(), building.getCenterPositionY());
+            float distance2 = (float) cardPosition.distance(buildingPosition);
+            if (distance2 <= spell.getRadius() * 10) {
+                Point2D towerPosition = new Point2D(building.getCenterPositionX(), building.getCenterPositionY());
+                float distance1 = (float) cardPosition.distance(towerPosition);
+                if (distance1 <= spell.getRadius() * 10) {
+                    Point2D troopCardPosition = new Point2D(building.getCenterPositionX(), building.getCenterPositionY());
+                    float distance = (float) cardPosition.distance(troopCardPosition);
+                    if (distance <= spell.getRadius() * 10) {
+                        if (spell instanceof Fireball) {
+                            if (!building.getRelatedUser().equals(spell)) {
+                                building.setHp(building.getHp() - ((Fireball) spell).getAreaDamage());
+                                if (building.getHp() <= 0) {
+                                    killBuilding(building);
+                                }
+                            }
+                        } else if (spell instanceof Rage) {
+                            if (building.getRelatedUser().equals(spell)) {
+                                building.setDamage(building.getDamage() * 1.4);
+                                building.setHitSpeed(building.getHitSpeed() * 1.4);
+                                //speed
+                            }
 //                             else if (spell instanceof Arrows){
 //                                 if (!building.getRelatedUser().equals(spell)){
 //                                     killBuilding(building);
 //                                 }
 //                             }
-                         }
-                     }
-                 }
-             }
-         }
+                        }
+                    }
+                }
+            }
+        }
 
-     }
+    }
+
     private void moveCardToRightBridge(TroopsCard card) {
         stepToTarget(card, rightBridgeX, bridgesStartY, true);
 //        System.out.println("Moving Card To Right Bridge");
@@ -322,30 +319,27 @@ public class GameModel {
 //        System.out.println("Moving Card To King");
     }
 
-    private synchronized void stepToTarget(TroopsCard card, float targetX, float targetY, boolean isPassable) {
+    private void stepToTarget(TroopsCard card, float targetX, float targetY, boolean isPassable) {
         float currentX = card.getCenterPositionX();
         float currentY = card.getCenterPositionY();
         float rangeSize = getRangeSize(card.getRangeType());
         float speedSize = getSpeedSize(card.getSpeed());
+
         Point2D current = new Point2D(currentX, currentY);
         Point2D target = new Point2D(targetX, targetY);
-        if (current.distance(target) > minDist) {
+        boolean shouldMove = (isPassable && current.distance(target) > minDist) ||
+                (!isPassable && current.distance(target) > getRangeSize(card.getRangeType()));
+        if (shouldMove) {
             //if card's range is farther than targets center
             double distance = current.distance(target);
-//            System.out.println("target:" + targetX + "," + targetY);
-//            System.out.println("current:" + currentX + "," + currentY);
-//            System.out.println("distance:" + distance + "\n\n");
-
             float distanceX = targetX - currentX;
             float distanceY = targetY - currentY;
-//            System.out.println("distance: x:" + distanceX + " y: " + distanceY);
             double xRatio = distanceX / distance;
             double yRatio = distanceY / distance;
 
             float stepX = (float) (speedSize * xRatio);
             float stepY = (float) (speedSize * yRatio);
-//            System.out.println("stepX: "+ stepX + " StepY: "+stepY);
-            changeRouteIfBlocked(card, speedSize);
+            changeRouteIfBlocked(card, speedSize, new Point2D(stepX, stepY));
 
             currentX = card.getCenterPositionX();
             currentY = card.getCenterPositionY();
@@ -536,22 +530,38 @@ public class GameModel {
         return new ArrayList<>();
     }
 
-    private void changeRouteIfBlocked(TroopsCard card, float stepSize) {
+    private void changeRouteIfBlocked(TroopsCard card, float stepSize, Point2D cardVector) {
         for (Card existingCard : arenaExistingTroops) {
-            if (existingCard != card) {
+            if (existingCard != card && existingCard.isAlive()) {
                 Point2D currentPosition = new Point2D(card.getCenterPositionX(), card.getCenterPositionY());
                 Point2D existingCardPosition = new Point2D(existingCard.getCenterPositionX(), existingCard.getCenterPositionY());
                 double distance = currentPosition.distance(existingCardPosition);
-                if (distance < stepSize) {
+                if (distance < stepSize + unitSize) {
                     System.out.println("Blocking Detected");
-                    stepRight(card);
-                }
+                    manageBlocking(card, existingCard, cardVector);
+                } else card.setBeingBlocked(false);
             }
         }
     }
 
-    private void stepRight(Card card) {
-        card.setCenterPositionX(card.getCenterPositionX() - unitSize);
+    private void manageBlocking(Card card, Card otherCard, Point2D vector) {
+
+        if ((!card.isBeingBlocked() && !otherCard.isBeingBlocked()) || (card.isBeingBlocked() && !otherCard.isBeingBlocked())) {
+            card.setBeingBlocked(true);
+            float newStepX = (float) (-1 * vector.getY());
+            float newStepY = (float) vector.getX();
+
+            card.setCenterPositionX(card.getCenterPositionX() + newStepX);
+            card.setCenterPositionY(card.getCenterPositionY() + newStepY);
+        } else if (!card.isBeingBlocked() && otherCard.isBeingBlocked()) {
+            float newStepX = (float) (-1 * vector.getY());
+            float newStepY = (float) vector.getX();
+
+            otherCard.setCenterPositionX(otherCard.getCenterPositionX() + newStepX);
+            otherCard.setCenterPositionY(otherCard.getCenterPositionY() + newStepY);
+        }
+
+//        card.setCenterPositionX(card.getCenterPositionX() - unitSize);
     }
     //---------------------------------------------------------------------------------------------------------
     //---------------------------------------------------------------------------------------------------------
@@ -605,13 +615,13 @@ public class GameModel {
     }
 
     private float getRangeSize(Range range) {
-        float size = 0;
+        float size = 10;
         if (range.equals(Range.RANGED3))
-            size = 3 * minDist;
+            size = 30 * minDist;
         else if (range.equals(Range.RANGED5))
-            size = 5 * minDist;
+            size = 50 * minDist;
         else if (range.equals(Range.RANGED6))
-            size = 6 * minDist;
+            size = 60 * minDist;
         return size;
     }
 

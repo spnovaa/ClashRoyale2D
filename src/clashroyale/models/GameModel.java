@@ -208,15 +208,17 @@ public class GameModel {
                         }
                     }
                 } else if (spell instanceof Rage) {
-                    if (troopsCard.getRelatedUser().equals(spell)) {
+                    if (troopsCard.getRelatedUser().equals(spell.getRelatedUser())) {
                         troopsCard.setDamage(troopsCard.getDamage() * 1.4);
                         troopsCard.setHitSpeed(troopsCard.getHitSpeed() * 1.4);
                         //speed
                         if (troopsCard.getSpeed().equals(Speed.SLOW)){
                             troopsCard.setSpeed(Speed.SLOW_AMPLIFIED);
+                            System.out.println("dddddddd");
                         }
                         else  if (troopsCard.getSpeed().equals(Speed.MEDIUM)){
                             troopsCard.setSpeed(Speed.MEDIUM_AMPLIFIED);
+                            System.out.println("ddddddd");
                         }
                         else  if (troopsCard.getSpeed().equals(Speed.FAST)){
                             troopsCard.setSpeed(Speed.FAST_AMPLIFIED);
@@ -237,19 +239,19 @@ public class GameModel {
                 float distance = (float) cardPosition.distance(troopCardPosition);
                 if (distance <= spell.getRadius() * 10) {
                     if (spell instanceof Fireball) {
-                        if (!tower.getRelatedUser().equals(spell)) {
+                        if (!tower.getRelatedUser().equals(spell.getRelatedUser())) {
                             tower.setHp(tower.getHp() - ((Fireball) spell).getAreaDamage());
                             if (tower.getHp() <= 0) {
                                 killTower(tower);
                             }
                         }
                     } else if (spell instanceof Rage) {
-                        if (tower.getRelatedUser().equals(spell)) {
+                        if (tower.getRelatedUser().equals(spell.getRelatedUser())) {
                             tower.setDamage(tower.getDamage() * 1.4);
                             tower.setHitSpeed(tower.getHitSpeed() * 1.4);
 
                         } else if (spell instanceof Arrows) {
-                            if (!tower.getRelatedUser().equals(spell)) {
+                            if (!tower.getRelatedUser().equals(spell.getRelatedUser())) {
                                 killTower(tower);
                             }
                         }
@@ -644,6 +646,7 @@ public class GameModel {
             size = 3;
         else if (speed.equals(Speed.SLOW_AMPLIFIED))
             size = (float) (minDist * 1.4);
+
         else if (speed.equals(Speed.MEDIUM_AMPLIFIED))
             size = (float) (2 * 1.4);
         else if (speed.equals(Speed.FAST_AMPLIFIED))

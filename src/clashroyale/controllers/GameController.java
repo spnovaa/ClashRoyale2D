@@ -3,6 +3,9 @@ package clashroyale.controllers;
 import clashroyale.models.GameModel;
 import clashroyale.models.UserModel;
 import clashroyale.models.cardsmodels.buildings.Building;
+import clashroyale.models.cardsmodels.spells.Arrows;
+import clashroyale.models.cardsmodels.spells.Fireball;
+import clashroyale.models.cardsmodels.spells.Rage;
 import clashroyale.models.cardsmodels.spells.Spells;
 import clashroyale.models.cardsmodels.troops.Card;
 import clashroyale.models.cardsmodels.troops.TroopsCard;
@@ -165,17 +168,18 @@ public class GameController extends Application {
     private boolean deployClickedAt(float x, float y) {
         Card chosen = userModel.getChosenToDeployCard();
         if (chosen != null && y < userMaxY && y > userMinY && x > userMinX && x < userMaxX) {
-//            if (chosen instanceof Spells){
-//                gameView.deploySpells(x, y, chosen);
-//            }
-//            else {
+
             gameView.deployTroops(x, y, chosen);
             chosen.setCenterPositionX(x);
             chosen.setCenterPositionY(y);
             if (chosen instanceof Spells) {
                 //add to existing spells
                 gameModel.getArenaExistingSpellCards().add((Spells) chosen);
-                gameModel.spellAction((Spells) chosen);
+                if (chosen instanceof Rage){ gameModel.spellAction((Rage) chosen);}
+               else if (chosen instanceof Fireball){ gameModel.spellAction((Fireball) chosen);}
+               else if (chosen instanceof Arrows){ gameModel.spellAction((Arrows) chosen);}
+
+
             } else if (chosen instanceof TroopsCard) {
                 //add to existing troops
                 gameModel.getArenaExistingTroops().add((TroopsCard) chosen);

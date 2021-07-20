@@ -181,9 +181,14 @@ public class GameView extends Group {
     public void deployTroops(float x, float y, Card chosenToDeployCard) {
         String title = chosenToDeployCard.getTitle();
         if (title.equals("cannon")) {
-
+            if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
+                image = new Image(getClass().getResourceAsStream("../resources/chr/cannon/cannon1.png"));
+            } else {
+                image = new Image(getClass().getResourceAsStream("../resources/chr/cannon/cannon.png"));
+            }
         } else if (title.equals("infernoTower")) {
-            image = new Image(getClass().getResourceAsStream("../resources/chr/inferno/building_inferno_tower_sprite_2.png"));
+            image = new Image(getClass().getResourceAsStream("../resources/chr/inferno" +
+                    "/building_inferno_tower_sprite_2.png"));
         } else if (title.equals("arrows")) {
             image = new Image(getClass().getResourceAsStream("../resources/Ski_trail_rating_symbol_red_circle.png"));
         } else if (title.equals("fireball")) {

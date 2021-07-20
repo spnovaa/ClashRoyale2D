@@ -187,9 +187,9 @@ public class GameView extends Group {
         } else if (title.equals("arrows")) {
             image = new Image(getClass().getResourceAsStream("../resources/Ski_trail_rating_symbol_red_circle.png"));
         } else if (title.equals("fireball")) {
-            image = new Image(getClass().getResourceAsStream("../resources/index.png"));
+            image = new Image(getClass().getResourceAsStream("../resources/png-transparent-computer-icons-circle-circle-orange-sphere-desktop-wallpaper-thumbnail.png"));
         } else if (title.equals("rage")) {
-            image = new Image(getClass().getResourceAsStream("../resources/images.png"));
+            image = new Image(getClass().getResourceAsStream("../resources/Pan_Blue_Circle.png"));
 
         } else if (title.equals("archer")) {
             if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {

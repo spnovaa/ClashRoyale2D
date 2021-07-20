@@ -7,6 +7,7 @@ import clashroyale.models.cardsmodels.spells.Arrows;
 import clashroyale.models.cardsmodels.spells.Fireball;
 import clashroyale.models.cardsmodels.spells.Rage;
 import clashroyale.models.cardsmodels.spells.Spells;
+import clashroyale.models.cardsmodels.troops.BabyDragonCard;
 import clashroyale.models.cardsmodels.troops.Card;
 import clashroyale.models.cardsmodels.troops.TroopsCard;
 import clashroyale.models.enums.Range;
@@ -228,6 +229,7 @@ public class GameModel {
                 }
                 else if (building instanceof Cannon){
                     for (TroopsCard troopsCard : arenaExistingTroops) {
+                        if (! (troopsCard instanceof BabyDragonCard)){
                         if (!troopsCard.getRelatedUser().equals(building.getRelatedUser())){
                             Point2D troopCardPosition = new Point2D(troopsCard.getCenterPositionX(), troopsCard.getCenterPositionY());
                             float distance = (float) cardPosition.distance(troopCardPosition);
@@ -237,7 +239,7 @@ public class GameModel {
                                 if (troopsCard.getHp() <= 0) {
                                     killCard(troopsCard);
                                 }
-                            }}
+                            }}}
                     }
                     for (Tower tower :arenaExistingTowers) {
                         if (!tower.getRelatedUser().equals(building.getRelatedUser())){
@@ -251,9 +253,6 @@ public class GameModel {
                                 }
                             }
                         }}
-
-
-
                 }
             }
             building.decreaseLifeTime();

@@ -15,5 +15,17 @@ public enum Speed {
     /**
      * Fast speed.
      */
-    FAST
+    FAST,
+    /**
+     * Slow amplified speed.
+     */
+    SLOW_AMPLIFIED,
+    /**
+     * Medium amplified speed.
+     */
+    MEDIUM_AMPLIFIED,
+    /**
+     * Fast amplified speed.
+     */
+    FAST_AMPLIFIED
 }

@@ -212,6 +212,15 @@ public class GameModel {
                         troopsCard.setDamage(troopsCard.getDamage() * 1.4);
                         troopsCard.setHitSpeed(troopsCard.getHitSpeed() * 1.4);
                         //speed
+                        if (troopsCard.getSpeed().equals(Speed.SLOW)){
+                            troopsCard.setSpeed(Speed.SLOW_AMPLIFIED);
+                        }
+                        else  if (troopsCard.getSpeed().equals(Speed.MEDIUM)){
+                            troopsCard.setSpeed(Speed.MEDIUM_AMPLIFIED);
+                        }
+                        else  if (troopsCard.getSpeed().equals(Speed.FAST)){
+                            troopsCard.setSpeed(Speed.FAST_AMPLIFIED);
+                        }
                     } else if (spell instanceof Arrows) {
                         if (!troopsCard.getRelatedUser().equals(spell)) {
                             killCard(troopsCard);
@@ -238,7 +247,7 @@ public class GameModel {
                         if (tower.getRelatedUser().equals(spell)) {
                             tower.setDamage(tower.getDamage() * 1.4);
                             tower.setHitSpeed(tower.getHitSpeed() * 1.4);
-                            //speed
+
                         } else if (spell instanceof Arrows) {
                             if (!tower.getRelatedUser().equals(spell)) {
                                 killTower(tower);
@@ -633,6 +642,13 @@ public class GameModel {
             size = 2;
         else if (speed.equals(Speed.FAST))
             size = 3;
+        else if (speed.equals(Speed.SLOW_AMPLIFIED))
+            size = (float) (minDist * 1.4);
+        else if (speed.equals(Speed.MEDIUM_AMPLIFIED))
+            size = (float) (2 * 1.4);
+        else if (speed.equals(Speed.FAST_AMPLIFIED))
+            size = (float) (3 * 1.4);
+
         return (size);
     }
 

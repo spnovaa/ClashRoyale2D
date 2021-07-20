@@ -239,6 +239,7 @@ public class GameView extends Group {
         System.out.println(image.getWidth());
         imageView = new ImageView(image);
         if (title.equals("rage")){
+            imageView.setOpacity(0.3);
             imageView.setX(x - (float) 50 / 2);
             imageView.setY(y - (float) 50 / 2);
             imageView.setFitWidth(50);
@@ -246,6 +247,7 @@ public class GameView extends Group {
             imageView.setUserData(chosenToDeployCard);
         }
         else  if (title.equals("fireball")){
+            imageView.setOpacity(0.3);
             imageView.setX(x - (float) 25 / 2);
             imageView.setY(y - (float) 25 / 2);
             imageView.setFitWidth(25);
@@ -253,6 +255,7 @@ public class GameView extends Group {
             imageView.setUserData(chosenToDeployCard);
         }
         else  if (title.equals("arrows")){
+            imageView.setOpacity(0.3);
             imageView.setX(x - (float) 40 / 2);
             imageView.setY(y - (float) 40 / 2);
             imageView.setFitWidth(40);

@@ -64,7 +64,7 @@ public class Building extends Card {
      * @param damage the damage
      */
     public void setDamage(double damage) {
-        this.damage = damage;
+        this.damage = damage / 15;
     }
 
     /**

@@ -29,6 +29,7 @@ public class UserModel {
     private BattleDeck battleDeck;
     private Card chosenToDeployCard;
     private String botType;
+    private int elixirCount;
 
     /**
      * Instantiates a new User model.
@@ -36,6 +37,7 @@ public class UserModel {
     public UserModel() {
         cards = new ArrayList<>();
         chosenCardsList = new ArrayList<>();
+        elixirCount = 4;
     }
 
     private Card findByTitle(String string) {
@@ -246,5 +248,13 @@ public class UserModel {
 
     public void setBotType(String botType) {
         this.botType = botType;
+    }
+
+    public int getElixirCount() {
+        return elixirCount;
+    }
+
+    public void setElixirCount(int elixirCount) {
+        this.elixirCount = elixirCount;
     }
 }

@@ -14,9 +14,13 @@ public class SimpleRobot extends Robot {
     }
 
     public Card chooseCardToPlay() {
-        Card card = super.getCardsQue().poll();
-        super.getCardsQue().add(card);
-        return card;
+
+        Card card = super.getCardsQue().peek();
+        if (card.getCost() < getElixirCount()) {
+            super.getCardsQue().poll();
+            super.getCardsQue().add(card);
+            return card;
+        } else return null;
     }
 
     public synchronized Point2D chooseCoordinatesToPlay() {

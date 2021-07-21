@@ -44,6 +44,8 @@ public class GameView extends Group {
      */
     Queue<Card> cardsQue;
     private Label textTime;
+    private Label userElixir;
+    private Label botElixir;
     private AnchorPane anchorPane;
     private ImageView displayedCard1;
     private ImageView displayedCard2;
@@ -182,7 +184,6 @@ public class GameView extends Group {
 //            System.out.println(user+ "Not Equal Condition");
         else {
             deployBotClick(x, y, chosenToDeployCard);
-            System.out.println("Trying To Deploy: " + chosenToDeployCard.getTitle() + " for " + chosenToDeployCard.getRelatedUser());
         }
     }
 
@@ -237,7 +238,6 @@ public class GameView extends Group {
                 imageView.setY(y - (float) TROOPS_SIZE / 2);
                 imageView.setFitWidth(TROOPS_SIZE);
                 imageView.setFitHeight(TROOPS_SIZE);
-                System.out.println("Bot Card Not Recognized");
             }
         }
         imageView.setUserData(chosenToDeployCard);
@@ -364,7 +364,12 @@ public class GameView extends Group {
 
     }
 
-    public void updateLivingAssets(ArrayList<TroopsCard> existingTroops, ArrayList<Tower> existingTowers,ArrayList<Spells> existingSpells) {
+    public void updateElixirs(int userElixirCount, int botElixirCount) {
+        userElixir.setText(Integer.toString(userElixirCount));
+        botElixir.setText(Integer.toString(botElixirCount));
+    }
+
+    public void updateLivingAssets(ArrayList<TroopsCard> existingTroops, ArrayList<Tower> existingTowers, ArrayList<Spells> existingSpells) {
         for (ImageView asset : battleCards) {
             TroopsCard oldCard;
             Tower oldTower;
@@ -496,6 +501,14 @@ public class GameView extends Group {
         flag = 0;
     }
 
+    public void setUserElixir(Label userElixir) {
+        this.userElixir = userElixir;
+    }
+
+    public void setBotElixir(Label botElixir) {
+        this.botElixir = botElixir;
+    }
+
     public void setArenaTowers(ArrayList<Tower> arenaTowers) {
         this.arenaTowers = arenaTowers;
         for (Tower tower : arenaTowers) {
@@ -509,4 +522,5 @@ public class GameView extends Group {
             }
         }
     }
+
 }

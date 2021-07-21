@@ -39,7 +39,7 @@ public class Robot {
         maxY = 230;
         minX = 25;
         maxX = 340;
-        elixirCount = 0;
+        elixirCount = 4;
     }
 
     private void chooseCardsToPlay() {

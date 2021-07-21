@@ -2,6 +2,9 @@ package clashroyale.controllers;
 
 import clashroyale.models.GameModel;
 import clashroyale.models.UserModel;
+import clashroyale.models.game.Robot;
+import clashroyale.models.game.SimpleRobot;
+import clashroyale.models.game.SmartRobot;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,6 +27,7 @@ public class MenuController extends Application {
     private GameController gameController;
     private Stage stage;
     private UserModel userModel;
+    private Robot bot;
     @Override
     public void start(Stage stage) throws Exception {
         this.stage = stage;
@@ -80,7 +84,9 @@ public class MenuController extends Application {
                 Parent goToArenaRoot = loader.load();
                 gameController = loader.getController();
                 gameController.setUserModel(userModel);
-                GameModel gameModel = new GameModel(userModel);
+                if (userModel.getBotType().equals("simpleBot")) bot = new SimpleRobot(userModel.getLevel());
+                else bot = new SmartRobot(userModel.getLevel());
+                GameModel gameModel = new GameModel(userModel, bot);
                 gameController.setGameModel(gameModel);
                 stage.setHeight(630);
                 stage.setWidth(375);

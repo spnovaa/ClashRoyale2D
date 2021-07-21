@@ -16,6 +16,7 @@ public class Card {
     private boolean isAlive;
     private String relatedUser;
     private boolean isBeingBlocked;
+    private boolean isAttacking;
 
     /**
      * Instantiates a new Card.
@@ -31,6 +32,7 @@ public class Card {
         uuid = UUID.randomUUID().toString();
         this.relatedUser = relatedUser;
         isBeingBlocked = false;
+        isAttacking = false;
     }
 
     /**
@@ -121,5 +123,13 @@ public class Card {
 
     public void setBeingBlocked(boolean beingBlocked) {
         isBeingBlocked = beingBlocked;
+    }
+
+    public boolean isAttacking() {
+        return isAttacking;
+    }
+
+    public void setAttacking(boolean attacking) {
+        isAttacking = attacking;
     }
 }

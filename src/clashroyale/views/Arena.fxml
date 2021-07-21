@@ -76,10 +76,23 @@
                 <Image url="@../resources/ui/building_tower_sprite_009.png"/>
             </image>
         </ImageView>
-      <Label fx:id="time" alignment="CENTER" layoutX="291.0" layoutY="14.0" prefHeight="33.0" prefWidth="52.0" style="-fx-background-color: orange;" text="3:00">
-         <font>
-            <Font name="Agency FB" size="27.0" />
-         </font>
-      </Label>
+        <Label fx:id="time" alignment="CENTER" layoutX="291.0" layoutY="14.0" prefHeight="33.0" prefWidth="52.0"
+               style="-fx-background-color: orange;" text="3:00">
+            <font>
+                <Font name="Agency FB" size="27.0"/>
+            </font>
+        </Label>
+        <Label fx:id="userElixir" alignment="CENTER" layoutX="13.0" layoutY="554.0" prefHeight="33.0" prefWidth="52.0"
+               style="-fx-background-color: #FF0266;" text="2">
+            <font>
+                <Font name="Agency FB" size="27.0"/>
+            </font>
+        </Label>
+        <Label fx:id="botElixir" alignment="CENTER" layoutX="13.0" layoutY="14.0" prefHeight="33.0" prefWidth="52.0"
+               style="-fx-background-color: #8D6E63;" text="2">
+            <font>
+                <Font name="Agency FB" size="27.0"/>
+            </font>
+        </Label>
     </children>
 </AnchorPane>

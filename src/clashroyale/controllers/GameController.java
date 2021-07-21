@@ -10,7 +10,9 @@ import clashroyale.models.cardsmodels.spells.Fireball;
 import clashroyale.models.cardsmodels.spells.Rage;
 import clashroyale.models.cardsmodels.spells.Spells;
 import clashroyale.models.cardsmodels.troops.*;
+import clashroyale.models.game.Robot;
 import clashroyale.models.game.SimpleRobot;
+import clashroyale.models.game.SmartRobot;
 import clashroyale.models.towersmodels.Tower;
 import clashroyale.views.GameView;
 import javafx.application.Application;
@@ -18,7 +20,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -29,7 +30,6 @@ import javafx.scene.control.Label;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.UUID;
 
 
 /**
@@ -89,10 +89,14 @@ public class GameController extends Application {
     ImageView botLeftQueen;
     @FXML
     ImageView userLeftQueen;
+    private final static double FRAMES_PER_SECOND = 15.0;
+    @FXML
+    Label userElixir;
 
     private Stage stage;
     private UserModel userModel;
-    private final static double FRAMES_PER_SECOND = 1.0;
+    @FXML
+    Label botElixir;
     private Scene gameScene;
 
     private int userMinX;
@@ -101,11 +105,13 @@ public class GameController extends Application {
     private int userMaxY;
     private GameModel gameModel;
     private Timer timer;
-    private SimpleRobot simpleRobot;
+    int botMaxTroops = 80;
     private Card botChosenCard;
     private Point2D botClickCoordinates;
 
     private ArrayList<Tower> arenaTowers;
+    private Robot bot;
+    private int botActFlag;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -121,6 +127,7 @@ public class GameController extends Application {
         userMinY = 255;
         userMaxY = 450;
         arenaTowers = new ArrayList<>();
+        botActFlag = 0;
     }
 
     /**
@@ -130,7 +137,7 @@ public class GameController extends Application {
      */
     public void setUserModel(UserModel userModel) {
         this.userModel = userModel;
-        simpleRobot = new SimpleRobot(userModel.getLevel());
+
     }
 
     /**
@@ -143,6 +150,8 @@ public class GameController extends Application {
         addClickedLocationListener();
         gameView = new GameView(userModel);
         gameView.setTextTime(time);
+        gameView.setUserElixir(userElixir);
+        gameView.setBotElixir(botElixir);
         gameView.setAnchorPane(anchorPane);
         gameView.instantiateCardsQueImageViews(displayedCard1, displayedCard2, displayedCard3, displayedCard4, nextCard);
         gameView.instantiateTowers(botKing, botLeftQueen, botRightQueen, userKing, userLeftQueen, userRightQueen);
@@ -150,6 +159,7 @@ public class GameController extends Application {
         gameView.setArenaTowers(arenaTowers);
         gameView.prepareArena();
         System.out.println(userModel.getLevel());
+        this.bot = gameModel.getGameBot();
         startTimer();
     }
 
@@ -176,7 +186,12 @@ public class GameController extends Application {
      */
     private boolean deployClickedAt(float x, float y) {
         Card chosen = userModel.getChosenToDeployCard();
-        if (chosen != null && y < userMaxY && y > userMinY && x > userMinX && x < userMaxX) {
+        boolean isInRange = y < userMaxY && y > userMinY && x > userMinX && x < userMaxX;
+        boolean hasElixirs = false;
+        if (chosen != null)
+            hasElixirs = chosen.getCost() <= userModel.getElixirCount();
+        if (chosen != null && isInRange && hasElixirs) {
+            userModel.setElixirCount(userModel.getElixirCount() - chosen.getCost());
             chosen = generateNewCard(chosen.getTitle(), userModel.getUsername());
             gameView.deployTroops(x, y, chosen);
             chosen.setCenterPositionX(x);
@@ -193,16 +208,20 @@ public class GameController extends Application {
                 gameModel.getArenaExistingBuildings().add((Building) chosen);
             }
             return true;
+        } else if (!hasElixirs) {
+            System.out.println("You Have " + userModel.getElixirCount() + " Elixirs and Card Costs " + chosen.getCost());
+            return false;
         } else {
+            System.out.println("You Can't Deploy Cards There!");
             return false;
         }
     }
 
     private void deployBotClickedAt(float x, float y) {
 //        System.out.println("Bot Clicked At: "+ x + " , "+ y);
-        if (botChosenCard != null) {
+        if (botChosenCard != null && botChosenCard.getCost() <= bot.getElixirCount()) {
+            bot.setElixirCount(bot.getElixirCount() - botChosenCard.getCost());
             String bot = userModel.getBotType();
-            System.out.println("Bot Type : " + bot);
             botChosenCard = generateNewCard(botChosenCard.getTitle(), bot);
 //            System.out.println(botChosenCard.getRelatedUser());
             gameView.deployTroops(x, y, botChosenCard);
@@ -218,7 +237,9 @@ public class GameController extends Application {
                 //add to existing buildings
                 gameModel.getArenaExistingBuildings().add((Building) botChosenCard);
             }
-        }
+        } else if (botChosenCard != null) System.out.println("Bot Chose" + botChosenCard.getTitle() + "with " +
+                botChosenCard.getCost() + " cost. but has " + bot.getElixirCount() + " elixirs.");
+        else System.out.println("Bot Card Is Null");
     }
 
     /**
@@ -275,15 +296,30 @@ public class GameController extends Application {
 
     private synchronized void updateGame() {
         gameView.updateTimer();
-        botChosenCard = simpleRobot.chooseCardToPlay();
-        botClickCoordinates = simpleRobot.chooseCoordinatesToPlay();
-//        System.out.println("Bot Chose: " + botChosenCard.getTitle() + " at " + botClickCoordinates.getX()+" : "+ botClickCoordinates.getY());
-        deployBotClickedAt((float) botClickCoordinates.getX(), (float) botClickCoordinates.getY());
+        gameModel.updateElixirs();
+        gameView.updateElixirs(userModel.getElixirCount(), bot.getElixirCount());
+        bot = gameModel.getGameBot();
+        botActFlag++;
+        if (botActFlag % 15 == 0) actBot();
+
         gameModel.updateGameModel();
         ArrayList<TroopsCard> existingTroops = gameModel.getArenaExistingTroops();
         ArrayList<Tower> existingTowers = gameModel.getArenaExistingTowers();
         ArrayList<Spells> existingSpells = gameModel.getArenaExistingSpellCards();
         gameView.updateLivingAssets(existingTroops, existingTowers, existingSpells);
+    }
+
+    private void actBot() {
+        if (bot instanceof SimpleRobot) {
+            botChosenCard = ((SimpleRobot) bot).chooseCardToPlay();
+            botClickCoordinates = ((SimpleRobot) bot).chooseCoordinatesToPlay();
+        } else
+            System.out.println("SmartBot Is Not Implemented Yet");
+//        System.out.println("Bot Chose: " + botChosenCard.getTitle() + " at " + botClickCoordinates.getX()+" : "+ botClickCoordinates.getY());
+        if (botMaxTroops > 0) {
+            deployBotClickedAt((float) botClickCoordinates.getX(), (float) botClickCoordinates.getY());
+            botMaxTroops--;
+        }
     }
 
     public void setGameModel(GameModel gameModel) {

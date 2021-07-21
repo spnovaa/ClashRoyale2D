@@ -17,6 +17,7 @@ import javafx.scene.shape.Circle;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 
 /**
@@ -138,7 +139,6 @@ public class GameView extends Group {
                     case 2 -> displayedCard3.setUserData(card);
                     case 3 -> displayedCard4.setUserData(card);
                 }
-                cardsQue.add(card);
             }
         }
         Card card = cardsQue.poll();
@@ -146,7 +146,6 @@ public class GameView extends Group {
             Image cardImage = getCardImageByTitle(card.getTitle());
             initialCardsImages[4] = cardImage;
             nextCard.setUserData(card);
-            cardsQue.add(card);
         }
         setInitialImages(initialCardsImages);
     }
@@ -282,11 +281,13 @@ public class GameView extends Group {
      * switches cards after deployment with next card.
      */
     private void replaceDeployedCardWithNext() {
+
         String title1 = ((Card) displayedCard1.getUserData()).getTitle();
         String title2 = ((Card) displayedCard2.getUserData()).getTitle();
         String title3 = ((Card) displayedCard3.getUserData()).getTitle();
         String title4 = ((Card) displayedCard4.getUserData()).getTitle();
         String nextTitle = ((Card) nextCard.getUserData()).getTitle();
+
         if (userModel.getChosenToDeployCard().getTitle().equals(title1)) {
             displayedCard1.setImage(getCardImageByTitle(nextTitle));
             displayedCard1.setUserData(nextCard.getUserData());
@@ -302,14 +303,22 @@ public class GameView extends Group {
         } else {
             System.out.println("Unable To Recon Chosen Card");
         }
+
         Card newNextCard = cardsQue.poll();
         if (newNextCard != null) {
             nextCard.setUserData(newNextCard);
             nextCard.setImage(getCardImageByTitle(newNextCard.getTitle()));
+            cardsQue.add(userModel.getChosenToDeployCard());
             userModel.setChosenToDeployCard(null);
         } else {
             System.out.println("Unable To Recon Next Card");
         }
+
+
+        System.out.println("new waiting: \n");
+        for (Card card : cardsQue)
+            System.out.println(card.getTitle());
+
     }
 
 
@@ -383,6 +392,34 @@ public class GameView extends Group {
     //---------------------------------------------------------------------------------------------------------
     //---------------------------------------------------------------------------------------------------------
 
+    private void reverseQueue() {
+        Stack<Card> stack = new Stack<>();
+        while (!cardsQue.isEmpty()) {
+            stack.add(cardsQue.peek());
+            cardsQue.remove();
+        }
+        while (!stack.isEmpty()) {
+            cardsQue.add(stack.peek());
+            stack.pop();
+        }
+    }
+
+    private void removeCardFromQue(Card card) {
+        System.out.println("New Queue");
+        for (Card card2 : cardsQue) {
+            System.out.println(card2.getTitle());
+        }
+        Queue<Card> temp = new LinkedList<>();
+        for (Card card1 : cardsQue) {
+            if (!card1.getTitle().equals(card.getTitle()))
+                temp.add(card1);
+        }
+        cardsQue = temp;
+
+        reverseQueue();
+        cardsQue.add(card);
+
+    }
 
     /**
      * @param title title of requested image

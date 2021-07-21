@@ -147,42 +147,7 @@ public class GameModel {
     public void updateGameModel() {
         for (TroopsCard card : arenaExistingTroops) {
             attackNearestEnemyInRange(card);
-            float cardX = card.getCenterPositionX();
-            float cardY = card.getCenterPositionY();
-
-            if (cardY > bridgesStartY && !card.getTitle().equals("babyDragon")) {//card is in user's field and moves on the ground
-                if (cardX >= fieldCenterX) {
-                    moveCardToRightBridge(card);            //card is in right half
-                } else {                                    //card is in left half
-                    moveCardToLeftBridge(card);
-                }
-
-            } else if (cardY < bridgesEndY || card.getTitle().equals("babyDragon")) {//card is in enemy's field or moves on air
-                if (cardX >= fieldCenterX) {                //card is in the right side
-                    if (botRightQueenTower.isAlive())       // right queen tower is alive and card is in right side
-                        moveCardToRightQueenTower(card);
-                    else {                                  //card is in right side but right queen tower is dead
-                        if (botLeftQueenTower.isAlive())    //if left queen tower stands, move in that direction
-                            moveCardToLeftQueenTower(card);
-                        else                                //both queen towers are gone. move in king towers direction
-                            moveCardToKingTower(card);
-                    }
-                } else {                                    //card is in the left side of the field
-                    if (botLeftQueenTower.isAlive())        // left queen tower is alive and card is in left side
-                        moveCardToLeftQueenTower(card);
-                    else {                                  //card is in right side but right queen tower is dead
-                        if (botRightQueenTower.isAlive())   //if right queen tower stands, move in that direction
-                            moveCardToRightQueenTower(card);
-                        else                                //both queen towers are gone. move in king towers direction
-                            moveCardToKingTower(card);
-                    }
-                }
-            } else {                                        //card is on the bridge
-                if (cardX >= fieldCenterX) {
-                    passCardFromRightBridge(card);
-                } else
-                    passCardFromLeftBridge(card);
-            }
+            repositionCard(card);
         }
 
         for (Spells card : arenaExistingSpellCards) {
@@ -196,41 +161,12 @@ public class GameModel {
         }
 
 
-        for (Building building : arenaExistingBuildings){
-            if (building.isAlive()){
+        for (Building building : arenaExistingBuildings) {
+            if (building.isAlive()) {
                 Point2D cardPosition = new Point2D(building.getCenterPositionX(), building.getCenterPositionY());
-                if (building instanceof InfernoTower){
+                if (building instanceof InfernoTower) {
                     for (TroopsCard troopsCard : arenaExistingTroops) {
-                        if (!troopsCard.getRelatedUser().equals(building.getRelatedUser())){
-                        Point2D troopCardPosition = new Point2D(troopsCard.getCenterPositionX(), troopsCard.getCenterPositionY());
-                        float distance = (float) cardPosition.distance(troopCardPosition);
-                        System.out.println("distance " + distance);
-                        if (distance <= building.getRange() * 10) {
-                            troopsCard.setHp(troopsCard.getHp() - building.getDamage());
-                            if (troopsCard.getHp() <= 0) {
-                                killCard(troopsCard);
-                            }
-                        }}
-                        }
-                    for (Tower tower :arenaExistingTowers) {
-                        if (!tower.getRelatedUser().equals(building.getRelatedUser())){
-                        Point2D troopCardPosition = new Point2D(tower.getCenterPositionX(), tower.getCenterPositionY());
-                        float distance = (float) cardPosition.distance(troopCardPosition);
-                        System.out.println("distance " + distance);
-                        if (distance <= building.getRange() * 10) {
-                            tower.setHp(tower.getHp() - building.getDamage());
-                            if (tower.getHp() <= 0) {
-                                killTower(tower);
-                            }
-                        }
-                    }}
-                    int increaseDamage= (((InfernoTower)building).getMaxDamage()-((InfernoTower)building).getMinDamage())/building.getFixLifeTime();
-                    building.setDamage(building.getDamage() + increaseDamage);
-                }
-                else if (building instanceof Cannon){
-                    for (TroopsCard troopsCard : arenaExistingTroops) {
-                        if (! (troopsCard instanceof BabyDragonCard)){
-                        if (!troopsCard.getRelatedUser().equals(building.getRelatedUser())){
+                        if (!troopsCard.getRelatedUser().equals(building.getRelatedUser())) {
                             Point2D troopCardPosition = new Point2D(troopsCard.getCenterPositionX(), troopsCard.getCenterPositionY());
                             float distance = (float) cardPosition.distance(troopCardPosition);
                             System.out.println("distance " + distance);
@@ -239,10 +175,11 @@ public class GameModel {
                                 if (troopsCard.getHp() <= 0) {
                                     killCard(troopsCard);
                                 }
-                            }}}
+                            }
+                        }
                     }
-                    for (Tower tower :arenaExistingTowers) {
-                        if (!tower.getRelatedUser().equals(building.getRelatedUser())){
+                    for (Tower tower : arenaExistingTowers) {
+                        if (!tower.getRelatedUser().equals(building.getRelatedUser())) {
                             Point2D troopCardPosition = new Point2D(tower.getCenterPositionX(), tower.getCenterPositionY());
                             float distance = (float) cardPosition.distance(troopCardPosition);
                             System.out.println("distance " + distance);
@@ -252,17 +189,88 @@ public class GameModel {
                                     killTower(tower);
                                 }
                             }
-                        }}
+                        }
+                    }
+                    int increaseDamage = (((InfernoTower) building).getMaxDamage() - ((InfernoTower) building).getMinDamage()) / building.getFixLifeTime();
+                    building.setDamage(building.getDamage() + increaseDamage);
+                } else if (building instanceof Cannon) {
+                    for (TroopsCard troopsCard : arenaExistingTroops) {
+                        if (!(troopsCard instanceof BabyDragonCard)) {
+                            if (!troopsCard.getRelatedUser().equals(building.getRelatedUser())) {
+                                Point2D troopCardPosition = new Point2D(troopsCard.getCenterPositionX(), troopsCard.getCenterPositionY());
+                                float distance = (float) cardPosition.distance(troopCardPosition);
+                                System.out.println("distance " + distance);
+                                if (distance <= building.getRange() * 10) {
+                                    troopsCard.setHp(troopsCard.getHp() - building.getDamage());
+                                    if (troopsCard.getHp() <= 0) {
+                                        killCard(troopsCard);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    for (Tower tower : arenaExistingTowers) {
+                        if (!tower.getRelatedUser().equals(building.getRelatedUser())) {
+                            Point2D troopCardPosition = new Point2D(tower.getCenterPositionX(), tower.getCenterPositionY());
+                            float distance = (float) cardPosition.distance(troopCardPosition);
+                            System.out.println("distance " + distance);
+                            if (distance <= building.getRange() * 10) {
+                                tower.setHp(tower.getHp() - building.getDamage());
+                                if (tower.getHp() <= 0) {
+                                    killTower(tower);
+                                }
+                            }
+                        }
+                    }
                 }
             }
             building.decreaseLifeTime();
-            if (building.getLifeTime()<=0){
+            if (building.getLifeTime() <= 0) {
                 building.setAlive(false);
             }
         }
 
 
+    }
 
+    private void repositionCard(TroopsCard card) {
+        float cardX = card.getCenterPositionX();
+        float cardY = card.getCenterPositionY();
+        boolean isBot = card.getRelatedUser().equals("simpleBot") || card.getRelatedUser().equals("smartBot");
+        boolean canFly = card.getTitle().equals("babyDragon");
+        boolean isDown = cardY > bridgesStartY;
+        boolean isRight = cardX >= fieldCenterX;
+        boolean isUp = cardY < bridgesEndY;
+
+        if (isDown && !canFly) {                                                    //card is in user's field and moves on the ground
+            if (isRight) {
+                if (!isBot) moveCardToStartOfRightBridge(card);                     //user card is in right down quarter
+                else if (userRightQueenTower.isAlive()) moveCardToRightUserQueen(card);
+                else moveCardToUserKing(card);
+            } else {                                                                //card is in left half
+                if (!isBot) moveCardToStartOfLeftBridge(card);
+                else if (userLeftQueenTower.isAlive()) moveCardToLeftUserQueen(card);
+                else moveCardToUserKing(card);
+            }
+        } else if (isUp || canFly) {                                                //card is in enemy's field or moves on air
+            if (isRight) {                                                          //card is in the right side
+                if (isBot) moveCardToEndOfRightBridge(card);
+                else if (botRightQueenTower.isAlive()) moveCardToRightQueenTower(card);
+                else moveCardToKingTower(card);
+            } else {
+                if (isBot) moveCardToEndOfLeftBridge(card);
+                else if (botLeftQueenTower.isAlive()) moveCardToLeftQueenTower(card);
+                else moveCardToKingTower(card);
+            }
+        } else {                                                                    //card is on the bridge
+            if (cardX >= fieldCenterX) {
+                if (!isBot) passUserCardFromRightBridge(card);
+                else passBotCardFromRightBridge(card);
+            } else {
+                if (!isBot) passUserCardFromLeftBridge(card);
+                else passBotCardFromLeftBridge(card);
+            }
+        }
     }
 
     public void spellAction(Card temp) {
@@ -378,22 +386,22 @@ public class GameModel {
 
     }
 
-    private void moveCardToRightBridge(TroopsCard card) {
+    private void moveCardToStartOfRightBridge(TroopsCard card) {
         stepToTarget(card, rightBridgeX, bridgesStartY, true);
 //        System.out.println("Moving Card To Right Bridge");
     }
 
-    private void moveCardToLeftBridge(TroopsCard card) {
+    private void moveCardToStartOfLeftBridge(TroopsCard card) {
         stepToTarget(card, leftBridgeX, bridgesStartY, true);
 //        System.out.println("Moving Card To Left Bridge");
     }
 
-    private void passCardFromRightBridge(TroopsCard cardToMove) {
+    private void passUserCardFromRightBridge(TroopsCard cardToMove) {
         stepToTarget(cardToMove, rightBridgeX, bridgesEndY, true);
-        System.out.println("Passing Card from Right Bridge");
+//        System.out.println("Passing Card from Right Bridge");
     }
 
-    private void passCardFromLeftBridge(TroopsCard cardToMove) {
+    private void passUserCardFromLeftBridge(TroopsCard cardToMove) {
         stepToTarget(cardToMove, leftBridgeX, bridgesEndY, true);
 //        System.out.println("Passing Card From Left Bridge");
     }
@@ -411,6 +419,34 @@ public class GameModel {
     private void moveCardToKingTower(TroopsCard cardToMove) {
         stepToTarget(cardToMove, botKingTower.getCenterPositionX(), botKingTower.getCenterPositionY(), false);
 //        System.out.println("Moving Card To King");
+    }
+
+    private void moveCardToRightUserQueen(TroopsCard card) {
+        stepToTarget(card, userRightQueenTower.getCenterPositionX(), userRightQueenTower.getCenterPositionY(), false);
+    }
+
+    private void moveCardToUserKing(TroopsCard card) {
+        stepToTarget(card, userKingTower.getCenterPositionX(), userKingTower.getCenterPositionY(), false);
+    }
+
+    private void moveCardToLeftUserQueen(TroopsCard card) {
+        stepToTarget(card, userLeftQueenTower.getCenterPositionX(), userLeftQueenTower.getCenterPositionY(), false);
+    }
+
+    private void moveCardToEndOfRightBridge(TroopsCard card) {
+        stepToTarget(card, rightBridgeX, bridgesEndY, true);
+    }
+
+    private void moveCardToEndOfLeftBridge(TroopsCard card) {
+        stepToTarget(card, leftBridgeX, bridgesEndY, true);
+    }
+
+    private void passBotCardFromRightBridge(TroopsCard card) {
+        stepToTarget(card, rightBridgeX, bridgesStartY, true);
+    }
+
+    private void passBotCardFromLeftBridge(TroopsCard card) {
+        stepToTarget(card, leftBridgeX, bridgesStartY, true);
     }
 
     private void stepToTarget(TroopsCard card, float targetX, float targetY, boolean isPassable) {
@@ -457,7 +493,7 @@ public class GameModel {
         float distanceToTower = 10000;
         float distanceToCard = 10000;
 
-        Card enemyCard = findNearestEnemyInRange(card);
+        Card enemyCard = findNearestEnemyCardInRange(card);
         Tower enemyTower = findNearestEnemyTowerInRange(card);
         Point2D cardPosition = new Point2D(card.getCenterPositionX(), card.getCenterPositionY());
 
@@ -507,7 +543,7 @@ public class GameModel {
         return null;
     }
 
-    private Card findNearestEnemyInRange(Card card) {
+    private Card findNearestEnemyCardInRange(Card card) {
         Card nearestEnemy = null;
         float leastDistance;
 
@@ -631,7 +667,7 @@ public class GameModel {
                 Point2D existingCardPosition = new Point2D(existingCard.getCenterPositionX(), existingCard.getCenterPositionY());
                 double distance = currentPosition.distance(existingCardPosition);
                 if (distance < stepSize + unitSize) {
-                    System.out.println("Blocking Detected");
+//                    System.out.println("Blocking Detected");
                     manageBlocking(card, existingCard, cardVector);
                 } else card.setBeingBlocked(false);
             }

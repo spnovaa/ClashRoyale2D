@@ -28,6 +28,9 @@ public class GameModel {
     private int playerTwoCrowns;
     private int playerOneLostHP;
     private int playerTwoLostHP;
+    private int playerCrown;
+    private int robotCrown;
+
 
     private final float unitSize = 20;
 
@@ -86,6 +89,9 @@ public class GameModel {
 
         minDist = 1;
         elixirFlag = 0;
+
+        robotCrown=0;
+        playerCrown=0;
 
         arenaExistingTroops = new ArrayList<>();
         arenaExistingSpellCards = new ArrayList<>();
@@ -169,6 +175,7 @@ public class GameModel {
             }
             if (card.getTime() <= 0) {
                 card.setAlive(false);
+                killCard(card);
             }
 
         }
@@ -200,6 +207,19 @@ public class GameModel {
                                 tower.setHp(tower.getHp() - building.getDamage());
                                 if (tower.getHp() <= 0) {
                                     killTower(tower);
+                                    if (tower.getRelatedUser().equals(building.getRelatedUser())){
+                                        if (tower instanceof KingTower)
+                                            robotCrown=3;
+                                        else if (tower instanceof QueenTower)
+                                            robotCrown++;
+
+                                    }else {
+                                        if (tower instanceof KingTower)
+                                            playerCrown=3;
+                                        else if (tower instanceof QueenTower)
+                                            playerCrown++;
+
+                                    }
                                 }
                             }
                         }
@@ -231,6 +251,20 @@ public class GameModel {
                                 tower.setHp(tower.getHp() - building.getDamage());
                                 if (tower.getHp() <= 0) {
                                     killTower(tower);
+                                    if (tower.getRelatedUser().equals(building.getRelatedUser())){
+                                        if (tower instanceof KingTower)
+                                            robotCrown=3;
+                                        else if (tower instanceof QueenTower)
+                                            robotCrown++;
+
+                                    }else {
+                                        if (tower instanceof KingTower)
+                                           playerCrown=3;
+                                        else if (tower instanceof QueenTower)
+                                            playerCrown++;
+
+                                    }
+
                                 }
                             }
                         }
@@ -348,6 +382,19 @@ public class GameModel {
                             tower.setHp(tower.getHp() - ((Fireball) spell).getAreaDamage());
                             if (tower.getHp() <= 0) {
                                 killTower(tower);
+                                if (tower.getRelatedUser().equals(spell.getRelatedUser())){
+                                    if (tower instanceof KingTower)
+                                        robotCrown=3;
+                                    else if (tower instanceof QueenTower)
+                                        robotCrown++;
+
+                                }else {
+                                    if (tower instanceof KingTower)
+                                        playerCrown=3;
+                                    else if (tower instanceof QueenTower)
+                                        playerCrown++;
+
+                                }
                             }
                         }
                     } else if (spell instanceof Rage) {
@@ -358,6 +405,19 @@ public class GameModel {
                         } else if (spell instanceof Arrows) {
                             if (!tower.getRelatedUser().equals(spell.getRelatedUser())) {
                                 killTower(tower);
+                                if (tower.getRelatedUser().equals(spell.getRelatedUser())){
+                                    if (tower instanceof KingTower)
+                                        robotCrown=3;
+                                    else if (tower instanceof QueenTower)
+                                        robotCrown++;
+
+                                }else {
+                                    if (tower instanceof KingTower)
+                                        playerCrown=3;
+                                    else if (tower instanceof QueenTower)
+                                        playerCrown++;
+
+                                }
                             }
                         }
                     }
@@ -848,6 +908,14 @@ public class GameModel {
     //---------------------------------------Getters And Setters-----------------------------------------------
     //---------------------------------------------------------------------------------------------------------
     //---------------------------------------------------------------------------------------------------------
+
+    public int getPlayerCrown() {
+        return playerCrown;
+    }
+
+    public int getRobotCrown() {
+        return robotCrown;
+    }
 
     public UserModel getUserModel() {
         return userModel;

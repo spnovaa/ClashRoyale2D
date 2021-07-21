@@ -40,59 +40,62 @@
                 <Image url="@../resources/ui/0.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="userLeftQueen" fitHeight="104.0" fitWidth="92.0" layoutX="40.0" layoutY="322.0"
-                   pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="userLeftQueen" fitHeight="104.0" fitWidth="92.0" layoutX="40.0" layoutY="322.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../resources/ui/building_tower_sprite_200.png"/>
+                <Image url="@../resources/ui/building_tower_sprite_200.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="userRightQueen" fitHeight="104.0" fitWidth="92.0" layoutX="227.0" layoutY="322.0"
-                   pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="userRightQueen" fitHeight="104.0" fitWidth="92.0" layoutX="227.0" layoutY="322.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../resources/ui/building_tower_sprite_200.png"/>
+                <Image url="@../resources/ui/building_tower_sprite_200.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="botRightQueen" fitHeight="104.0" fitWidth="92.0" layoutX="227.0" layoutY="59.0"
-                   pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="botRightQueen" fitHeight="104.0" fitWidth="92.0" layoutX="227.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../resources/ui/building_tower_sprite_189.png"/>
+                <Image url="@../resources/ui/building_tower_sprite_189.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="botLeftQueen" fitHeight="104.0" fitWidth="92.0" layoutX="39.0" layoutY="59.0"
-                   pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="botLeftQueen" fitHeight="104.0" fitWidth="92.0" layoutX="39.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../resources/ui/building_tower_sprite_189.png"/>
+                <Image url="@../resources/ui/building_tower_sprite_189.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="userKing" fitHeight="146.0" fitWidth="122.0" layoutX="119.0" layoutY="344.0"
-                   pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="userKing" fitHeight="146.0" fitWidth="122.0" layoutX="119.0" layoutY="344.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../resources/ui/building_tower_sprite_199.png"/>
+                <Image url="@../resources/ui/building_tower_sprite_199.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="botKing" fitHeight="214.0" fitWidth="188.0" layoutX="89.0" layoutY="-28.0" pickOnBounds="true"
-                   preserveRatio="true">
+        <ImageView fx:id="botKing" fitHeight="214.0" fitWidth="188.0" layoutX="89.0" layoutY="-28.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../resources/ui/building_tower_sprite_009.png"/>
+                <Image url="@../resources/ui/building_tower_sprite_009.png" />
             </image>
         </ImageView>
-        <Label fx:id="time" alignment="CENTER" layoutX="291.0" layoutY="14.0" prefHeight="33.0" prefWidth="52.0"
-               style="-fx-background-color: orange;" text="3:00">
+        <Label fx:id="time" alignment="CENTER" layoutX="291.0" layoutY="14.0" prefHeight="33.0" prefWidth="52.0" style="-fx-background-color: orange;" text="3:00">
             <font>
-                <Font name="Agency FB" size="27.0"/>
+                <Font name="Agency FB" size="27.0" />
             </font>
         </Label>
-        <Label fx:id="userElixir" alignment="CENTER" layoutX="13.0" layoutY="554.0" prefHeight="33.0" prefWidth="52.0"
-               style="-fx-background-color: #FF0266;" text="2">
+        <Label fx:id="userElixir" alignment="CENTER" layoutX="13.0" layoutY="554.0" prefHeight="33.0" prefWidth="52.0" style="-fx-background-color: #FF0266;" text="2">
             <font>
-                <Font name="Agency FB" size="27.0"/>
+                <Font name="Agency FB" size="27.0" />
             </font>
         </Label>
-        <Label fx:id="botElixir" alignment="CENTER" layoutX="13.0" layoutY="14.0" prefHeight="33.0" prefWidth="52.0"
-               style="-fx-background-color: #8D6E63;" text="2">
+        <Label fx:id="botElixir" alignment="CENTER" layoutX="13.0" layoutY="14.0" prefHeight="33.0" prefWidth="52.0" style="-fx-background-color: #8D6E63;" text="2">
             <font>
-                <Font name="Agency FB" size="27.0"/>
+                <Font name="Agency FB" size="27.0" />
             </font>
         </Label>
+      <ImageView fitHeight="55.0" fitWidth="33.0" layoutX="301.0" layoutY="111.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/Crown_01.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="55.0" fitWidth="33.0" layoutX="301.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/Crown_02.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="botCrown1" alignment="BOTTOM_CENTER" layoutX="304.0" layoutY="155.0" prefHeight="17.0" prefWidth="27.0" style="-fx-background-color: red;" />
+      <Label fx:id="playerCrown1" alignment="BOTTOM_CENTER" layoutX="304.0" layoutY="322.0" prefHeight="17.0" prefWidth="27.0" style="-fx-background-color: blue;" />
     </children>
 </AnchorPane>

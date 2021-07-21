@@ -44,6 +44,8 @@ public class GameView extends Group {
      */
     Queue<Card> cardsQue;
     private Label textTime;
+    private Label botCrown;
+    private Label playerCrown;
     private Label userElixir;
     private Label botElixir;
     private AnchorPane anchorPane;
@@ -192,7 +194,7 @@ public class GameView extends Group {
         String title = chosenToDeployCard.getTitle();
         Image image;
         switch (title) {
-            case "cannon" -> image = new Image(getClass().getResourceAsStream("../resources/chr/cannon/cannon.png"));
+            case "cannon" -> image = new Image(getClass().getResourceAsStream("../resources/chr/cannon/cannon1.png"));
             case "infernoTower" -> image = new Image(getClass().getResourceAsStream("../resources/chr/inferno" +
                     "/building_inferno_tower_sprite_2.png"));
             case "arrows" -> image = new Image(getClass().getResourceAsStream("../resources/Ski_trail_rating_symbol_red_circle.png"));
@@ -509,6 +511,14 @@ public class GameView extends Group {
         this.botElixir = botElixir;
     }
 
+    public void setBotCrown(Label botCrown) {
+        this.botCrown = botCrown;
+    }
+
+    public void setPlayerCrown(Label playerCrown) {
+        this.playerCrown = playerCrown;
+    }
+
     public void setArenaTowers(ArrayList<Tower> arenaTowers) {
         this.arenaTowers = arenaTowers;
         for (Tower tower : arenaTowers) {
@@ -523,4 +533,8 @@ public class GameView extends Group {
         }
     }
 
+    public void updateCrown(String botCrown2,String playerCrown2) {
+        botCrown.setText(botCrown2);
+        playerCrown.setText(playerCrown2);
+    }
 }

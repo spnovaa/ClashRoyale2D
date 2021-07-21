@@ -92,6 +92,11 @@ public class GameController extends Application {
     private final static double FRAMES_PER_SECOND = 15.0;
     @FXML
     Label userElixir;
+    @FXML
+    private Label botCrown1;
+
+    @FXML
+    private Label playerCrown1;
 
     private Stage stage;
     private UserModel userModel;
@@ -150,6 +155,8 @@ public class GameController extends Application {
         addClickedLocationListener();
         gameView = new GameView(userModel);
         gameView.setTextTime(time);
+        gameView.setBotCrown(botCrown1);
+        gameView.setPlayerCrown(playerCrown1);
         gameView.setUserElixir(userElixir);
         gameView.setBotElixir(botElixir);
         gameView.setAnchorPane(anchorPane);
@@ -199,6 +206,7 @@ public class GameController extends Application {
             if (chosen instanceof Spells) {
                 //add to existing spells
                 gameModel.spellAction(chosen);
+                gameModel.getArenaExistingSpellCards().add((Spells) chosen);
             } else if (chosen instanceof TroopsCard) {
                 //add to existing troops
                 gameModel.getArenaExistingTroops().add((TroopsCard) chosen);
@@ -229,6 +237,7 @@ public class GameController extends Application {
             botChosenCard.setCenterPositionY(y);
             if (botChosenCard instanceof Spells) {
                 //add to existing spells
+                gameModel.getArenaExistingSpellCards().add((Spells) botChosenCard);
                 gameModel.spellAction(botChosenCard);
             } else if (botChosenCard instanceof TroopsCard) {
                 //add to existing troops
@@ -296,6 +305,7 @@ public class GameController extends Application {
 
     private synchronized void updateGame() {
         gameView.updateTimer();
+        gameView.updateCrown(gameModel.getRobotCrown()+"",gameModel.getPlayerCrown()+"");
         gameModel.updateElixirs();
         gameView.updateElixirs(userModel.getElixirCount(), bot.getElixirCount());
         bot = gameModel.getGameBot();
@@ -346,4 +356,6 @@ public class GameController extends Application {
         }
         return card;
     }
+
+
 }

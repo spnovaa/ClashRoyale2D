@@ -48,8 +48,8 @@ public class ChoosingRobotController extends Application {
      * Initialize.
      */
     public  void initialize(){
-        SmartRobot.setUserData(new SmartRobot());
-        SimpleRobot.setUserData(new SimpleRobot());
+        SmartRobot.setUserData(new SmartRobot(userModel.getLevel()));
+        SimpleRobot.setUserData(new SimpleRobot(userModel.getLevel()));
     }
 
     /**

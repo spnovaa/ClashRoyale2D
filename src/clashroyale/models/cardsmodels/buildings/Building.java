@@ -193,10 +193,6 @@ public class Building extends Card {
         this.positionY = positionY;
     }
 
-    public String getRelatedUser() {
-        return relatedUser;
-    }
-
     /**
      * Gets fix life time.
      *

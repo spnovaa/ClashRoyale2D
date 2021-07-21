@@ -169,7 +169,7 @@ public class GameModel {
                         if (!troopsCard.getRelatedUser().equals(building.getRelatedUser())) {
                             Point2D troopCardPosition = new Point2D(troopsCard.getCenterPositionX(), troopsCard.getCenterPositionY());
                             float distance = (float) cardPosition.distance(troopCardPosition);
-                            System.out.println("distance " + distance);
+//                            System.out.println("distance " + distance);
                             if (distance <= building.getRange() * 10) {
                                 troopsCard.setHp(troopsCard.getHp() - building.getDamage());
                                 if (troopsCard.getHp() <= 0) {
@@ -182,7 +182,7 @@ public class GameModel {
                         if (!tower.getRelatedUser().equals(building.getRelatedUser())) {
                             Point2D troopCardPosition = new Point2D(tower.getCenterPositionX(), tower.getCenterPositionY());
                             float distance = (float) cardPosition.distance(troopCardPosition);
-                            System.out.println("distance " + distance);
+//                            System.out.println("distance " + distance);
                             if (distance <= building.getRange() * 10) {
                                 tower.setHp(tower.getHp() - building.getDamage());
                                 if (tower.getHp() <= 0) {
@@ -199,7 +199,7 @@ public class GameModel {
                             if (!troopsCard.getRelatedUser().equals(building.getRelatedUser())) {
                                 Point2D troopCardPosition = new Point2D(troopsCard.getCenterPositionX(), troopsCard.getCenterPositionY());
                                 float distance = (float) cardPosition.distance(troopCardPosition);
-                                System.out.println("distance " + distance);
+//                                System.out.println("distance " + distance);
                                 if (distance <= building.getRange() * 10) {
                                     troopsCard.setHp(troopsCard.getHp() - building.getDamage());
                                     if (troopsCard.getHp() <= 0) {
@@ -213,7 +213,7 @@ public class GameModel {
                         if (!tower.getRelatedUser().equals(building.getRelatedUser())) {
                             Point2D troopCardPosition = new Point2D(tower.getCenterPositionX(), tower.getCenterPositionY());
                             float distance = (float) cardPosition.distance(troopCardPosition);
-                            System.out.println("distance " + distance);
+//                            System.out.println("distance " + distance);
                             if (distance <= building.getRange() * 10) {
                                 tower.setHp(tower.getHp() - building.getDamage());
                                 if (tower.getHp() <= 0) {
@@ -288,8 +288,8 @@ public class GameModel {
         for (TroopsCard troopsCard : arenaExistingTroops) {
             Point2D troopCardPosition = new Point2D(troopsCard.getCenterPositionX(), troopsCard.getCenterPositionY());
             float distance = (float) cardPosition.distance(troopCardPosition);
-            System.out.println("distance " + distance);
-            System.out.println("spell radius : " + spell.getRadious() * 10);
+//            System.out.println("distance " + distance);
+//            System.out.println("spell radius : " + spell.getRadious() * 10);
             if (distance <= spell.getRadious() * 10) {
                 System.out.println("Troop " + troopsCard.getTitle() + " is detected in " + spell.getTitle() + " range");
                 if (spell instanceof Fireball) {
@@ -300,17 +300,17 @@ public class GameModel {
                         }
                     }
                 } else if (spell instanceof Rage) {
-                    System.out.println(troopsCard.getRelatedUser() + " and " + spell.getRelatedUser());
+//                    System.out.println(troopsCard.getRelatedUser() + " and " + spell.getRelatedUser());
                     if (troopsCard.getRelatedUser().equals(spell.getRelatedUser())) {
                         troopsCard.setDamage(troopsCard.getDamage() * 1.4);
                         troopsCard.setHitSpeed(troopsCard.getHitSpeed() * 1.4);
                         //speed
                         if (troopsCard.getSpeed().equals(Speed.SLOW)) {
                             troopsCard.setSpeed(Speed.SLOW_AMPLIFIED);
-                            System.out.println("dddddddd");
+//                            System.out.println("dddddddd");
                         } else if (troopsCard.getSpeed().equals(Speed.MEDIUM)) {
                             troopsCard.setSpeed(Speed.MEDIUM_AMPLIFIED);
-                            System.out.println("ddddddd");
+//                            System.out.println("ddddddd");
                         } else if (troopsCard.getSpeed().equals(Speed.FAST)) {
                             troopsCard.setSpeed(Speed.FAST_AMPLIFIED);
                         }

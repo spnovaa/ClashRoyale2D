@@ -44,8 +44,6 @@ public class GameView extends Group {
      */
     Queue<Card> cardsQue;
     private Label textTime;
-    private ImageView imageView;
-    private Image image;
     private AnchorPane anchorPane;
     private ImageView displayedCard1;
     private ImageView displayedCard2;
@@ -178,99 +176,128 @@ public class GameView extends Group {
      * @param chosenToDeployCard the chosen to deploy card
      */
     public void deployTroops(float x, float y, Card chosenToDeployCard) {
-        String title = chosenToDeployCard.getTitle();
-        if (title.equals("cannon")) {
-            if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
-                image = new Image(getClass().getResourceAsStream("../resources/chr/cannon/cannon1.png"));
-            } else {
-                image = new Image(getClass().getResourceAsStream("../resources/chr/cannon/cannon.png"));
-            }
-        } else if (title.equals("infernoTower")) {
-            image = new Image(getClass().getResourceAsStream("../resources/chr/inferno" +
-                    "/building_inferno_tower_sprite_2.png"));
-        } else if (title.equals("arrows")) {
-            image = new Image(getClass().getResourceAsStream("../resources/Ski_trail_rating_symbol_red_circle.png"));
-        } else if (title.equals("fireball")) {
-            image = new Image(getClass().getResourceAsStream("../resources/png-transparent-computer-icons-circle-circle-orange-sphere-desktop-wallpaper-thumbnail.png"));
-        } else if (title.equals("rage")) {
-            image = new Image(getClass().getResourceAsStream("../resources/Pan_Blue_Circle.png"));
-
-        } else if (title.equals("archer")) {
-            if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
-                image = new Image(getClass().getResourceAsStream("../resources/chr/archer/chr_archer_sprite_069.png"));
-            } else {
-                image = new Image(getClass().getResourceAsStream("../resources/chr/archer/chr_archer_sprite_000.png"));
-            }
-
-        } else if (title.equals("babyDragon")) {
-            if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
-                image = new Image(getClass().getResourceAsStream("../resources/chr/babydragon/chr_baby_dragon_sprite_111.png"));
-            } else {
-                image = new Image(getClass().getResourceAsStream("../resources/chr/babydragon/chr_baby_dragon_sprite_003.png"));
-            }
-        } else if (title.equals("barbarian")) {
-            if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
-                image = new Image(getClass().getResourceAsStream("../resources/chr/barbarian/chr_barbarian_sprite_0251.png"));
-            } else {
-                image = new Image(getClass().getResourceAsStream("../resources/chr/barbarian/chr_barbarian_sprite_0252.png"));
-            }
-        } else if (title.equals("giant")) {
-            if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
-                image = new Image(getClass().getResourceAsStream("../resources/chr/giant/chr_giant_sprite_134.png"));
-            } else {
-                image = new Image(getClass().getResourceAsStream("../resources/chr/giant/chr_giant_sprite_000.png"));
-            }
-        } else if (title.equals("miniPEKKA")) {
-            if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
-                image = new Image(getClass().getResourceAsStream("../resources/chr/minipekka/chr_mini_pekka_sprite_104.png"));
-            } else {
-                image = new Image(getClass().getResourceAsStream("../resources/chr/minipekka/chr_mini_pekka_sprite_002.png"));
-            }
-        } else if (title.equals("valkyrie")) {
-            if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
-                image = new Image(getClass().getResourceAsStream("../resources/chr/valkyrie/chr_valkyrie_sprite_060.png"));
-            } else {
-                image = new Image(getClass().getResourceAsStream("../resources/chr/valkyrie/chr_valkyrie_sprite_004.png"));
-            }
-        } else if (title.equals("wizard")) {
-            if (!userModel.getUsername().equals("simpleBot") || !userModel.getUsername().equals("smartBot")) {
-                image = new Image(getClass().getResourceAsStream("../resources/chr/wizard/chr_wizard_sprite_070.png"));
-            } else {
-                image = new Image(getClass().getResourceAsStream("../resources/chr/wizard/chr_wizard_sprite_004.png"));
-            }
-        }
-        System.out.println(x + "  " + y);
-        System.out.println(image.getWidth());
-        imageView = new ImageView(image);
-        if (title.equals("rage")){
-            imageView.setOpacity(0.3);
-            imageView.setX(x - (float) 50 / 2);
-            imageView.setY(y - (float) 50 / 2);
-            imageView.setFitWidth(50);
-            imageView.setFitHeight(50);
-            imageView.setUserData(chosenToDeployCard);
-        }
-        else  if (title.equals("fireball")){
-            imageView.setOpacity(0.3);
-            imageView.setX(x - (float) 25 / 2);
-            imageView.setY(y - (float) 25 / 2);
-            imageView.setFitWidth(25);
-            imageView.setFitHeight(25);
-            imageView.setUserData(chosenToDeployCard);
-        }
-        else  if (title.equals("arrows")){
-            imageView.setOpacity(0.3);
-            imageView.setX(x - (float) 40 / 2);
-            imageView.setY(y - (float) 40 / 2);
-            imageView.setFitWidth(40);
-            imageView.setFitHeight(40);
-            imageView.setUserData(chosenToDeployCard);
-        }
+        String user = chosenToDeployCard.getRelatedUser();
+        if (!user.equals("simpleBot") && !user.equals("SmartBot"))
+            deployUserClick(x, y, chosenToDeployCard);
+//            System.out.println(user+ "Not Equal Condition");
         else {
-        imageView.setX(x - (float) TROOPS_SIZE / 2);
-        imageView.setY(y - (float) TROOPS_SIZE / 2);
-        imageView.setFitWidth(TROOPS_SIZE);
-        imageView.setFitHeight(TROOPS_SIZE);}
+            deployBotClick(x, y, chosenToDeployCard);
+            System.out.println("Trying To Deploy: " + chosenToDeployCard.getTitle() + " for " + chosenToDeployCard.getRelatedUser());
+        }
+    }
+
+    private void deployBotClick(float x, float y, Card chosenToDeployCard) {
+        ImageView imageView;
+        String title = chosenToDeployCard.getTitle();
+        Image image;
+        switch (title) {
+            case "cannon" -> image = new Image(getClass().getResourceAsStream("../resources/chr/cannon/cannon.png"));
+            case "infernoTower" -> image = new Image(getClass().getResourceAsStream("../resources/chr/inferno" +
+                    "/building_inferno_tower_sprite_2.png"));
+            case "arrows" -> image = new Image(getClass().getResourceAsStream("../resources/Ski_trail_rating_symbol_red_circle.png"));
+            case "fireball" -> image = new Image(getClass().getResourceAsStream("../resources/png-transparent-computer-icons-circle-circle-orange-sphere-desktop-wallpaper-thumbnail.png"));
+            case "rage" -> image = new Image(getClass().getResourceAsStream("../resources/Pan_Blue_Circle.png"));
+            case "archer" -> image = new Image(getClass().getResourceAsStream("../resources/chr/archer/chr_archer_sprite_000.png"));
+            case "babyDragon" -> image = new Image(getClass().getResourceAsStream("../resources/chr/babydragon/chr_baby_dragon_sprite_003.png"));
+            case "barbarian" -> image = new Image(getClass().getResourceAsStream("../resources/chr/barbarian/chr_barbarian_sprite_0252.png"));
+            case "giant" -> image = new Image(getClass().getResourceAsStream("../resources/chr/giant/chr_giant_sprite_000.png"));
+            case "miniPEKKA" -> image = new Image(getClass().getResourceAsStream("../resources/chr/minipekka/chr_mini_pekka_sprite_002.png"));
+            case "valkyrie" -> image = new Image(getClass().getResourceAsStream("../resources/chr/valkyrie/chr_valkyrie_sprite_004.png"));
+            case "wizard" -> image = new Image(getClass().getResourceAsStream("../resources/chr/wizard/chr_wizard_sprite_004.png"));
+            default -> image = new Image(getClass().getResourceAsStream("../resources/ui/0.png"));
+        }
+        imageView = new ImageView(image);
+        switch (title) {
+            case "rage" -> {
+                imageView.setOpacity(0.3);
+                imageView.setX(x - (float) 50 / 2);
+                imageView.setY(y - (float) 50 / 2);
+                imageView.setFitWidth(50);
+                imageView.setFitHeight(50);
+                imageView.setUserData(chosenToDeployCard);
+            }
+            case "fireball" -> {
+                imageView.setOpacity(0.3);
+                imageView.setX(x - (float) 25 / 2);
+                imageView.setY(y - (float) 25 / 2);
+                imageView.setFitWidth(25);
+                imageView.setFitHeight(25);
+                imageView.setUserData(chosenToDeployCard);
+            }
+            case "arrows" -> {
+                imageView.setOpacity(0.3);
+                imageView.setX(x - (float) 40 / 2);
+                imageView.setY(y - (float) 40 / 2);
+                imageView.setFitWidth(40);
+                imageView.setFitHeight(40);
+                imageView.setUserData(chosenToDeployCard);
+            }
+            default -> {
+                imageView.setX(x - (float) TROOPS_SIZE / 2);
+                imageView.setY(y - (float) TROOPS_SIZE / 2);
+                imageView.setFitWidth(TROOPS_SIZE);
+                imageView.setFitHeight(TROOPS_SIZE);
+                System.out.println("Bot Card Not Recognized");
+            }
+        }
+        imageView.setUserData(chosenToDeployCard);
+        anchorPane.getChildren().add(imageView);
+        battleCards.add(imageView);
+    }
+
+    private void deployUserClick(float x, float y, Card chosenToDeployCard) {
+        ImageView imageView;
+        Image image;
+        String title = chosenToDeployCard.getTitle();
+        switch (title) {
+            case "cannon" -> image = new Image(getClass().getResourceAsStream("../resources/chr/cannon/cannon1.png"));
+            case "infernoTower" -> image = new Image(getClass().getResourceAsStream("../resources/chr/inferno" +
+                    "/building_inferno_tower_sprite_2.png"));
+            case "arrows" -> image = new Image(getClass().getResourceAsStream("../resources/Ski_trail_rating_symbol_red_circle.png"));
+            case "fireball" -> image = new Image(getClass().getResourceAsStream("../resources/png-transparent-computer-icons-circle-circle-orange-sphere-desktop-wallpaper-thumbnail.png"));
+            case "rage" -> image = new Image(getClass().getResourceAsStream("../resources/Pan_Blue_Circle.png"));
+            case "archer" -> image = new Image(getClass().getResourceAsStream("../resources/chr/archer/chr_archer_sprite_069.png"));
+            case "babyDragon" -> image = new Image(getClass().getResourceAsStream("../resources/chr/babydragon/chr_baby_dragon_sprite_111.png"));
+            case "barbarian" -> image = new Image(getClass().getResourceAsStream("../resources/chr/barbarian/chr_barbarian_sprite_0251.png"));
+            case "giant" -> image = new Image(getClass().getResourceAsStream("../resources/chr/giant/chr_giant_sprite_134.png"));
+            case "miniPEKKA" -> image = new Image(getClass().getResourceAsStream("../resources/chr/minipekka/chr_mini_pekka_sprite_104.png"));
+            case "valkyrie" -> image = new Image(getClass().getResourceAsStream("../resources/chr/valkyrie/chr_valkyrie_sprite_060.png"));
+            case "wizard" -> image = new Image(getClass().getResourceAsStream("../resources/chr/wizard/chr_wizard_sprite_070.png"));
+            default -> image = new Image(getClass().getResourceAsStream("../resources/ui/0.png"));
+        }
+        imageView = new ImageView(image);
+        switch (title) {
+            case "rage" -> {
+                imageView.setOpacity(0.3);
+                imageView.setX(x - (float) 50 / 2);
+                imageView.setY(y - (float) 50 / 2);
+                imageView.setFitWidth(50);
+                imageView.setFitHeight(50);
+                imageView.setUserData(chosenToDeployCard);
+            }
+            case "fireball" -> {
+                imageView.setOpacity(0.3);
+                imageView.setX(x - (float) 25 / 2);
+                imageView.setY(y - (float) 25 / 2);
+                imageView.setFitWidth(25);
+                imageView.setFitHeight(25);
+                imageView.setUserData(chosenToDeployCard);
+            }
+            case "arrows" -> {
+                imageView.setOpacity(0.3);
+                imageView.setX(x - (float) 40 / 2);
+                imageView.setY(y - (float) 40 / 2);
+                imageView.setFitWidth(40);
+                imageView.setFitHeight(40);
+                imageView.setUserData(chosenToDeployCard);
+            }
+            default -> {
+                imageView.setX(x - (float) TROOPS_SIZE / 2);
+                imageView.setY(y - (float) TROOPS_SIZE / 2);
+                imageView.setFitWidth(TROOPS_SIZE);
+                imageView.setFitHeight(TROOPS_SIZE);
+            }
+        }
         imageView.setUserData(chosenToDeployCard);
         anchorPane.getChildren().add(imageView);
         battleCards.add(imageView);
@@ -314,11 +341,6 @@ public class GameView extends Group {
             System.out.println("Unable To Recon Next Card");
         }
 
-
-        System.out.println("new waiting: \n");
-        for (Card card : cardsQue)
-            System.out.println(card.getTitle());
-
     }
 
 
@@ -354,6 +376,7 @@ public class GameView extends Group {
                         if (!card.isAlive()) {
                             asset.setImage(null);
                             asset.setUserData(null);
+                            System.out.println("Dead Troop Image Removed");
                         } else {
                             asset.setX(card.getCenterPositionX() - (float) TROOPS_SIZE / 2);
                             asset.setY(card.getCenterPositionY() - (float) TROOPS_SIZE / 2);

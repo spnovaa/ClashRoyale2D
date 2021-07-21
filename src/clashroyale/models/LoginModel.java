@@ -24,7 +24,8 @@ public class LoginModel {
                 if (resultSet.getString("password").equals(password)) {
                     userModel.setUsername(username);
                     userModel.setLevel(Integer.parseInt(resultSet.getString("level")));
-                    System.out.println(Integer.parseInt(resultSet.getString("level")));
+                    int botType = Integer.parseInt(resultSet.getString("bot_type"));
+                    userModel.setBotType(botType == 1 ? "simpleBot" : "smartBot");
                     userModel.setId(resultSet.getString("id"));
                     return 1;
                 } else

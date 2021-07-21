@@ -59,10 +59,6 @@ public class Spells extends Card {
         isAlive = alive;
     }
 
-    public String getRelatedUser() {
-        return relatedUser;
-    }
-
     public void setRelatedUser(String relatedUser) {
         this.relatedUser = relatedUser;
     }

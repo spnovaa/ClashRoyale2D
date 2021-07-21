@@ -3,18 +3,22 @@ package clashroyale.controllers;
 import clashroyale.models.GameModel;
 import clashroyale.models.UserModel;
 import clashroyale.models.cardsmodels.buildings.Building;
+import clashroyale.models.cardsmodels.buildings.Cannon;
+import clashroyale.models.cardsmodels.buildings.InfernoTower;
 import clashroyale.models.cardsmodels.spells.Arrows;
 import clashroyale.models.cardsmodels.spells.Fireball;
 import clashroyale.models.cardsmodels.spells.Rage;
 import clashroyale.models.cardsmodels.spells.Spells;
-import clashroyale.models.cardsmodels.troops.Card;
-import clashroyale.models.cardsmodels.troops.TroopsCard;
+import clashroyale.models.cardsmodels.troops.*;
+import clashroyale.models.game.SimpleRobot;
 import clashroyale.models.towersmodels.Tower;
 import clashroyale.views.GameView;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -25,6 +29,7 @@ import javafx.scene.control.Label;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
 
 /**
@@ -87,7 +92,7 @@ public class GameController extends Application {
 
     private Stage stage;
     private UserModel userModel;
-    private final static double FRAMES_PER_SECOND = 15.0;
+    private final static double FRAMES_PER_SECOND = 1.0;
     private Scene gameScene;
 
     private int userMinX;
@@ -96,6 +101,9 @@ public class GameController extends Application {
     private int userMaxY;
     private GameModel gameModel;
     private Timer timer;
+    private SimpleRobot simpleRobot;
+    private Card botChosenCard;
+    private Point2D botClickCoordinates;
 
     private ArrayList<Tower> arenaTowers;
 
@@ -122,6 +130,7 @@ public class GameController extends Application {
      */
     public void setUserModel(UserModel userModel) {
         this.userModel = userModel;
+        simpleRobot = new SimpleRobot(userModel.getLevel());
     }
 
     /**
@@ -168,7 +177,7 @@ public class GameController extends Application {
     private boolean deployClickedAt(float x, float y) {
         Card chosen = userModel.getChosenToDeployCard();
         if (chosen != null && y < userMaxY && y > userMinY && x > userMinX && x < userMaxX) {
-
+            chosen = generateNewCard(chosen.getTitle(), userModel.getUsername());
             gameView.deployTroops(x, y, chosen);
             chosen.setCenterPositionX(x);
             chosen.setCenterPositionY(y);
@@ -178,6 +187,7 @@ public class GameController extends Application {
             } else if (chosen instanceof TroopsCard) {
                 //add to existing troops
                 gameModel.getArenaExistingTroops().add((TroopsCard) chosen);
+                System.out.println("Added : " + chosen.getUuid());
             } else {
                 //add to existing buildings
                 gameModel.getArenaExistingBuildings().add((Building) chosen);
@@ -185,6 +195,29 @@ public class GameController extends Application {
             return true;
         } else {
             return false;
+        }
+    }
+
+    private void deployBotClickedAt(float x, float y) {
+//        System.out.println("Bot Clicked At: "+ x + " , "+ y);
+        if (botChosenCard != null) {
+            String bot = userModel.getBotType();
+            System.out.println("Bot Type : " + bot);
+            botChosenCard = generateNewCard(botChosenCard.getTitle(), bot);
+//            System.out.println(botChosenCard.getRelatedUser());
+            gameView.deployTroops(x, y, botChosenCard);
+            botChosenCard.setCenterPositionX(x);
+            botChosenCard.setCenterPositionY(y);
+            if (botChosenCard instanceof Spells) {
+                //add to existing spells
+                gameModel.spellAction(botChosenCard);
+            } else if (botChosenCard instanceof TroopsCard) {
+                //add to existing troops
+                gameModel.getArenaExistingTroops().add((TroopsCard) botChosenCard);
+            } else {
+                //add to existing buildings
+                gameModel.getArenaExistingBuildings().add((Building) botChosenCard);
+            }
         }
     }
 
@@ -240,16 +273,41 @@ public class GameController extends Application {
         this.timer.schedule(timerTask, 0, frameTimeInMilliseconds);
     }
 
-    private void updateGame() {
+    private synchronized void updateGame() {
         gameView.updateTimer();
+        botChosenCard = simpleRobot.chooseCardToPlay();
+        botClickCoordinates = simpleRobot.chooseCoordinatesToPlay();
+//        System.out.println("Bot Chose: " + botChosenCard.getTitle() + " at " + botClickCoordinates.getX()+" : "+ botClickCoordinates.getY());
+        deployBotClickedAt((float) botClickCoordinates.getX(), (float) botClickCoordinates.getY());
         gameModel.updateGameModel();
         ArrayList<TroopsCard> existingTroops = gameModel.getArenaExistingTroops();
         ArrayList<Tower> existingTowers = gameModel.getArenaExistingTowers();
         ArrayList<Spells> existingSpells = gameModel.getArenaExistingSpellCards();
-        gameView.updateLivingAssets(existingTroops, existingTowers,existingSpells);
+        gameView.updateLivingAssets(existingTroops, existingTowers, existingSpells);
     }
 
     public void setGameModel(GameModel gameModel) {
         this.gameModel = gameModel;
+    }
+
+    private Card generateNewCard(String title, String username) {
+        Card card;
+        int level = gameModel.getUserLevel();
+        switch (title) {
+            case "cannon" -> card = new Cannon(level, username);
+            case "infernoTower" -> card = new InfernoTower(level, username);
+            case "arrows" -> card = new Arrows(level, username);
+            case "fireball" -> card = new Fireball(level, username);
+            case "rage" -> card = new Rage(level, username);
+            case "archer" -> card = new ArchersCard(level, username);
+            case "babyDragon" -> card = new BabyDragonCard(level, username);
+            case "barbarian" -> card = new BarbariansCard(level, username);
+            case "giant" -> card = new GiantCard(level, username);
+            case "miniPEKKA" -> card = new MiniPEKKACard(level, username);
+            case "valkyrie" -> card = new ValkyrieCard(level, username);
+            case "wizard" -> card = new WizardCard(level, username);
+            default -> card = null;
+        }
+        return card;
     }
 }

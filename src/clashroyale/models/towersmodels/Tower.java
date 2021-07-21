@@ -1,5 +1,7 @@
 package clashroyale.models.towersmodels;
 
+import clashroyale.models.cardsmodels.troops.Card;
+
 import java.util.UUID;
 
 /**
@@ -17,6 +19,8 @@ public class Tower {
     private boolean isAlive;
     private String uuid;
     private String title;
+    private boolean isAttacking;
+    private Card target;
 
     /**
      * Instantiates a new Tower.
@@ -35,6 +39,8 @@ public class Tower {
         isAlive = true;
         uuid = UUID.randomUUID().toString();
         this.title = title;
+        isAttacking = false;
+        target = null;
     }
 
     /**
@@ -153,5 +159,21 @@ public class Tower {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public boolean isAttacking() {
+        return isAttacking;
+    }
+
+    public void setAttacking(boolean attacking) {
+        isAttacking = attacking;
+    }
+
+    public Card getTarget() {
+        return target;
+    }
+
+    public void setTarget(Card target) {
+        this.target = target;
     }
 }

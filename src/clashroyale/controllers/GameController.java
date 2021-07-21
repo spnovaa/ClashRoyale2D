@@ -299,7 +299,8 @@ public class GameController extends Application {
             }
         };
 
-        long frameTimeInMilliseconds = (long) (1000.0 / FRAMES_PER_SECOND);
+        long frameTimeInMilliseconds = (long) (
+                1000.0 / FRAMES_PER_SECOND);
         this.timer.schedule(timerTask, 0, frameTimeInMilliseconds);
     }
 

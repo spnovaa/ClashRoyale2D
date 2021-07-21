@@ -235,6 +235,12 @@ public class GameView extends Group {
                 imageView.setFitHeight(40);
                 imageView.setUserData(chosenToDeployCard);
             }
+            case "cannon", "infernoTower" ->{ imageView.setX(x - (float) TROOPS_SIZE / 4);
+                imageView.setY(y - (float) TROOPS_SIZE / 4);
+                imageView.setFitWidth(TROOPS_SIZE/2);
+                imageView.setFitHeight(TROOPS_SIZE/2);}
+
+
             default -> {
                 imageView.setX(x - (float) TROOPS_SIZE / 2);
                 imageView.setY(y - (float) TROOPS_SIZE / 2);

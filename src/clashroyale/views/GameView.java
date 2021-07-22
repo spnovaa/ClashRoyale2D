@@ -181,7 +181,7 @@ public class GameView extends Group {
      */
     public void deployTroops(float x, float y, Card chosenToDeployCard) {
         String user = chosenToDeployCard.getRelatedUser();
-        if (!user.equals("simpleBot") && !user.equals("SmartBot"))
+        if (!user.equals("simpleBot") && !user.equals("smartBot"))
             deployUserClick(x, y, chosenToDeployCard);
 //            System.out.println(user+ "Not Equal Condition");
         else {

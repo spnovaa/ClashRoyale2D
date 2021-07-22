@@ -182,6 +182,7 @@ public class GameController extends Application {
         gameView.prepareArena();
         System.out.println(userModel.getLevel());
         this.bot = gameModel.getGameBot();
+        if (bot.getUsername().equals("smartBot")) ((SmartRobot) bot).setLiveData(gameModel);
         startTimer();
     }
 
@@ -367,10 +368,10 @@ public class GameController extends Application {
             botChosenCard = ((SimpleRobot) bot).chooseCardToPlay();
             botClickCoordinates = ((SimpleRobot) bot).chooseCoordinatesToPlay();
         } else {
-//            bot.setLivaData( args );
-//            botChosenCard = ((SmartRobot) bot).chooseCardToPlay();
-//            botClickCoordinates = ((SmartRobot) bot).chooseCoordinatesToPlay();
-            System.out.println("Smart Bot Implementation");
+            ((SmartRobot) bot).setLiveData(gameModel);
+            botChosenCard = ((SmartRobot) bot).chooseCardToPlay();
+            botClickCoordinates = ((SmartRobot) bot).chooseCoordinatesToPlay(botChosenCard);
+//            System.out.println("Smart Bot Implementation");
         }
 
 //        System.out.println("Bot Chose: " + botChosenCard.getTitle() + " at " + botClickCoordinates.getX()+" : "+ botClickCoordinates.getY());

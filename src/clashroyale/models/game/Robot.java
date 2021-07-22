@@ -94,7 +94,7 @@ public class Robot {
         this.cardsQue = cardsQue;
     }
 
-    public ArrayList<Card> getAllCards() {
+    public ArrayList<Card> allCards() {
         return allCards;
     }
 

@@ -88,6 +88,7 @@ public class HistoryController extends Group {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/Menu.fxml"));
                 Parent menuRoot = loader.load();
                 menuController = loader.getController();
+                menuController.setUserModel(userModel);
                 menuController.start(stage);
                 menu = new Scene(menuRoot);
             } catch (Exception exception) {

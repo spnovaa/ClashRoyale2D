@@ -19,47 +19,46 @@ public class SmartRobot extends Robot {
     private ArrayList<Card> smartBotCards;
     private GameModel gameModel;
 
-    private int minX1 = 25;
-    private int maxX1 = 183;
-    private int minY1 = 35;
-    private int maxY1 = 133;
+    private int minX1;
+    private int maxX1;
+    private int minY1;
+    private int maxY1;
 
 
+    private int minX2;
+    private int maxX2;
+    private int minY2;
+    private int maxY2;
 
-    private int minX2 = 183;
-    private int maxX2 = 340;
-    private int minY2 = 35;
-    private int maxY2 = 133;
+    private int minX3;
+    private int maxX3 ;
+    private int minY3;
+    private int maxY3 ;
 
-    private int minX3 = 25;
-    private int maxX3 = 183;
-    private int minY3 = 133;
-    private int maxY3 =  (int) (230-gameModel.getBridgesEndY());
+    private int minX4;
+    private int maxX4 ;
+    private int minY4;
+    private int maxY4;
 
-    private int minX4 = 183;
-    private int maxX4 = 340;
-    private int minY4 = 133;
-    private int maxY4 = (int) (230-gameModel.getBridgesEndY());
+    private int minX5;
+    private int maxX5 ;
+    private int minY5;
+    private int maxY5;
 
-    private int minX5 = 25;
-    private int maxX5 = 183;
-    private int minY5 = (int) (230+gameModel.getBridgesStartY());
-    private int maxY5 = 340;
+    private int minX6;
+    private int maxX6;
+    private int minY6;
+    private int maxY6;
 
-    private int minX6 = 183;
-    private int maxX6 = 340;
-    private int minY6 = (int) (230+gameModel.getBridgesStartY());
-    private int maxY6 = 340;
+    private int minX7 ;
+    private int maxX7;
+    private int minY7;
+    private int maxY7;
 
-    private int minX7 = 25;
-    private int maxX7 = 183;
-    private int minY7 = 340;
-    private int maxY7 = 450;
-
-    private int minX8 = 183;
-    private int maxX8 = 340;
-    private int minY8 = 340;
-    private int maxY8 = 450;
+    private int minX8;
+    private int maxX8;
+    private int minY8;
+    private int maxY8;
 
     /**
      * Instantiates a new Smart robot.
@@ -78,6 +77,50 @@ public class SmartRobot extends Robot {
      */
     public void setLiveData(GameModel gameModel) {
         this.gameModel = gameModel;
+        initializePosition();
+    }
+
+    private void initializePosition() {
+        minX1 = 25;
+        maxX1 = 183;
+        minY1 = 35;
+        maxY1 = 133;
+
+
+        minX2 = 183;
+        maxX2 = 340;
+        minY2 = 35;
+        maxY2 = 133;
+
+        minX3 = 25;
+        maxX3 = 183;
+        minY3 = 133;
+        maxY3 = (int) (230 - gameModel.getBridgesEndY());
+
+        minX4 = 183;
+        maxX4 = 340;
+        minY4 = 133;
+        maxY4 = (int) (230 - gameModel.getBridgesEndY());
+
+        minX5 = 25;
+        maxX5 = 183;
+        minY5 = (int) (230 + gameModel.getBridgesStartY());
+        maxY5 = 340;
+
+        minX6 = 183;
+        maxX6 = 340;
+        minY6 = (int) (230 + gameModel.getBridgesStartY());
+        maxY6 = 340;
+
+        minX7 = 25;
+        maxX7 = 183;
+        minY7 = 340;
+        maxY7 = 450;
+
+        minX8 = 183;
+        maxX8 = 340;
+        minY8 = 340;
+        maxY8 = 450;
     }
 
     /**
@@ -155,13 +198,13 @@ public class SmartRobot extends Robot {
         int enemy3 = 0;
         int enemy4 = 0;
 
-        float deployedY=0,deployedX=0;
+        float deployedY = 0, deployedX = 0;
         if (botChosenCard instanceof Rage) {
             for (TroopsCard troopsCard : gameModel.getArenaExistingTroops()) {
-             if (troopsCard.getRelatedUser().equals("smartBot")){
-                 deployedX=troopsCard.getCenterPositionX()+1;
-                 deployedY=troopsCard.getCenterPositionY()+1;
-             }
+                if (troopsCard.getRelatedUser().equals("smartBot")) {
+                    deployedX = troopsCard.getCenterPositionX() + 1;
+                    deployedY = troopsCard.getCenterPositionY() + 1;
+                }
             }
         } else {
 
@@ -179,27 +222,25 @@ public class SmartRobot extends Robot {
                     enemy4++;
                 }
             }
-                int maxEnemy = Math.max(Math.max(enemy1,enemy2),Math.max(enemy3,enemy4));
-                if (enemy1 == maxEnemy) {
-                    deployedX = getRandomNumberUsingNextInt(minX1,maxX1);
-                    deployedY = getRandomNumberUsingNextInt(minY1,maxY1);
-                } else if (enemy2 == maxEnemy){
-                    deployedX = getRandomNumberUsingNextInt(minX2,maxX2);
-                    deployedY = getRandomNumberUsingNextInt(minY2,maxY2);
-                }
-                else if (enemy3 == maxEnemy){
-                    deployedX = getRandomNumberUsingNextInt(minX3,maxX3);
-                    deployedY = getRandomNumberUsingNextInt(minY3,maxY3);
-                }
-                else if (enemy4 == maxEnemy){
-                    deployedX = getRandomNumberUsingNextInt(minX4,maxX4);
-                    deployedY = getRandomNumberUsingNextInt(minY4,maxY4);
-                }
-
-
+            int maxEnemy = Math.max(Math.max(enemy1, enemy2), Math.max(enemy3, enemy4));
+            if (enemy1 == maxEnemy) {
+                deployedX = getRandomNumberUsingNextInt(minX1, maxX1);
+                deployedY = getRandomNumberUsingNextInt(minY1, maxY1);
+            } else if (enemy2 == maxEnemy) {
+                deployedX = getRandomNumberUsingNextInt(minX2, maxX2);
+                deployedY = getRandomNumberUsingNextInt(minY2, maxY2);
+            } else if (enemy3 == maxEnemy) {
+                deployedX = getRandomNumberUsingNextInt(minX3, maxX3);
+                deployedY = getRandomNumberUsingNextInt(minY3, maxY3);
+            } else if (enemy4 == maxEnemy) {
+                deployedX = getRandomNumberUsingNextInt(minX4, maxX4);
+                deployedY = getRandomNumberUsingNextInt(minY4, maxY4);
             }
 
 
-            return new Point2D(deployedX,deployedY);
         }
+
+
+        return new Point2D(deployedX, deployedY);
     }
+}

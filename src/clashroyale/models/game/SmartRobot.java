@@ -61,15 +61,30 @@ public class SmartRobot extends Robot {
     private int minY8 = 340;
     private int maxY8 = 450;
 
+    /**
+     * Instantiates a new Smart robot.
+     *
+     * @param level the level
+     */
     public SmartRobot(int level) {
         super("smartBot", level);
         smartBotCards = choosingSmartBotCards();
     }
 
+    /**
+     * Sets live data.
+     *
+     * @param gameModel the game model
+     */
     public void setLiveData(GameModel gameModel) {
         this.gameModel = gameModel;
     }
 
+    /**
+     * Choosing smart bot cards array list.
+     *
+     * @return the array list
+     */
     public ArrayList<Card> choosingSmartBotCards() {
         ArrayList<Card> smartBotCards1 = new ArrayList();
         int troop = 0;
@@ -103,6 +118,11 @@ public class SmartRobot extends Robot {
         return smartBotCards1;
     }
 
+    /**
+     * Choose card to play card.
+     *
+     * @return the card
+     */
     public Card chooseCardToPlay() {
 
         Card card = smartBotCards.get(new Random().nextInt(8));
@@ -111,11 +131,24 @@ public class SmartRobot extends Robot {
         } else return null;
     }
 
+    /**
+     * Gets random number using next int.
+     *
+     * @param min the min
+     * @param max the max
+     * @return the random number using next int
+     */
     public float getRandomNumberUsingNextInt(float min, float max) {
         Random random = new Random();
         return random.nextFloat() * (max - min) + min;
     }
 
+    /**
+     * Choose coordinates to play point 2 d.
+     *
+     * @param botChosenCard the bot chosen card
+     * @return the point 2 d
+     */
     public Point2D chooseCoordinatesToPlay(Card botChosenCard) {
         int enemy1 = 0;
         int enemy2 = 0;

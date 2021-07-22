@@ -196,36 +196,40 @@ public class GameController extends Application {
      */
     private boolean deployClickedAt(float x, float y) {
         Card chosen = userModel.getChosenToDeployCard();
-        boolean isInRange = y < userMaxY && y > userMinY && x > userMinX && x < userMaxX;
-        boolean hasElixirs = false;
-        if (chosen != null)
-            hasElixirs = chosen.getCost() <= userModel.getElixirCount();
-        if (chosen != null && isInRange && hasElixirs) {
-            userModel.setElixirCount(userModel.getElixirCount() - chosen.getCost());
-            chosen = generateNewCard(chosen.getTitle(), userModel.getUsername());
-            gameView.deployTroops(x, y, chosen);
-            chosen.setCenterPositionX(x);
-            chosen.setCenterPositionY(y);
-            if (chosen instanceof Spells) {
-                //add to existing spells
-                gameModel.spellAction(chosen);
-                gameModel.getArenaExistingSpellCards().add((Spells) chosen);
-            } else if (chosen instanceof TroopsCard) {
-                //add to existing troops
-                gameModel.getArenaExistingTroops().add((TroopsCard) chosen);
-                System.out.println("Added : " + chosen.getUuid());
+        if (chosen != null) {
+            boolean isInRange = y < userMaxY && y > userMinY && x > userMinX && x < userMaxX
+                    || (chosen instanceof Spells && y < userMaxY);
+            boolean hasElixirs = false;
+            if (chosen != null)
+                hasElixirs = chosen.getCost() <= userModel.getElixirCount();
+            if (chosen != null && isInRange && hasElixirs) {
+                userModel.setElixirCount(userModel.getElixirCount() - chosen.getCost());
+                chosen = generateNewCard(chosen.getTitle(), userModel.getUsername());
+                gameView.deployTroops(x, y, chosen);
+                chosen.setCenterPositionX(x);
+                chosen.setCenterPositionY(y);
+                if (chosen instanceof Spells) {
+                    //add to existing spells
+                    gameModel.spellAction(chosen);
+                    gameModel.getArenaExistingSpellCards().add((Spells) chosen);
+                } else if (chosen instanceof TroopsCard) {
+                    //add to existing troops
+                    gameModel.getArenaExistingTroops().add((TroopsCard) chosen);
+                    System.out.println("Added : " + chosen.getUuid());
+                } else {
+                    //add to existing buildings
+                    gameModel.getArenaExistingBuildings().add((Building) chosen);
+                }
+                return true;
+            } else if (!hasElixirs) {
+                System.out.println("You Have " + userModel.getElixirCount() + " Elixirs and Card Costs " + chosen.getCost());
+                return false;
             } else {
-                //add to existing buildings
-                gameModel.getArenaExistingBuildings().add((Building) chosen);
+                System.out.println("You Can't Deploy Cards There!");
+                return false;
             }
-            return true;
-        } else if (!hasElixirs) {
-            System.out.println("You Have " + userModel.getElixirCount() + " Elixirs and Card Costs " + chosen.getCost());
-            return false;
-        } else {
-            System.out.println("You Can't Deploy Cards There!");
-            return false;
         }
+        return false;
     }
 
     private void deployBotClickedAt(float x, float y) {

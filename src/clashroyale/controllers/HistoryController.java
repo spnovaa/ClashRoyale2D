@@ -23,17 +23,29 @@ import java.sql.ResultSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * The type History controller.
+ */
 public class HistoryController extends Group {
     private UserModel userModel;
     private Scene menu;
     private MenuController menuController;
 
+    /**
+     * The Tableview.
+     */
     TableView tableview;
+    /**
+     * The Anchorpane.
+     */
     @FXML
     AnchorPane anchorpane;
     private Stage stage;
     private ObservableList<ObservableList> data;
 
+    /**
+     * Build data.
+     */
     public void buildData() {
         Connection c;
         data = FXCollections.observableArrayList();
@@ -66,10 +78,20 @@ public class HistoryController extends Group {
     }
 
 
+    /**
+     * Gets user model.
+     *
+     * @return the user model
+     */
     public UserModel getUserModel() {
         return userModel;
     }
 
+    /**
+     * Sets user model.
+     *
+     * @param userModel the user model
+     */
     public void setUserModel(UserModel userModel) {
         this.userModel = userModel;
         getHistoryList();
@@ -77,11 +99,19 @@ public class HistoryController extends Group {
         buildData();
     }
 
+    /**
+     * Sets stage.
+     *
+     * @param stage the stage
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
 
+    /**
+     * Go to menu.
+     */
     public void goToMenu() {
         if (menu == null) {
             try {

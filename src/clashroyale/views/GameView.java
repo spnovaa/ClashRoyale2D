@@ -1,6 +1,7 @@
 package clashroyale.views;
 
 import clashroyale.models.UserModel;
+import clashroyale.models.cardsmodels.buildings.Building;
 import clashroyale.models.cardsmodels.spells.Spells;
 import clashroyale.models.cardsmodels.troops.Card;
 import clashroyale.models.cardsmodels.troops.TroopsCard;
@@ -377,7 +378,7 @@ public class GameView extends Group {
         botElixir.setText(Integer.toString(botElixirCount));
     }
 
-    public void updateLivingAssets(ArrayList<TroopsCard> existingTroops, ArrayList<Tower> existingTowers, ArrayList<Spells> existingSpells) {
+    public void updateLivingAssets(ArrayList<TroopsCard> existingTroops, ArrayList<Tower> existingTowers, ArrayList<Spells> existingSpells,ArrayList<Building> existingBuilding) {
         for (ImageView asset : battleCards) {
             TroopsCard oldCard;
             Tower oldTower;
@@ -400,6 +401,13 @@ public class GameView extends Group {
             } else if (asset.getUserData() instanceof Spells) {
                 for (Spells spell : existingSpells) {
                     if (spell.equals(asset.getUserData()) && !spell.isAlive()) {
+                        asset.setImage(null);
+                    }
+                }
+            }
+              else if (asset.getUserData() instanceof Building){
+                for (Building building : existingBuilding) {
+                    if (building.equals(asset.getUserData()) && !(building.isAlive())) {
                         asset.setImage(null);
                     }
                 }

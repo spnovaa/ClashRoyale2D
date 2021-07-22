@@ -202,10 +202,7 @@ public class Building extends Card {
         return fixLifeTime;
     }
 
-    @Override
-    public boolean isAlive() {
-        return isAlive;
-    }
+
 
     public void setRelatedUser(String relatedUser) {
         this.relatedUser = relatedUser;

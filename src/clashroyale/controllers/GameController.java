@@ -351,7 +351,8 @@ public class GameController extends Application {
             ArrayList<TroopsCard> existingTroops = gameModel.getArenaExistingTroops();
             ArrayList<Tower> existingTowers = gameModel.getArenaExistingTowers();
             ArrayList<Spells> existingSpells = gameModel.getArenaExistingSpellCards();
-            gameView.updateLivingAssets(existingTroops, existingTowers, existingSpells);
+            ArrayList<Building> existingBuildings=gameModel.getArenaExistingBuildings();
+            gameView.updateLivingAssets(existingTroops, existingTowers, existingSpells,existingBuildings);
         } else if (!isAlertShown) {
             boolean isUserWinner = gameModel.getPlayerCrown() > gameModel.getRobotCrown();
             new AppAlerts("Game Finished!", " GGWP!", (isUserWinner ? " You Won And Received 3 Crowns!"
@@ -368,6 +369,7 @@ public class GameController extends Application {
             botClickCoordinates = ((SimpleRobot) bot).chooseCoordinatesToPlay();
         } else
             System.out.println("SmartBot Is Not Implemented Yet");
+        ((SmartRobot)bot).setLiveData(gameModel);
 //        System.out.println("Bot Chose: " + botChosenCard.getTitle() + " at " + botClickCoordinates.getX()+" : "+ botClickCoordinates.getY());
         if (botMaxTroops > 0) {
             deployBotClickedAt((float) botClickCoordinates.getX(), (float) botClickCoordinates.getY());

@@ -366,8 +366,13 @@ public class GameController extends Application {
         if (bot instanceof SimpleRobot) {
             botChosenCard = ((SimpleRobot) bot).chooseCardToPlay();
             botClickCoordinates = ((SimpleRobot) bot).chooseCoordinatesToPlay();
-        } else
-            System.out.println("SmartBot Is Not Implemented Yet");
+        } else {
+//            bot.setLivaData( args );
+//            botChosenCard = ((SmartRobot) bot).chooseCardToPlay();
+//            botClickCoordinates = ((SmartRobot) bot).chooseCoordinatesToPlay();
+            System.out.println("Smart Bot Implementation");
+        }
+
 //        System.out.println("Bot Chose: " + botChosenCard.getTitle() + " at " + botClickCoordinates.getX()+" : "+ botClickCoordinates.getY());
         if (botMaxTroops > 0) {
             deployBotClickedAt((float) botClickCoordinates.getX(), (float) botClickCoordinates.getY());

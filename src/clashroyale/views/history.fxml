@@ -4,6 +4,7 @@
 
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="anchorpane" prefHeight="500.0" prefWidth="310.0"
-            xmlns="http://javafx.com/javafx/16" fx:controller="clashroyale.controllers.HistoryController">
+            style="-fx-background-color: #424242;" xmlns="http://javafx.com/javafx/16"
+            fx:controller="clashroyale.controllers.HistoryController">
 
 </AnchorPane>

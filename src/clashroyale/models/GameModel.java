@@ -326,7 +326,7 @@ public class GameModel {
             Point2D cardPosition = new Point2D(card.getCenterPositionX(), card.getCenterPositionY());
             for (Card existing : arenaExistingTroops) {
                 boolean canAttack = existing.isAlive() && !(existing.getTitle().equals("babyDragon") &&
-                        card.getTarget().equals(Target.GROUND) && card.getTarget().equals(Target.BUILDINGS));
+                        (card.getTarget().equals(Target.GROUND) || card.getTarget().equals(Target.BUILDINGS)));
                 if (!existing.getRelatedUser().equals(card.getRelatedUser()) && canAttack) {
                     Point2D pos = new Point2D(existing.getCenterPositionX(), existing.getCenterPositionY());
                     float dist = (float) pos.distance(cardPosition);

@@ -45,14 +45,6 @@ public class ChoosingRobotController extends Application {
     private RadioButton SmartRobot;
 
     /**
-     * Initialize.
-     */
-    public  void initialize(){
-        SmartRobot.setUserData(new SmartRobot(userModel.getLevel()));
-        SimpleRobot.setUserData(new SimpleRobot(userModel.getLevel()));
-    }
-
-    /**
      * Robot type selected.
      *
      * @param event the event
@@ -75,6 +67,8 @@ public class ChoosingRobotController extends Application {
      */
     public void setUserModel(UserModel userModel) {
         this.userModel = userModel;
+        SmartRobot.setUserData(new SmartRobot(userModel.getLevel()));
+        SimpleRobot.setUserData(new SimpleRobot(userModel.getLevel()));
     }
 
     /**

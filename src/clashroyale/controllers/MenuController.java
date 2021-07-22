@@ -110,7 +110,7 @@ public class MenuController extends Application {
                 Parent goToHistoryRoot = loader.load();
                 historyController = loader.getController();
                 historyController.setUserModel(userModel);
-                historyController.start(stage);
+//                historyController.start(stage);
                 historyScene = new Scene(goToHistoryRoot);
                 historyScene.getStylesheets().add("style.css");
             } catch (Exception exception) {

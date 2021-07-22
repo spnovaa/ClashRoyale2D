@@ -5,6 +5,7 @@ import javafx.geometry.Point2D;
 
 import java.util.Random;
 
+
 /**
  * The type Simple robot.
  */

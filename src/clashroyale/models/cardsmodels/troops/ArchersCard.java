@@ -39,4 +39,5 @@ public class ArchersCard extends TroopsCard {
         super.setCenterPositionY(0);
     }
 
+
 }

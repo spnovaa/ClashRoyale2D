@@ -42,7 +42,6 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 /**
  * The type Game controller.
  */

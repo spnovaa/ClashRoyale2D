@@ -3,7 +3,6 @@ package clashroyale.models.towersmodels;
 import clashroyale.models.cardsmodels.troops.Card;
 
 import java.util.UUID;
-
 /**
  * The type Tower.
  */

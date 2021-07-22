@@ -1,5 +1,4 @@
 package clashroyale.models.towersmodels;
-
 /**
  * The type King tower.
  */

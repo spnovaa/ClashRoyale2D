@@ -1,7 +1,6 @@
 package clashroyale.models;
 
 import java.sql.*;
-
 /**
  * The type Login model.
  */

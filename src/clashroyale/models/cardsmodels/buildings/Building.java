@@ -47,7 +47,7 @@ public class Building extends Card {
      */
     public void decreaseLifeTime(){
         lifeTime--;
-}
+    }
 
     /**
      * Sets hp.

@@ -258,7 +258,7 @@ public class GameView extends Group {
         Image image;
         String title = chosenToDeployCard.getTitle();
         switch (title) {
-            case "cannon" -> image = new Image(getClass().getResourceAsStream("../resources/chr/cannon/cannon1.png"));
+            case "cannon" -> image = new Image(getClass().getResourceAsStream("../resources/chr/cannon/cannon.png"));
             case "infernoTower" -> image = new Image(getClass().getResourceAsStream("../resources/chr/inferno" +
                     "/building_inferno_tower_sprite_2.png"));
             case "arrows" -> image = new Image(getClass().getResourceAsStream("../resources/Ski_trail_rating_symbol_red_circle.png"));
@@ -299,6 +299,10 @@ public class GameView extends Group {
                 imageView.setFitHeight(40);
                 imageView.setUserData(chosenToDeployCard);
             }
+            case "cannon", "infernoTower" ->{ imageView.setX(x - (float) TROOPS_SIZE / 4);
+                imageView.setY(y - (float) TROOPS_SIZE / 4);
+                imageView.setFitWidth(TROOPS_SIZE/2);
+                imageView.setFitHeight(TROOPS_SIZE/2);}
             default -> {
                 imageView.setX(x - (float) TROOPS_SIZE / 2);
                 imageView.setY(y - (float) TROOPS_SIZE / 2);

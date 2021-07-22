@@ -4,6 +4,7 @@ import clashroyale.models.enums.Range;
 import clashroyale.models.enums.Speed;
 import clashroyale.models.enums.Target;
 
+
 /**
  * The type Baby dragon card.
  */

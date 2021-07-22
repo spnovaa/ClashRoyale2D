@@ -176,8 +176,9 @@ public class SmartRobot extends Robot {
                     enemy3++;
                 }
                 if (!troopsCard.getRelatedUser().equals("smartBot") && troopsCard.getCenterPositionX() > minX4 && troopsCard.getCenterPositionX() < maxX4 && troopsCard.getCenterPositionY() < maxY4 && troopsCard.getCenterPositionY() > minY4) {
-                    enemy3++;
+                    enemy4++;
                 }
+            }
                 int maxEnemy = Math.max(Math.max(enemy1,enemy2),Math.max(enemy3,enemy4));
                 if (enemy1 == maxEnemy) {
                     deployedX = getRandomNumberUsingNextInt(minX1,maxX1);
@@ -195,7 +196,7 @@ public class SmartRobot extends Robot {
                     deployedY = getRandomNumberUsingNextInt(minY4,maxY4);
                 }
 
-            }
+
             }
 
 

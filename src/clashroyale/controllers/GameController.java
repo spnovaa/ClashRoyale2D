@@ -363,6 +363,9 @@ public class GameController extends Application {
         }
     }
 
+    /**
+     * Robot act method
+     */
     private void actBot() {
         if (bot instanceof SimpleRobot) {
             botChosenCard = ((SimpleRobot) bot).chooseCardToPlay();

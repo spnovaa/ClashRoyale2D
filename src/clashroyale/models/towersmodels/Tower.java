@@ -58,7 +58,7 @@ public class Tower {
      * @param damage the damage
      */
     public void setDamage(double damage) {
-        this.damage = damage;
+        this.damage = damage / 15;
     }
 
     /**

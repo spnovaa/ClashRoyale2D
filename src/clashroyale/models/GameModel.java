@@ -12,10 +12,12 @@ import clashroyale.models.cardsmodels.troops.Card;
 import clashroyale.models.cardsmodels.troops.TroopsCard;
 import clashroyale.models.enums.Range;
 import clashroyale.models.enums.Speed;
+import clashroyale.models.enums.Target;
 import clashroyale.models.game.Robot;
 import clashroyale.models.towersmodels.KingTower;
 import clashroyale.models.towersmodels.QueenTower;
 import clashroyale.models.towersmodels.Tower;
+import javafx.application.Platform;
 import javafx.geometry.Point2D;
 
 import java.util.ArrayList;
@@ -24,13 +26,11 @@ import java.util.Collections;
 
 public class GameModel {
     private UserModel userModel;
-    private int playerOneCrowns;
-    private int playerTwoCrowns;
+
     private int playerOneLostHP;
     private int playerTwoLostHP;
     private int playerCrown;
     private int robotCrown;
-
 
     private final float unitSize = 20;
 
@@ -98,8 +98,6 @@ public class GameModel {
         arenaExistingTowers = new ArrayList<>();
         arenaExistingBuildings = new ArrayList<>();
 
-        playerOneCrowns = 0;
-        playerTwoCrowns = 0;
         playerTwoLostHP = 0;
         playerOneLostHP = 0;
 
@@ -162,13 +160,18 @@ public class GameModel {
     //---------------------------------------------------------------------------------------------------------
 
     public void updateGameModel() {
-        for (TroopsCard card : arenaExistingTroops) {
-            if (card.isAlive()) {
-                boolean isAttacking = attackNearestEnemyInRange(card);
-                if (!isAttacking) repositionCard(card);
-            }
-        }
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                for (TroopsCard card : arenaExistingTroops) {
+                    if (card.isAlive()) {
+                        boolean isAttacking = attackNearestEnemyInRange(card);
+                        if (!isAttacking) repositionCard(card);
+                    }
+                }
 
+            }
+        });
         towersHandling();
 
         for (Spells card : arenaExistingSpellCards) {
@@ -209,19 +212,6 @@ public class GameModel {
                                 tower.setHp(tower.getHp() - building.getDamage());
                                 if (tower.getHp() <= 0) {
                                     killTower(tower);
-                                    if (tower.getRelatedUser().equals(building.getRelatedUser())){
-                                        if (tower instanceof KingTower)
-                                            robotCrown=3;
-                                        else if (tower instanceof QueenTower)
-                                            robotCrown++;
-
-                                    }else {
-                                        if (tower instanceof KingTower)
-                                            playerCrown=3;
-                                        else if (tower instanceof QueenTower)
-                                            playerCrown++;
-
-                                    }
                                 }
                             }
                         }
@@ -253,20 +243,6 @@ public class GameModel {
                                 tower.setHp(tower.getHp() - building.getDamage());
                                 if (tower.getHp() <= 0) {
                                     killTower(tower);
-                                    if (tower.getRelatedUser().equals(building.getRelatedUser())){
-                                        if (tower instanceof KingTower)
-                                            robotCrown=3;
-                                        else if (tower instanceof QueenTower)
-                                            robotCrown++;
-
-                                    }else {
-                                        if (tower instanceof KingTower)
-                                            playerCrown=3;
-                                        else if (tower instanceof QueenTower)
-                                            playerCrown++;
-
-                                    }
-
                                 }
                             }
                         }
@@ -305,45 +281,61 @@ public class GameModel {
         boolean isRight = cardX >= fieldCenterX;
         boolean isUp = cardY < bridgesEndY;
 
-        if (isDown && !canFly) {                                                    //card is in user's field and moves on the ground
-            if (isRight) {
-                if (!isBot) moveCardToStartOfRightBridge(card);                     //user card is in right down quarter
-                else if (userRightQueenTower.isAlive()) moveCardToRightUserQueen(card);
-                else moveCardToUserKing(card);
-            } else {                                                                //card is in left half
-                if (!isBot) moveCardToStartOfLeftBridge(card);
-                else if (userLeftQueenTower.isAlive()) moveCardToLeftUserQueen(card);
-                else moveCardToUserKing(card);
-            }
-        } else if (isUp && !canFly) {                                                //card is in enemy's field or moves on air
-            if (isRight) {                                                          //card is in the right side
-                if (isBot) moveCardToEndOfRightBridge(card);
-                else if (botRightQueenTower.isAlive()) moveCardToRightQueenTower(card);
-                else moveCardToKingTower(card);
+        Point2D invaderPosition = findInvader(card);
+        if (invaderPosition != null) {
+            stepToTarget(card, (float) invaderPosition.getX(), (float) invaderPosition.getY(), true);
+        } else {
+            if (isDown && !canFly) {                                                    //card is in user's field and moves on the ground
+                if (isRight) {
+                    if (!isBot)
+                        moveCardToStartOfRightBridge(card);                     //user card is in right down quarter
+                    else if (userRightQueenTower.isAlive()) moveCardToRightUserQueen(card);
+                    else moveCardToUserKing(card);
+                } else {                                                                //card is in left half
+                    if (!isBot) moveCardToStartOfLeftBridge(card);
+                    else if (userLeftQueenTower.isAlive()) moveCardToLeftUserQueen(card);
+                    else moveCardToUserKing(card);
+                }
+            } else if (isUp && !canFly) {                                                //card is in enemy's field or moves on air
+                if (isRight) {                                                          //card is in the right side
+                    if (isBot) moveCardToEndOfRightBridge(card);
+                    else if (botRightQueenTower.isAlive()) moveCardToRightQueenTower(card);
+                    else moveCardToKingTower(card);
+                } else {
+                    if (isBot) moveCardToEndOfLeftBridge(card);
+                    else if (botLeftQueenTower.isAlive()) moveCardToLeftQueenTower(card);
+                    else moveCardToKingTower(card);
+                }
             } else {
-                if (isBot) moveCardToEndOfLeftBridge(card);
-                else if (botLeftQueenTower.isAlive()) moveCardToLeftQueenTower(card);
-                else moveCardToKingTower(card);
+                if (isBot && isRight && userRightQueenTower.isAlive()) moveCardToRightUserQueen(card);
+                else if (isBot && isRight && !userRightQueenTower.isAlive()) moveCardToUserKing(card);
+                else if (isBot && !isRight && userLeftQueenTower.isAlive()) moveCardToLeftUserQueen(card);
+                else if (isBot && !isRight && !userLeftQueenTower.isAlive()) moveCardToUserKing(card);
+
+                else if (!isBot && isRight && botRightQueenTower.isAlive()) moveCardToRightQueenTower(card);
+                else if (!isBot && isRight && !botRightQueenTower.isAlive()) moveCardToKingTower(card);
+                else if (!isBot && !isRight && botLeftQueenTower.isAlive()) moveCardToLeftQueenTower(card);
+                else if (!isBot && !isRight && !botLeftQueenTower.isAlive()) moveCardToKingTower(card);
             }
-        } else {                                                                    //card is on the bridge
-//            if (cardX >= fieldCenterX) {
-//                if (!isBot) passUserCardFromRightBridge(card);
-//                else passBotCardFromRightBridge(card);
-//            } else {
-//                if (!isBot) passUserCardFromLeftBridge(card);
-//                else passBotCardFromLeftBridge(card);
-//            }
-            if (isBot && isRight && userRightQueenTower.isAlive()) moveCardToRightUserQueen(card);
-            else if (isBot && isRight && !userRightQueenTower.isAlive()) moveCardToUserKing(card);
-            else if (isBot && !isRight && userLeftQueenTower.isAlive()) moveCardToLeftUserQueen(card);
-            else if (isBot && !isRight && !userLeftQueenTower.isAlive()) moveCardToUserKing(card);
-
-            else if (!isBot && isRight && botRightQueenTower.isAlive()) moveCardToRightQueenTower(card);
-            else if (!isBot && isRight && !botRightQueenTower.isAlive()) moveCardToKingTower(card);
-            else if (!isBot && !isRight && botLeftQueenTower.isAlive()) moveCardToLeftQueenTower(card);
-            else if (!isBot && !isRight && !botLeftQueenTower.isAlive()) moveCardToKingTower(card);
-
         }
+    }
+
+    private Point2D findInvader(TroopsCard card) {
+        Point2D invaderPosition = null;
+        if (!card.getTarget().equals(Target.BUILDINGS)) {
+            Point2D cardPosition = new Point2D(card.getCenterPositionX(), card.getCenterPositionY());
+            for (Card existing : arenaExistingTroops) {
+                boolean canAttack = existing.isAlive() && !(existing.getTitle().equals("babyDragon") &&
+                        card.getTarget().equals(Target.GROUND) && card.getTarget().equals(Target.BUILDINGS));
+                if (!existing.getRelatedUser().equals(card.getRelatedUser()) && canAttack) {
+                    Point2D pos = new Point2D(existing.getCenterPositionX(), existing.getCenterPositionY());
+                    float dist = (float) pos.distance(cardPosition);
+                    if (dist < 70.0)
+                        invaderPosition = pos;
+                }
+            }
+        }
+        return invaderPosition;
     }
 
     public void spellAction(Card temp) {
@@ -427,23 +419,10 @@ public class GameModel {
                             tower.setDamage(tower.getDamage() * 1.4);
                             tower.setHitSpeed(tower.getHitSpeed() * 1.4);
 
-                        } else if (spell instanceof Arrows) {
-                            if (!tower.getRelatedUser().equals(spell.getRelatedUser())) {
-                                killTower(tower);
-                                if (tower.getRelatedUser().equals(spell.getRelatedUser())){
-                                    if (tower instanceof KingTower)
-                                        robotCrown=3;
-                                    else if (tower instanceof QueenTower)
-                                        robotCrown++;
-
-                                }else {
-                                    if (tower instanceof KingTower)
-                                        playerCrown=3;
-                                    else if (tower instanceof QueenTower)
-                                        playerCrown++;
-
-                                }
-                            }
+                        }
+                    } else {
+                        if (!tower.getRelatedUser().equals(spell.getRelatedUser())) {
+                            killTower(tower);
                         }
                     }
                 }
@@ -614,9 +593,6 @@ public class GameModel {
         } else if (distanceToCard <= getRangeSize(((TroopsCard) card).getRangeType())) {
             attackCardToCard(card, enemyCard);
         }
-//        if (enemyTower == null || enemyCard == null || !enemyCard.isAlive() || !enemyTower.isAlive())
-//            isAttacking = false;
-
 //        System.out.println("Is Attacking : "+ isAttacking);
         return isAttacking;
     }
@@ -714,9 +690,9 @@ public class GameModel {
             leastDistance = (float) ((Building) card).getRange();
         else
             leastDistance = 10000;
-
+        boolean isGiant = card.getTitle().equals("giant");
         for (TroopsCard troopsCard : arenaExistingTroops) {
-            if (!troopsCard.getRelatedUser().equals(card.getRelatedUser())) {
+            if (!troopsCard.getRelatedUser().equals(card.getRelatedUser()) && !isGiant) {
                 float distance = calcDistance(card, troopsCard);
                 if (distance < leastDistance && troopsCard.isAlive()) {
 //                    System.out.println(troopsCard.getTitle() +" for "+ troopsCard.getRelatedUser());
@@ -745,7 +721,7 @@ public class GameModel {
     }
 
     private void attackCardToTower(Card attackerCard, Tower targetTower) {
-//        System.out.println(attackerCard.getTitle() + " is Attacking " + targetTower.getUuid());
+        System.out.println(attackerCard.getTitle() + " is Attacking " + targetTower.getRelatedUser() + " " + targetTower.getTitle());
         double hp = 0;
         if (attackerCard instanceof TroopsCard) {
 //            System.out.println("troop damage :" + ((TroopsCard) attackerCard).getDamage());
@@ -758,8 +734,9 @@ public class GameModel {
         if (hp >= 0)
             targetTower.setHp(hp);
         else {
-            targetTower.setHp(0);
-            targetTower.setAlive(false);
+            killTower(targetTower);
+//            targetTower.setHp(0);
+//            targetTower.setAlive(false);
 //            System.out.println("Tower " + targetTower.getUuid() + " is now dead");
         }
 
@@ -769,6 +746,8 @@ public class GameModel {
         if (attackerTower.isAlive()) {
             if (targetCard instanceof TroopsCard) {
                 ((TroopsCard) targetCard).setHp(((TroopsCard) targetCard).getHp() - attackerTower.getDamage());
+//                System.out.println(attackerTower.getRelatedUser()+" is attacking " + targetCard.getTitle()+ " hpe : "+
+//                        ((TroopsCard) targetCard).getHp());
                 if (((TroopsCard) targetCard).getHp() < 0) {
                     killCard(targetCard);
                     attackerTower.setTarget(null);
@@ -784,10 +763,12 @@ public class GameModel {
     }
 
     private void attackCardToCard(Card attackerCard, Card targetCard) {
-
         if (targetCard instanceof TroopsCard) {
-            if (attackerCard instanceof TroopsCard) {
-                System.out.println(((TroopsCard) targetCard).getHp() + " and " + ((TroopsCard) attackerCard).getDamage());
+            boolean isAttackAllowed = !targetCard.getTitle().equals("babyDragon") ||
+                    ((TroopsCard) attackerCard).getTarget().equals(Target.AIR) ||
+                    ((TroopsCard) attackerCard).getTarget().equals(Target.AIR_GROUND);
+            if (attackerCard instanceof TroopsCard && isAttackAllowed) {
+                System.out.println(((TroopsCard) targetCard).getHp() + " and " + ((TroopsCard) attackerCard).getHp());
                 ((TroopsCard) targetCard).setHp(((TroopsCard) targetCard).getHp() - ((TroopsCard) attackerCard).getDamage());
                 if (((TroopsCard) targetCard).getHp() < 0) killCard(targetCard);
             } else if (attackerCard instanceof Building) {
@@ -916,6 +897,19 @@ public class GameModel {
 
     private void killTower(Tower tower) {
         tower.setAlive(false);
+        String user = tower.getRelatedUser();
+        System.out.println(tower.getRelatedUser() + " lost " + tower.getTitle());
+        if (user.equals("simpleBot") || user.equals("smartBot")) {
+            if (tower.getTitle().equals("botKingTower"))
+                playerCrown = 3;
+            else if (tower.getTitle().equals("botRightQueenTower") || tower.getTitle().equals("botLeftQueenTower"))
+                playerCrown++;
+        } else {
+            if (tower.getTitle().equals("userKingTower"))
+                robotCrown = 3;
+            else if (tower.getTitle().equals("userRightQueenTower") || tower.getTitle().equals("userLeftQueenTower"))
+                robotCrown++;
+        }
     }
 
     private void killBuilding(Building building) {

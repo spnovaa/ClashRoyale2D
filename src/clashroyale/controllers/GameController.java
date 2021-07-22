@@ -14,6 +14,7 @@ import clashroyale.models.game.Robot;
 import clashroyale.models.game.SimpleRobot;
 import clashroyale.models.game.SmartRobot;
 import clashroyale.models.towersmodels.Tower;
+import clashroyale.views.AppAlerts;
 import clashroyale.views.GameView;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -104,13 +105,14 @@ public class GameController extends Application {
     Label botElixir;
     private Scene gameScene;
 
+    int botMaxTroops = 800;
     private int userMinX;
     private int userMaxX;
     private int userMinY;
     private int userMaxY;
     private GameModel gameModel;
     private Timer timer;
-    int botMaxTroops = 80;
+    private boolean isGameRunning;
     private Card botChosenCard;
     private Point2D botClickCoordinates;
 
@@ -127,6 +129,7 @@ public class GameController extends Application {
      * Instantiates a new Game controller.
      */
     public GameController() {
+        isGameRunning = true;
         userMinX = 25;
         userMaxX = 340;
         userMinY = 255;
@@ -291,6 +294,10 @@ public class GameController extends Application {
         this.timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             public void run() {
+                if (!isGameRunning) {
+                    timer.cancel();
+                    timer.purge();
+                }
                 Platform.runLater(new Runnable() {
                     public void run() {
                         updateGame();
@@ -305,19 +312,30 @@ public class GameController extends Application {
     }
 
     private synchronized void updateGame() {
-        gameView.updateTimer();
-        gameView.updateCrown(gameModel.getRobotCrown()+"",gameModel.getPlayerCrown()+"");
-        gameModel.updateElixirs();
-        gameView.updateElixirs(userModel.getElixirCount(), bot.getElixirCount());
-        bot = gameModel.getGameBot();
-        botActFlag++;
-        if (botActFlag % 15 == 0) actBot();
+        isGameRunning =
+                !(gameModel.getRobotCrown() == 3
+                        || gameModel.getPlayerCrown() == 3
+                        || (gameView.getLeftTime().getMinutes() == 0 && gameView.getLeftTime().getSeconds() == 0));
+        if (isGameRunning) {
+            gameView.updateTimer();
+            gameView.updateCrown(gameModel.getRobotCrown() + "", gameModel.getPlayerCrown() + "");
+            gameModel.updateElixirs();
+            gameView.updateElixirs(userModel.getElixirCount(), bot.getElixirCount());
+            bot = gameModel.getGameBot();
+            botActFlag++;
+            if (botActFlag % 15 == 0) actBot();
 
-        gameModel.updateGameModel();
-        ArrayList<TroopsCard> existingTroops = gameModel.getArenaExistingTroops();
-        ArrayList<Tower> existingTowers = gameModel.getArenaExistingTowers();
-        ArrayList<Spells> existingSpells = gameModel.getArenaExistingSpellCards();
-        gameView.updateLivingAssets(existingTroops, existingTowers, existingSpells);
+            gameModel.updateGameModel();
+            ArrayList<TroopsCard> existingTroops = gameModel.getArenaExistingTroops();
+            ArrayList<Tower> existingTowers = gameModel.getArenaExistingTowers();
+            ArrayList<Spells> existingSpells = gameModel.getArenaExistingSpellCards();
+            gameView.updateLivingAssets(existingTroops, existingTowers, existingSpells);
+        } else {
+            boolean isUserWinner = gameModel.getPlayerCrown() > gameModel.getRobotCrown();
+            new AppAlerts("Game Finished!", " GGWP!", isUserWinner ? " You Won And Received 3 Crowns!"
+                    : "Bot Won And You Received " + gameModel.getPlayerCrown() + " Crowns!").showInformationAlert();
+            isGameRunning = false;
+        }
     }
 
     private void actBot() {

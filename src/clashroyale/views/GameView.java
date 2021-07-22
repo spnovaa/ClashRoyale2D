@@ -539,8 +539,12 @@ public class GameView extends Group {
         }
     }
 
-    public void updateCrown(String botCrown2,String playerCrown2) {
+    public void updateCrown(String botCrown2, String playerCrown2) {
         botCrown.setText(botCrown2);
         playerCrown.setText(playerCrown2);
+    }
+
+    public LeftTime getLeftTime() {
+        return leftTime;
     }
 }

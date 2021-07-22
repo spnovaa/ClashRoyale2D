@@ -9,7 +9,16 @@ public enum Range {
      */
     MELEE,
     /**
-     * Ramged range.
+     * Ranged 5 range.
      */
-    RAMGED
+    RANGED5,
+    /**
+     * Ranged 6 range.
+     */
+    RANGED6,
+    /**
+     * Ranged 3 range.
+     */
+    RANGED3
+
 }

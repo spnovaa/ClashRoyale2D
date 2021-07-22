@@ -11,14 +11,20 @@ public class Arrows extends Spells {
      *
      * @param level the level
      */
-    public Arrows(int level) {
-        super("arrows",3, 4,"ClashRoyale2D\\src\\clashroyale\\resources\\thumbCards\\thumbarrows.png");
+    public Arrows(int level, String relatedUser) {
+        super("arrows", 3, 4, "/thumbCards/thumbarrows.png", relatedUser);
         if (level == 1) {
-            areaDamage = 144;
+            areaDamage = 144.0 / 15;
+        } else if (level == 2) {
+            areaDamage = 156.0 / 15;
+        } else if (level == 3) {
+            areaDamage = 174.0 / 15;
+        } else if (level == 4) {
+            areaDamage = 189.0 / 15;
+        } else if (level == 5) {
+            areaDamage = 210.0 / 15;
         }
-        else if (level==2){areaDamage=156;}
-        else if (level==3){areaDamage=174;}
-        else if (level==4){areaDamage=189;}
-        else if (level==5){areaDamage=210;}
+        super.setPositionX(0);
+        super.setPositionY(0);
     }
 }

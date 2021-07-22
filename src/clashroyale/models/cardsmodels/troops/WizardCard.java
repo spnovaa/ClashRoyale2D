@@ -15,9 +15,10 @@ public class WizardCard extends TroopsCard {
      *
      * @param level the level
      */
-    public WizardCard(int level) {
-        super("wizard",5,  1, 1.7, Target.AIR_GROUND, Range.RAMGED, Speed.MEDIUM,true,"ClashRoyale2D\\src\\clashroyale\\resources\\thumbCards\\thumbwizard.png" );
-        range=5;
+    public WizardCard(int level, String relatedUser) {
+        super("wizard", 5, 1, 1.7, Target.AIR_GROUND, Range.RANGED5, Speed.MEDIUM,
+                true, "/thumbCards/thumbwizard.png", relatedUser);
+        range = 5;
         if (level == 1) {
             super.setDamage(130);
             super.setHp(340);
@@ -34,5 +35,7 @@ public class WizardCard extends TroopsCard {
             super.setDamage(189);
             super.setHp(496);
         }
+        super.setCenterPositionX(0);
+        super.setCenterPositionY(0);
     }
 }

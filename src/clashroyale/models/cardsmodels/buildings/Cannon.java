@@ -2,6 +2,8 @@ package clashroyale.models.cardsmodels.buildings;
 
 import clashroyale.models.enums.Target;
 
+import java.net.URL;
+
 /**
  * The type Cannon.
  */
@@ -12,8 +14,9 @@ public class Cannon extends Building {
      *
      * @param level the level
      */
-    public Cannon(int level) {
-        super("cannon",3, 5.5, 30, 0.8, Target.GROUND,"ClashRoyale2D\\src\\clashroyale\\resources\\thumbCards\\thumbcannon.png");
+    public Cannon(int level, String relatedUser) {
+        super("cannon", 3, 5.5, 30*15, 0.8, Target.GROUND,
+                "/thumbCards/thumbcannon.png", relatedUser);
         if (level == 1) {
             super.setDamage(60);
             super.setHp(380);
@@ -30,5 +33,7 @@ public class Cannon extends Building {
             super.setDamage(87);
             super.setHp(554);
         }
+        super.setPositionX(0);
+        super.setPositionY(0);
     }
 }

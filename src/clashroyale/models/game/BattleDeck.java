@@ -1,7 +1,7 @@
 package clashroyale.models.game;
 
 import clashroyale.models.cardsmodels.buildings.Cannon;
-import clashroyale.models.cardsmodels.buildings.Fireball;
+import clashroyale.models.cardsmodels.spells.Fireball;
 import clashroyale.models.cardsmodels.buildings.InfernoTower;
 import clashroyale.models.cardsmodels.troops.*;
 import clashroyale.models.cardsmodels.spells.Arrows;
@@ -32,21 +32,21 @@ public class BattleDeck {
      */
     private void updateAllCards(int level) {
         allCards.clear();
+        String username = "";
+        allCards.add(new ArchersCard(level, username));
+        allCards.add(new BarbariansCard(level, username));
+        allCards.add(new GiantCard(level, username));
+        allCards.add(new BabyDragonCard(level, username));
+        allCards.add(new ValkyrieCard(level, username));
+        allCards.add(new MiniPEKKACard(level, username));
+        allCards.add(new WizardCard(level, username));
 
-        allCards.add(new ArchersCard(level));
-        allCards.add(new BarbariansCard(level));
-        allCards.add(new GiantCard(level));
-        allCards.add(new BabyDragonCard(level));
-        allCards.add(new ValkyrieCard(level));
-        allCards.add(new MiniPEKKACard(level));
-        allCards.add(new WizardCard(level));
+        allCards.add(new Arrows(level, username));
+        allCards.add(new Rage(level, username));
 
-        allCards.add(new Arrows(level));
-        allCards.add(new Rage(level));
-
-        allCards.add(new Cannon(level));
-        allCards.add(new Fireball(level));
-        allCards.add(new InfernoTower(level));
+        allCards.add(new Cannon(level, username));
+        allCards.add(new Fireball(level, username));
+        allCards.add(new InfernoTower(level, username));
     }
 
     /**

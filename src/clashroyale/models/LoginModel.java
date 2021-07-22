@@ -13,7 +13,7 @@ public class LoginModel {
      * @param password the password
      * @return 2 if password is incorrect, 1 if logged in successfully, 0 if username not found, -1 if connection failed
      */
-    public int tryToLogin(String username, String password) {
+    public int tryToLogin(String username, String password, UserModel userModel) {
         try {
             Connection con = new DbConnect().getConnection();
             if (con == null) throw new SQLException("CONNECTION FAILED!");
@@ -21,9 +21,14 @@ public class LoginModel {
             String query = "SELECT * FROM users WHERE username ='" + username + "'";
             ResultSet resultSet = statement.executeQuery(query);
             if (resultSet.next()) {
-                if (resultSet.getString("password").equals(password))
+                if (resultSet.getString("password").equals(password)) {
+                    userModel.setUsername(username);
+                    userModel.setLevel(Integer.parseInt(resultSet.getString("level")));
+                    int botType = Integer.parseInt(resultSet.getString("bot_type"));
+                    userModel.setBotType(botType == 1 ? "simpleBot" : "smartBot");
+                    userModel.setId(resultSet.getString("id"));
                     return 1;
-                else
+                } else
                     return 2;
             } else return 0;
         } catch (SQLException e) {

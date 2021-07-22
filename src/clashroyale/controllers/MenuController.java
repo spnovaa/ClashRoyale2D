@@ -109,6 +109,7 @@ public class MenuController extends Application {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/history.fxml"));
                 Parent goToHistoryRoot = loader.load();
                 historyController = loader.getController();
+                historyController.setStage(stage);
                 historyController.setUserModel(userModel);
 //                historyController.start(stage);
                 historyScene = new Scene(goToHistoryRoot);

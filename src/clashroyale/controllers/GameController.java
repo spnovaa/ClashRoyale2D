@@ -370,6 +370,10 @@ public class GameController extends Application {
         } else
             System.out.println("SmartBot Is Not Implemented Yet");
         ((SmartRobot)bot).setLiveData(gameModel);
+        botChosenCard = ((SmartRobot) bot).chooseCardToPlay();
+        if (botChosenCard!=null){
+            botClickCoordinates = ((SmartRobot) bot).chooseCoordinatesToPlay(botChosenCard);
+        }
 //        System.out.println("Bot Chose: " + botChosenCard.getTitle() + " at " + botClickCoordinates.getX()+" : "+ botClickCoordinates.getY());
         if (botMaxTroops > 0) {
             deployBotClickedAt((float) botClickCoordinates.getX(), (float) botClickCoordinates.getY());

@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+/**
+ * The type Game model.
+ */
 public class GameModel {
     private UserModel userModel;
 
@@ -79,6 +82,12 @@ public class GameModel {
     //---------------------------------------------------------------------------------------------------------
     //---------------------------------------------------------------------------------------------------------
 
+    /**
+     * Instantiates a new Game model.
+     *
+     * @param userModel the user model
+     * @param bot       the bot
+     */
     public GameModel(UserModel userModel, Robot bot) {
         this.userModel = userModel;
         this.bot = bot;
@@ -159,6 +168,9 @@ public class GameModel {
     //---------------------------------------------------------------------------------------------------------
     //---------------------------------------------------------------------------------------------------------
 
+    /**
+     * Update game model.
+     */
     public void updateGameModel() {
         Platform.runLater(new Runnable() {
             @Override
@@ -338,6 +350,11 @@ public class GameModel {
         return invaderPosition;
     }
 
+    /**
+     * Spell action.
+     *
+     * @param temp the temp
+     */
     public void spellAction(Card temp) {
         String title = temp.getTitle();
         Spells spell;
@@ -864,6 +881,9 @@ public class GameModel {
     }
 
 
+    /**
+     * Update elixirs.
+     */
     public void updateElixirs() {
         elixirFlag++;
         if (elixirFlag % 30 == 0) {
@@ -975,6 +995,11 @@ public class GameModel {
         return (size);
     }
 
+    /**
+     * Gets game bot.
+     *
+     * @return the game bot
+     */
     public Robot getGameBot() {
         return bot;
     }
@@ -985,263 +1010,588 @@ public class GameModel {
     //---------------------------------------------------------------------------------------------------------
     //---------------------------------------------------------------------------------------------------------
 
+    /**
+     * Gets player crown.
+     *
+     * @return the player crown
+     */
     public int getPlayerCrown() {
         return playerCrown;
     }
 
+    /**
+     * Gets robot crown.
+     *
+     * @return the robot crown
+     */
     public int getRobotCrown() {
         return robotCrown;
     }
 
+    /**
+     * Gets user model.
+     *
+     * @return the user model
+     */
     public UserModel getUserModel() {
         return userModel;
     }
 
+    /**
+     * Sets user model.
+     *
+     * @param userModel the user model
+     */
     public void setUserModel(UserModel userModel) {
         this.userModel = userModel;
     }
 
+    /**
+     * Gets arena existing troops.
+     *
+     * @return the arena existing troops
+     */
     public ArrayList<TroopsCard> getArenaExistingTroops() {
         return arenaExistingTroops;
     }
 
+    /**
+     * Sets arena existing troops.
+     *
+     * @param arenaExistingTroops the arena existing troops
+     */
     public void setArenaExistingTroops(ArrayList<TroopsCard> arenaExistingTroops) {
         this.arenaExistingTroops = arenaExistingTroops;
     }
 
+    /**
+     * Gets arena existing spell cards.
+     *
+     * @return the arena existing spell cards
+     */
     public ArrayList<Spells> getArenaExistingSpellCards() {
         return arenaExistingSpellCards;
     }
 
+    /**
+     * Sets arena existing spell cards.
+     *
+     * @param arenaExistingSpellCards the arena existing spell cards
+     */
     public void setArenaExistingSpellCards(ArrayList<Spells> arenaExistingSpellCards) {
         this.arenaExistingSpellCards = arenaExistingSpellCards;
     }
 
+    /**
+     * Gets arena existing towers.
+     *
+     * @return the arena existing towers
+     */
     public ArrayList<Tower> getArenaExistingTowers() {
         return arenaExistingTowers;
     }
 
+    /**
+     * Sets arena existing towers.
+     *
+     * @param arenaExistingTowers the arena existing towers
+     */
     public void setArenaExistingTowers(ArrayList<Tower> arenaExistingTowers) {
         this.arenaExistingTowers = arenaExistingTowers;
     }
 
+    /**
+     * Gets user king tower.
+     *
+     * @return the user king tower
+     */
     public KingTower getUserKingTower() {
         return userKingTower;
     }
 
+    /**
+     * Sets user king tower.
+     *
+     * @param userKingTower the user king tower
+     */
     public void setUserKingTower(KingTower userKingTower) {
         this.userKingTower = userKingTower;
     }
 
+    /**
+     * Gets user right queen tower.
+     *
+     * @return the user right queen tower
+     */
     public QueenTower getUserRightQueenTower() {
         return userRightQueenTower;
     }
 
+    /**
+     * Sets user right queen tower.
+     *
+     * @param userRightQueenTower the user right queen tower
+     */
     public void setUserRightQueenTower(QueenTower userRightQueenTower) {
         this.userRightQueenTower = userRightQueenTower;
     }
 
+    /**
+     * Gets user left queen tower.
+     *
+     * @return the user left queen tower
+     */
     public QueenTower getUserLeftQueenTower() {
         return userLeftQueenTower;
     }
 
+    /**
+     * Sets user left queen tower.
+     *
+     * @param userLeftQueenTower the user left queen tower
+     */
     public void setUserLeftQueenTower(QueenTower userLeftQueenTower) {
         this.userLeftQueenTower = userLeftQueenTower;
     }
 
+    /**
+     * Gets user level.
+     *
+     * @return the user level
+     */
     public int getUserLevel() {
         return userLevel;
     }
 
+    /**
+     * Sets user level.
+     *
+     * @param userLevel the user level
+     */
     public void setUserLevel(int userLevel) {
         this.userLevel = userLevel;
     }
 
+    /**
+     * Gets player one username.
+     *
+     * @return the player one username
+     */
     public String getPlayerOneUsername() {
         return playerOneUsername;
     }
 
+    /**
+     * Sets player one username.
+     *
+     * @param playerOneUsername the player one username
+     */
     public void setPlayerOneUsername(String playerOneUsername) {
         this.playerOneUsername = playerOneUsername;
     }
 
+    /**
+     * Gets bot king tower.
+     *
+     * @return the bot king tower
+     */
     public KingTower getBotKingTower() {
         return botKingTower;
     }
 
+    /**
+     * Sets bot king tower.
+     *
+     * @param botKingTower the bot king tower
+     */
     public void setBotKingTower(KingTower botKingTower) {
         this.botKingTower = botKingTower;
     }
 
+    /**
+     * Gets bot right queen tower.
+     *
+     * @return the bot right queen tower
+     */
     public QueenTower getBotRightQueenTower() {
         return botRightQueenTower;
     }
 
+    /**
+     * Sets bot right queen tower.
+     *
+     * @param botRightQueenTower the bot right queen tower
+     */
     public void setBotRightQueenTower(QueenTower botRightQueenTower) {
         this.botRightQueenTower = botRightQueenTower;
     }
 
+    /**
+     * Gets bot left queen tower.
+     *
+     * @return the bot left queen tower
+     */
     public QueenTower getBotLeftQueenTower() {
         return botLeftQueenTower;
     }
 
+    /**
+     * Sets bot left queen tower.
+     *
+     * @param botLeftQueenTower the bot left queen tower
+     */
     public void setBotLeftQueenTower(QueenTower botLeftQueenTower) {
         this.botLeftQueenTower = botLeftQueenTower;
     }
 
+    /**
+     * Gets bot username.
+     *
+     * @return the bot username
+     */
     public String getBotUsername() {
         return botUsername;
     }
 
+    /**
+     * Sets bot username.
+     *
+     * @param botUsername the bot username
+     */
     public void setBotUsername(String botUsername) {
         this.botUsername = botUsername;
     }
 
+    /**
+     * Gets bridge width.
+     *
+     * @return the bridge width
+     */
     public float getBridgeWidth() {
         return bridgeWidth;
     }
 
+    /**
+     * Sets bridge width.
+     *
+     * @param bridgeWidth the bridge width
+     */
     public void setBridgeWidth(float bridgeWidth) {
         this.bridgeWidth = bridgeWidth;
     }
 
+    /**
+     * Gets left bridge x.
+     *
+     * @return the left bridge x
+     */
     public float getLeftBridgeX() {
         return leftBridgeX;
     }
 
+    /**
+     * Sets left bridge x.
+     *
+     * @param leftBridgeX the left bridge x
+     */
     public void setLeftBridgeX(float leftBridgeX) {
         this.leftBridgeX = leftBridgeX;
     }
 
+    /**
+     * Gets bridges end y.
+     *
+     * @return the bridges end y
+     */
     public float getBridgesEndY() {
         return bridgesEndY;
     }
 
+    /**
+     * Sets bridges end y.
+     *
+     * @param bridgesEndY the bridges end y
+     */
     public void setBridgesEndY(float bridgesEndY) {
         this.bridgesEndY = bridgesEndY;
     }
 
+    /**
+     * Gets right bridge x.
+     *
+     * @return the right bridge x
+     */
     public float getRightBridgeX() {
         return rightBridgeX;
     }
 
+    /**
+     * Sets right bridge x.
+     *
+     * @param rightBridgeX the right bridge x
+     */
     public void setRightBridgeX(float rightBridgeX) {
         this.rightBridgeX = rightBridgeX;
     }
 
+    /**
+     * Gets bridges start y.
+     *
+     * @return the bridges start y
+     */
     public float getBridgesStartY() {
         return bridgesStartY;
     }
 
+    /**
+     * Sets bridges start y.
+     *
+     * @param bridgesStartY the bridges start y
+     */
     public void setBridgesStartY(float bridgesStartY) {
         this.bridgesStartY = bridgesStartY;
     }
 
+    /**
+     * Gets arena existing buildings.
+     *
+     * @return the arena existing buildings
+     */
     public ArrayList<Building> getArenaExistingBuildings() {
         return arenaExistingBuildings;
     }
 
+    /**
+     * Sets arena existing buildings.
+     *
+     * @param arenaExistingBuildings the arena existing buildings
+     */
     public void setArenaExistingBuildings(ArrayList<Building> arenaExistingBuildings) {
         this.arenaExistingBuildings = arenaExistingBuildings;
     }
 
 
+    /**
+     * Gets arena towers.
+     *
+     * @return the arena towers
+     */
     public ArrayList<Tower> getArenaTowers() {
         return arenaExistingTowers;
     }
 
+    /**
+     * Gets bot.
+     *
+     * @return the bot
+     */
     public Robot getBot() {
         return bot;
     }
 
+    /**
+     * Gets player lost hp.
+     *
+     * @return the player lost hp
+     */
     public int getPlayerLostHP() {
         return playerLostHP;
     }
 
+    /**
+     * Sets player lost hp.
+     *
+     * @param playerLostHP the player lost hp
+     */
     public void setPlayerLostHP(int playerLostHP) {
         this.playerLostHP = playerLostHP;
     }
 
+    /**
+     * Gets bot lost hp.
+     *
+     * @return the bot lost hp
+     */
     public int getBotLostHP() {
         return botLostHP;
     }
 
+    /**
+     * Sets bot lost hp.
+     *
+     * @param botLostHP the bot lost hp
+     */
     public void setBotLostHP(int botLostHP) {
         this.botLostHP = botLostHP;
     }
 
+    /**
+     * Sets player crown.
+     *
+     * @param playerCrown the player crown
+     */
     public void setPlayerCrown(int playerCrown) {
         this.playerCrown = playerCrown;
     }
 
+    /**
+     * Sets robot crown.
+     *
+     * @param robotCrown the robot crown
+     */
     public void setRobotCrown(int robotCrown) {
         this.robotCrown = robotCrown;
     }
 
+    /**
+     * Gets unit size.
+     *
+     * @return the unit size
+     */
     public float getUnitSize() {
         return unitSize;
     }
 
+    /**
+     * Gets min dist.
+     *
+     * @return the min dist
+     */
     public float getMinDist() {
         return minDist;
     }
 
+    /**
+     * Sets min dist.
+     *
+     * @param minDist the min dist
+     */
     public void setMinDist(float minDist) {
         this.minDist = minDist;
     }
 
+    /**
+     * Gets player one right border y.
+     *
+     * @return the player one right border y
+     */
     public float getPlayerOneRightBorderY() {
         return playerOneRightBorderY;
     }
 
+    /**
+     * Sets player one right border y.
+     *
+     * @param playerOneRightBorderY the player one right border y
+     */
     public void setPlayerOneRightBorderY(float playerOneRightBorderY) {
         this.playerOneRightBorderY = playerOneRightBorderY;
     }
 
+    /**
+     * Gets player one left border y.
+     *
+     * @return the player one left border y
+     */
     public float getPlayerOneLeftBorderY() {
         return playerOneLeftBorderY;
     }
 
+    /**
+     * Sets player one left border y.
+     *
+     * @param playerOneLeftBorderY the player one left border y
+     */
     public void setPlayerOneLeftBorderY(float playerOneLeftBorderY) {
         this.playerOneLeftBorderY = playerOneLeftBorderY;
     }
 
+    /**
+     * Gets player two right border y.
+     *
+     * @return the player two right border y
+     */
     public float getPlayerTwoRightBorderY() {
         return playerTwoRightBorderY;
     }
 
+    /**
+     * Sets player two right border y.
+     *
+     * @param playerTwoRightBorderY the player two right border y
+     */
     public void setPlayerTwoRightBorderY(float playerTwoRightBorderY) {
         this.playerTwoRightBorderY = playerTwoRightBorderY;
     }
 
+    /**
+     * Gets player two left border y.
+     *
+     * @return the player two left border y
+     */
     public float getPlayerTwoLeftBorderY() {
         return playerTwoLeftBorderY;
     }
 
+    /**
+     * Sets player two left border y.
+     *
+     * @param playerTwoLeftBorderY the player two left border y
+     */
     public void setPlayerTwoLeftBorderY(float playerTwoLeftBorderY) {
         this.playerTwoLeftBorderY = playerTwoLeftBorderY;
     }
 
+    /**
+     * Gets slow step size.
+     *
+     * @return the slow step size
+     */
     public float getSlowStepSize() {
         return slowStepSize;
     }
 
+    /**
+     * Sets slow step size.
+     *
+     * @param slowStepSize the slow step size
+     */
     public void setSlowStepSize(float slowStepSize) {
         this.slowStepSize = slowStepSize;
     }
 
+    /**
+     * Gets medium step size.
+     *
+     * @return the medium step size
+     */
     public float getMediumStepSize() {
         return mediumStepSize;
     }
 
+    /**
+     * Sets medium step size.
+     *
+     * @param mediumStepSize the medium step size
+     */
     public void setMediumStepSize(float mediumStepSize) {
         this.mediumStepSize = mediumStepSize;
     }
 
+    /**
+     * Gets fast step size.
+     *
+     * @return the fast step size
+     */
     public float getFastStepSize() {
         return fastStepSize;
     }
 
+    /**
+     * Sets fast step size.
+     *
+     * @param fastStepSize the fast step size
+     */
     public void setFastStepSize(float fastStepSize) {
         this.fastStepSize = fastStepSize;
     }

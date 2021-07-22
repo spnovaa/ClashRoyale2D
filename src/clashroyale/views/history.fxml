@@ -1,10 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="anchorpane" prefHeight="500.0" prefWidth="310.0"
             style="-fx-background-color: #424242;" xmlns="http://javafx.com/javafx/16"
             fx:controller="clashroyale.controllers.HistoryController">
-
+    <children>
+        <Rectangle arcHeight="25.0" arcWidth="25.0" fill="#00897b" height="75.0" layoutX="15.0" layoutY="410.0"
+                   onMouseClicked="#goToMenu" strokeDashOffset="100.0" strokeLineCap="ROUND" strokeLineJoin="ROUND"
+                   strokeMiterLimit="100.0" width="125.0">
+            <stroke>
+                <RadialGradient centerX="0.5" centerY="0.5" focusAngle="90.0" focusDistance="-0.023255813953488413"
+                                radius="1.0">
+                    <stops>
+                        <Stop>
+                            <color>
+                                <Color/>
+                            </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                            <color>
+                                <Color red="1.0" green="1.0" blue="1.0"/>
+                            </color>
+                        </Stop>
+                    </stops>
+                </RadialGradient>
+            </stroke>
+            <effect>
+                <InnerShadow blurType="ONE_PASS_BOX" height="32.5" offsetY="-2.0" radius="13.875" width="25.0">
+                    <color>
+                        <Color red="0.03921568766236305" green="0.3529411852359772" blue="0.6666666865348816"/>
+                    </color>
+                </InnerShadow>
+            </effect>
+        </Rectangle>
+        <ImageView fitHeight="53.0" fitWidth="46.0" layoutX="15.0" layoutY="425.0" onMouseClicked="#goToMenu"
+                   pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../resources/ui/tournament.png"/>
+            </image>
+        </ImageView>
+        <Label layoutX="63.0" layoutY="433.0" onMouseClicked="#goToMenu" text="Menu" textFill="#f0f4c3">
+            <font>
+                <Font name="Supercell-Magic Regular" size="16.0"/>
+            </font>
+        </Label>
+    </children>
 </AnchorPane>

@@ -588,10 +588,21 @@ public class GameModel {
         }
 
 
-        if (distanceToTower < distanceToCard && distanceToTower <= getRangeSize(((TroopsCard) card).getRangeType())) {
-            attackCardToTower(card, enemyTower);
+        if (distanceToTower < distanceToCard && distanceToTower <= getRangeSize(((TroopsCard) card).getRangeType())
+                && enemyTower != null) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    attackCardToTower(card, enemyTower);
+                }
+            });
         } else if (distanceToCard <= getRangeSize(((TroopsCard) card).getRangeType())) {
-            attackCardToCard(card, enemyCard);
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    attackCardToCard(card, enemyCard);
+                }
+            });
         }
 //        System.out.println("Is Attacking : "+ isAttacking);
         return isAttacking;

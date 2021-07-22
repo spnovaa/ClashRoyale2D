@@ -145,7 +145,6 @@ public class GameController extends Application {
      */
     public void setUserModel(UserModel userModel) {
         this.userModel = userModel;
-
     }
 
     /**
@@ -301,6 +300,7 @@ public class GameController extends Application {
                 if (!isGameRunning) {
                     timer.cancel();
                     timer.purge();
+//                    saveGameHistoryToDB();
                 }
                 Platform.runLater(new Runnable() {
                     public void run() {

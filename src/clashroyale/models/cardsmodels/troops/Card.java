@@ -33,6 +33,7 @@ public class Card {
         this.relatedUser = relatedUser;
         isBeingBlocked = false;
         isAttacking = false;
+
     }
 
     /**

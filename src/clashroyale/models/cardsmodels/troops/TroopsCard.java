@@ -42,6 +42,9 @@ public class TroopsCard extends Card {
         this.speed = speed;
         this.target = target;
         this.relatedUser = relatedUser;
+        damage=0.0;
+        hp=0;
+
     }
 
     /**

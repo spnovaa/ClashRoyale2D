@@ -300,7 +300,7 @@ public class GameController extends Application {
                 if (!isGameRunning) {
                     timer.cancel();
                     timer.purge();
-//                    saveGameHistoryToDB();
+                    saveGameHistoryToDB();
                 }
                 Platform.runLater(new Runnable() {
                     public void run() {
@@ -380,5 +380,12 @@ public class GameController extends Application {
         return card;
     }
 
+    private void saveGameHistoryToDB() {
+        int leftSeconds = gameView.getLeftTime().getMinutes() * 60 + gameView.getLeftTime().getSeconds();
+        int durationSeconds = 180 - leftSeconds;
+        String duration = (durationSeconds / 60) + " : " + durationSeconds % 60;
+        System.out.println("Game Duration : " + duration);
+
+    }
 
 }

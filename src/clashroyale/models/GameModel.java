@@ -906,20 +906,22 @@ public class GameModel {
         card.setAlive(false);
     }
 
-    private void killTower(Tower tower) {
-        tower.setAlive(false);
-        String user = tower.getRelatedUser();
-        System.out.println(tower.getRelatedUser() + " lost " + tower.getTitle());
-        if (user.equals("simpleBot") || user.equals("smartBot")) {
-            if (tower.getTitle().equals("botKingTower"))
-                playerCrown = 3;
-            else if (tower.getTitle().equals("botRightQueenTower") || tower.getTitle().equals("botLeftQueenTower"))
-                playerCrown++;
-        } else {
-            if (tower.getTitle().equals("userKingTower"))
-                robotCrown = 3;
-            else if (tower.getTitle().equals("userRightQueenTower") || tower.getTitle().equals("userLeftQueenTower"))
-                robotCrown++;
+    private synchronized void killTower(Tower tower) {
+        if (tower.isAlive()) {
+            tower.setAlive(false);
+            String user = tower.getRelatedUser();
+            System.out.println(tower.getRelatedUser() + " lost " + tower.getTitle());
+            if (user.equals("simpleBot") || user.equals("smartBot")) {
+                if (tower.getTitle().equals("botKingTower"))
+                    playerCrown = 3;
+                else if (tower.getTitle().equals("botRightQueenTower") || tower.getTitle().equals("botLeftQueenTower"))
+                    playerCrown++;
+            } else {
+                if (tower.getTitle().equals("userKingTower"))
+                    robotCrown = 3;
+                else if (tower.getTitle().equals("userRightQueenTower") || tower.getTitle().equals("userLeftQueenTower"))
+                    robotCrown++;
+            }
         }
     }
 

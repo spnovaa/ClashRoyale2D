@@ -22,9 +22,11 @@ public class MenuController extends Application {
     private Scene botSelectionScene;
     private Scene battleDeckScene;
     private Scene arenaScene;
+    private Scene historyScene;
     private ChoosingRobotController choosingRobotController;
     private ChoosingCardsController choosingCardsController;
     private GameController gameController;
+    private HistoryController historyController;
     private Stage stage;
     private UserModel userModel;
     private Robot bot;
@@ -101,6 +103,23 @@ public class MenuController extends Application {
         stage.setScene(arenaScene);
     }
 
+    public void goToHistory() {
+        if (historyScene == null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/history.fxml"));
+                Parent goToHistoryRoot = loader.load();
+                historyController = loader.getController();
+                historyController.setUserModel(userModel);
+                historyController.start(stage);
+                historyScene = new Scene(goToHistoryRoot);
+                historyScene.getStylesheets().add("style.css");
+            } catch (Exception exception) {
+                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, exception);
+                exception.printStackTrace();
+            }
+        }
+        stage.setScene(historyScene);
+    }
 
     /**
      * Sets user model.

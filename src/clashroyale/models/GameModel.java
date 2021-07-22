@@ -27,8 +27,8 @@ import java.util.Collections;
 public class GameModel {
     private UserModel userModel;
 
-    private int playerOneLostHP;
-    private int playerTwoLostHP;
+    private int playerLostHP;
+    private int botLostHP;
     private int playerCrown;
     private int robotCrown;
 
@@ -90,16 +90,16 @@ public class GameModel {
         minDist = 1;
         elixirFlag = 0;
 
-        robotCrown=0;
-        playerCrown=0;
+        robotCrown = 0;
+        playerCrown = 0;
 
         arenaExistingTroops = new ArrayList<>();
         arenaExistingSpellCards = new ArrayList<>();
         arenaExistingTowers = new ArrayList<>();
         arenaExistingBuildings = new ArrayList<>();
 
-        playerTwoLostHP = 0;
-        playerOneLostHP = 0;
+        playerLostHP = 0;
+        botLostHP = 0;
 
         slowStepSize = 10;
         mediumStepSize = 15;
@@ -1152,5 +1152,97 @@ public class GameModel {
 
     public Robot getBot() {
         return bot;
+    }
+
+    public int getPlayerLostHP() {
+        return playerLostHP;
+    }
+
+    public void setPlayerLostHP(int playerLostHP) {
+        this.playerLostHP = playerLostHP;
+    }
+
+    public int getBotLostHP() {
+        return botLostHP;
+    }
+
+    public void setBotLostHP(int botLostHP) {
+        this.botLostHP = botLostHP;
+    }
+
+    public void setPlayerCrown(int playerCrown) {
+        this.playerCrown = playerCrown;
+    }
+
+    public void setRobotCrown(int robotCrown) {
+        this.robotCrown = robotCrown;
+    }
+
+    public float getUnitSize() {
+        return unitSize;
+    }
+
+    public float getMinDist() {
+        return minDist;
+    }
+
+    public void setMinDist(float minDist) {
+        this.minDist = minDist;
+    }
+
+    public float getPlayerOneRightBorderY() {
+        return playerOneRightBorderY;
+    }
+
+    public void setPlayerOneRightBorderY(float playerOneRightBorderY) {
+        this.playerOneRightBorderY = playerOneRightBorderY;
+    }
+
+    public float getPlayerOneLeftBorderY() {
+        return playerOneLeftBorderY;
+    }
+
+    public void setPlayerOneLeftBorderY(float playerOneLeftBorderY) {
+        this.playerOneLeftBorderY = playerOneLeftBorderY;
+    }
+
+    public float getPlayerTwoRightBorderY() {
+        return playerTwoRightBorderY;
+    }
+
+    public void setPlayerTwoRightBorderY(float playerTwoRightBorderY) {
+        this.playerTwoRightBorderY = playerTwoRightBorderY;
+    }
+
+    public float getPlayerTwoLeftBorderY() {
+        return playerTwoLeftBorderY;
+    }
+
+    public void setPlayerTwoLeftBorderY(float playerTwoLeftBorderY) {
+        this.playerTwoLeftBorderY = playerTwoLeftBorderY;
+    }
+
+    public float getSlowStepSize() {
+        return slowStepSize;
+    }
+
+    public void setSlowStepSize(float slowStepSize) {
+        this.slowStepSize = slowStepSize;
+    }
+
+    public float getMediumStepSize() {
+        return mediumStepSize;
+    }
+
+    public void setMediumStepSize(float mediumStepSize) {
+        this.mediumStepSize = mediumStepSize;
+    }
+
+    public float getFastStepSize() {
+        return fastStepSize;
+    }
+
+    public void setFastStepSize(float fastStepSize) {
+        this.fastStepSize = fastStepSize;
     }
 }

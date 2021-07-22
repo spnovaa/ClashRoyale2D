@@ -1,5 +1,6 @@
 package clashroyale.controllers;
 
+import clashroyale.models.DbConnect;
 import clashroyale.models.GameModel;
 import clashroyale.models.UserModel;
 import clashroyale.models.cardsmodels.buildings.Building;
@@ -19,7 +20,9 @@ import clashroyale.views.GameView;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -28,9 +31,16 @@ import javafx.stage.Stage;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -104,6 +114,8 @@ public class GameController extends Application {
     @FXML
     Label botElixir;
     private Scene gameScene;
+    private Scene menu;
+    private MenuController menuController;
 
     int botMaxTroops = 800;
     private int userMinX;
@@ -119,7 +131,7 @@ public class GameController extends Application {
     private ArrayList<Tower> arenaTowers;
     private Robot bot;
     private int botActFlag;
-
+    private boolean isAlertShown;
     @Override
     public void start(Stage stage) throws Exception {
         this.stage = stage;
@@ -136,6 +148,7 @@ public class GameController extends Application {
         userMaxY = 450;
         arenaTowers = new ArrayList<>();
         botActFlag = 0;
+        isAlertShown = false;
     }
 
     /**
@@ -298,9 +311,14 @@ public class GameController extends Application {
         TimerTask timerTask = new TimerTask() {
             public void run() {
                 if (!isGameRunning) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            saveGameHistoryToDB();
+                        }
+                    });
                     timer.cancel();
                     timer.purge();
-                    saveGameHistoryToDB();
                 }
                 Platform.runLater(new Runnable() {
                     public void run() {
@@ -334,11 +352,13 @@ public class GameController extends Application {
             ArrayList<Tower> existingTowers = gameModel.getArenaExistingTowers();
             ArrayList<Spells> existingSpells = gameModel.getArenaExistingSpellCards();
             gameView.updateLivingAssets(existingTroops, existingTowers, existingSpells);
-        } else {
+        } else if (!isAlertShown) {
             boolean isUserWinner = gameModel.getPlayerCrown() > gameModel.getRobotCrown();
-            new AppAlerts("Game Finished!", " GGWP!", isUserWinner ? " You Won And Received 3 Crowns!"
-                    : "Bot Won And You Received " + gameModel.getPlayerCrown() + " Crowns!").showInformationAlert();
+            new AppAlerts("Game Finished!", " GGWP!", (isUserWinner ? " You Won And Received 3 Crowns!"
+                    : "Bot Won And You Received " + gameModel.getPlayerCrown() + " Crowns!") + "\n" +
+                    "Press OK To Redirect Menu!").showInformationAlert();
             isGameRunning = false;
+            isAlertShown = true;
         }
     }
 
@@ -385,7 +405,56 @@ public class GameController extends Application {
         int durationSeconds = 180 - leftSeconds;
         String duration = (durationSeconds / 60) + " : " + durationSeconds % 60;
         System.out.println("Game Duration : " + duration);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        String date = dtf.format(now);
+        try {
+            Connection con = new DbConnect().getConnection();
+            if (con == null) throw new SQLException("CONNECTION FAILED");
 
+            String insertion =
+                    "INSERT INTO history(user_id,opponent,user_crowns,opponent_crowns,user_damage,opponent_damage,duration,game_time)" +
+                            " VALUES (?,?,?,?,?,?,?,?)";
+            PreparedStatement st = con.prepareStatement(insertion);
+            st.setInt(1, Integer.parseInt(userModel.getId()));
+            st.setString(2, bot.getUsername());
+            st.setInt(3, gameModel.getPlayerCrown());
+            st.setInt(4, gameModel.getRobotCrown());
+            st.setInt(5, gameModel.getPlayerLostHP());
+            st.setInt(6, gameModel.getBotLostHP());
+            st.setString(7, duration);
+            st.setString(8, date);
+            st.executeUpdate();
+            goToMenu();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            new AppAlerts("ERROR!", null, "An Error Occurred While saving To Database!")
+                    .showInformationAlert();
+        }
+
+
+    }
+
+
+    private void goToMenu() {
+        if (menu == null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/Menu.fxml"));
+                Parent menuRoot = loader.load();
+                menuController = loader.getController();
+                menuController.setUserModel(userModel);
+                menuController.start(stage);
+
+                menu = new Scene(menuRoot);
+
+            } catch (Exception exception) {
+                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, exception);
+                exception.printStackTrace();
+            }
+        }
+        stage.setHeight(538);
+        stage.setWidth(320);
+        stage.setScene(menu);
     }
 
 }

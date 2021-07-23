@@ -207,10 +207,21 @@ public class GameController extends Application {
      * @param y clicked y
      */
     private boolean deployClickedAt(float x, float y) {
+        int userMinYTemp = userMinY;
+        float center = (userMaxX - userMinX) / 2f;
+        float fieldYQuarter = (userMaxY - userMinY) / 2f;
+
         Card chosen = userModel.getChosenToDeployCard();
         if (chosen != null) {
+
+            boolean isRightQueenAlive = gameModel.getBotRightQueenTower().isAlive();
+            boolean isLeftQueenAlive = gameModel.getBotLeftQueenTower().isAlive();
+            if ((!isRightQueenAlive && x >= center) || (!isLeftQueenAlive && x < center))
+                userMinY = (int) (userMinY - fieldYQuarter);
+
             boolean isInRange = y < userMaxY && y > userMinY && x > userMinX && x < userMaxX
                     || (chosen instanceof Spells && y < userMaxY);
+
             boolean hasElixirs = false;
             if (chosen != null)
                 hasElixirs = chosen.getCost() <= userModel.getElixirCount();
@@ -232,11 +243,14 @@ public class GameController extends Application {
                     //add to existing buildings
                     gameModel.getArenaExistingBuildings().add((Building) chosen);
                 }
+                userMinY = userMinYTemp;
                 return true;
             } else if (!hasElixirs) {
                 System.out.println("You Have " + userModel.getElixirCount() + " Elixirs and Card Costs " + chosen.getCost());
+                userMinY = userMinYTemp;
                 return false;
             } else {
+                userMinY = userMinYTemp;
                 System.out.println("You Can't Deploy Cards There!");
                 return false;
             }

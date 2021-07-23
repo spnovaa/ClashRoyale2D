@@ -62,7 +62,7 @@ public class TroopsCard extends Card {
      * @param damage the damage
      */
     public void setDamage(double damage) {
-        this.damage = damage / 15;
+        this.damage = damage * hitSpeed / 15;
     }
 
     public double getHp() {

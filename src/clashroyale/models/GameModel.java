@@ -197,7 +197,6 @@ public class GameModel {
 
         }
 
-
         for (Building building : arenaExistingBuildings) {
             if (building.isAlive()) {
                 Point2D cardPosition = new Point2D(building.getCenterPositionX(), building.getCenterPositionY());
@@ -389,17 +388,15 @@ public class GameModel {
                         //speed
                         if (troopsCard.getSpeed().equals(Speed.SLOW)) {
                             troopsCard.setSpeed(Speed.SLOW_AMPLIFIED);
-//                            System.out.println("dddddddd");
                         } else if (troopsCard.getSpeed().equals(Speed.MEDIUM)) {
                             troopsCard.setSpeed(Speed.MEDIUM_AMPLIFIED);
-//                            System.out.println("ddddddd");
                         } else if (troopsCard.getSpeed().equals(Speed.FAST)) {
                             troopsCard.setSpeed(Speed.FAST_AMPLIFIED);
                         }
                     }
                 } else {
                     if (!troopsCard.getRelatedUser().equals(spell.getRelatedUser())) {
-                        killCard(troopsCard);
+                        troopsCard.setHp(troopsCard.getHp() - ((Arrows) spell).getAreaDamage());
                     }
                 }
             }
@@ -439,7 +436,9 @@ public class GameModel {
                         }
                     } else {
                         if (!tower.getRelatedUser().equals(spell.getRelatedUser())) {
-                            killTower(tower);
+                            System.out.println(tower.getTitle() + " hp before spell :" + tower.getHp());
+                            tower.setHp(tower.getHp() - ((Arrows) spell).getAreaDamage());
+                            System.out.println(tower.getTitle() + " hp after spell :" + tower.getHp());
                         }
                     }
                 }

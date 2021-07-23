@@ -749,13 +749,22 @@ public class GameModel {
     }
 
     private void attackCardToTower(Card attackerCard, Tower targetTower) {
+        boolean isBot = attackerCard.getRelatedUser().equals("smartBot") || attackerCard.getRelatedUser().equals("simpleBot");
+
         System.out.println(attackerCard.getTitle() + " is Attacking " + targetTower.getRelatedUser() + " " + targetTower.getTitle());
         double hp = 0;
         if (attackerCard instanceof TroopsCard) {
+            if (isBot) playerLostHP = (int) (playerLostHP + ((TroopsCard) attackerCard).getDamage());
+            else botLostHP = (int) (botLostHP + ((TroopsCard) attackerCard).getDamage());
+
 //            System.out.println("troop damage :" + ((TroopsCard) attackerCard).getDamage());
 //            System.out.println("TowerHp : " + targetTower.getHp());
             hp = targetTower.getHp() - ((TroopsCard) attackerCard).getDamage();
+
         } else if (attackerCard instanceof Building) {
+            if (isBot) playerLostHP = (int) (playerLostHP + ((Building) attackerCard).getDamage());
+            else botLostHP = (int) (botLostHP + ((Building) attackerCard).getDamage());
+
             hp = targetTower.getHp() - ((Building) attackerCard).getDamage();
         }
 //        System.out.println(" Tower Hp : " + hp);
@@ -771,6 +780,10 @@ public class GameModel {
     }
 
     private void attackTowerToCard(Tower attackerTower, Card targetCard) {
+        boolean isBot = attackerTower.getRelatedUser().equals("simpleBot") || attackerTower.getRelatedUser().equals("smartBot");
+        if (isBot) playerLostHP = (int) (playerLostHP + ((Tower) attackerTower).getDamage());
+        else botLostHP = (int) (botLostHP + ((Tower) attackerTower).getDamage());
+
         if (attackerTower.isAlive()) {
             if (targetCard instanceof TroopsCard) {
                 ((TroopsCard) targetCard).setHp(((TroopsCard) targetCard).getHp() - attackerTower.getDamage());
@@ -791,31 +804,42 @@ public class GameModel {
     }
 
     private void attackCardToCard(Card attackerCard, Card targetCard) {
+        boolean isBot = attackerCard.getRelatedUser().equals("simpleBot") || attackerCard.getRelatedUser().equals("smartBot");
+
         if (targetCard instanceof TroopsCard) {
             boolean isAttackAllowed = !targetCard.getTitle().equals("babyDragon") ||
                     ((TroopsCard) attackerCard).getTarget().equals(Target.AIR) ||
                     ((TroopsCard) attackerCard).getTarget().equals(Target.AIR_GROUND);
+
             if (attackerCard instanceof TroopsCard && isAttackAllowed) {
+                if (isBot) playerLostHP = (int) (playerLostHP + ((TroopsCard) attackerCard).getDamage());
+                else botLostHP = (int) (botLostHP + ((TroopsCard) attackerCard).getDamage());
+
                 System.out.println(((TroopsCard) targetCard).getHp() + " and " + ((TroopsCard) attackerCard).getHp());
                 ((TroopsCard) targetCard).setHp(((TroopsCard) targetCard).getHp() - ((TroopsCard) attackerCard).getDamage());
                 if (((TroopsCard) targetCard).getHp() < 0) killCard(targetCard);
             } else if (attackerCard instanceof Building) {
+                if (isBot) playerLostHP = (int) (playerLostHP + ((Building) attackerCard).getDamage());
+                else botLostHP = (int) (botLostHP + ((Building) attackerCard).getDamage());
+
                 ((TroopsCard) targetCard).setHp(((TroopsCard) targetCard).getHp() - ((Building) attackerCard).getDamage());
                 if (((TroopsCard) targetCard).getHp() < 0) killCard(targetCard);
             }
         } else if (targetCard instanceof Building) {
             if (attackerCard instanceof TroopsCard) {
+                if (isBot) playerLostHP = (int) (playerLostHP + ((TroopsCard) attackerCard).getDamage());
+                else botLostHP = (int) (botLostHP + ((TroopsCard) attackerCard).getDamage());
+
                 ((Building) targetCard).setHp(((Building) targetCard).getHp() - ((TroopsCard) attackerCard).getDamage());
                 if (((Building) targetCard).getHp() < 0) killCard(targetCard);
             } else if (attackerCard instanceof Building) {
+                if (isBot) playerLostHP = (int) (playerLostHP + ((Building) attackerCard).getDamage());
+                else botLostHP = (int) (botLostHP + ((Building) attackerCard).getDamage());
+
                 ((Building) targetCard).setHp(((Building) targetCard).getHp() - ((Building) attackerCard).getDamage());
                 if (((Building) targetCard).getHp() < 0) killCard(targetCard);
             }
         }
-    }
-
-    private void attackTowerToTower(Tower attackerTower, Tower targetTower) {
-        targetTower.setHp(targetTower.getHp() - attackerTower.getDamage());
     }
 
     private void attackCardToBuilding(Card attackerCard, Building targetBuilding) {

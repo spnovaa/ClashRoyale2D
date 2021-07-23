@@ -353,7 +353,10 @@ public class GameController extends Application {
             ArrayList<Spells> existingSpells = gameModel.getArenaExistingSpellCards();
             gameView.updateLivingAssets(existingTroops, existingTowers, existingSpells);
         } else if (!isAlertShown) {
-            boolean isUserWinner = gameModel.getPlayerCrown() > gameModel.getRobotCrown();
+            boolean isUserWinner = gameModel.getPlayerCrown() > gameModel.getRobotCrown()
+                    || ((gameModel.getPlayerCrown() == gameModel.getRobotCrown()) &&
+                    gameModel.getBotLostHP() > gameModel.getPlayerLostHP());
+
             new AppAlerts("Game Finished!", " GGWP!", (isUserWinner ? " You Won And Received 3 Crowns!"
                     : "Bot Won And You Received " + gameModel.getPlayerCrown() + " Crowns!") + "\n" +
                     "Press OK To Redirect Menu!").showInformationAlert();

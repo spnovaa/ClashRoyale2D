@@ -1,6 +1,7 @@
 package clashroyale.views;
 
 import clashroyale.models.UserModel;
+import clashroyale.models.cardsmodels.buildings.Building;
 import clashroyale.models.cardsmodels.spells.Spells;
 import clashroyale.models.cardsmodels.troops.Card;
 import clashroyale.models.cardsmodels.troops.TroopsCard;
@@ -406,6 +407,12 @@ public class GameView extends Group {
                     if (spell.equals(asset.getUserData()) && !spell.isAlive()) {
                         asset.setImage(null);
                     }
+                }
+            } else if (asset.getUserData() instanceof Building) {
+                ((Building) asset.getUserData()).decreaseLifeTime();
+                if (((Building) asset.getUserData()).getLifeTime() < 0) {
+                    ((Building) asset.getUserData()).setAlive(false);
+                    asset.setImage(null);
                 }
             }
         }

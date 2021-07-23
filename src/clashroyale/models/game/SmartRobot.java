@@ -12,9 +12,7 @@ import clashroyale.models.cardsmodels.troops.*;
 import javafx.geometry.Point2D;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
+import java.util.*;
 
 /**
  * The type Smart robot.
@@ -63,6 +61,7 @@ public class SmartRobot extends Robot {
     private int maxX8;
     private int minY8;
     private int maxY8;
+    private Queue<Card> botCards;
 
     /**
      * Instantiates a new Smart robot.
@@ -71,7 +70,7 @@ public class SmartRobot extends Robot {
      */
     public SmartRobot(int level) {
         super("smartBot", level);
-        smartBotCards = choosingSmartBotCards();
+        botCards = choosingSmartBotCards();
     }
 
     /**
@@ -89,7 +88,6 @@ public class SmartRobot extends Robot {
         maxX1 = 183;
         minY1 = 35;
         maxY1 = 133;
-
 
         minX2 = 183;
         maxX2 = 340;
@@ -125,14 +123,17 @@ public class SmartRobot extends Robot {
         maxX8 = 340;
         minY8 = 340;
         maxY8 = 450;
+
+        botCards = new LinkedList<>();
     }
+
 
     /**
      * Choosing smart bot cards array list.
      *
      * @return the array list
      */
-    public synchronized ArrayList<Card> choosingSmartBotCards() {
+    public synchronized Queue<Card> choosingSmartBotCards() {
 //        ArrayList<Card> cards = new ArrayList<>(super.getAllCards());
 //        return cards;
         String username = "smartBot";
@@ -173,7 +174,8 @@ public class SmartRobot extends Robot {
             }
         }
         Collections.shuffle(smartBotCards1);
-        return smartBotCards1;
+        botCards.addAll(smartBotCards1);
+        return botCards;
     }
 
     /**
@@ -182,9 +184,12 @@ public class SmartRobot extends Robot {
      * @return the card
      */
     public Card chooseCardToPlay() {
-        SecureRandom secureRandom = new SecureRandom();
-        Card card = smartBotCards.get(secureRandom.nextInt(8));
-        if (card.getCost() < getElixirCount()) {
+//        SecureRandom secureRandom = new SecureRandom();
+//        Card card = smartBotCards.get(secureRandom.nextInt(8));
+        Card card = botCards.peek();
+        if (card != null && card.getCost() < getElixirCount()) {
+            card = botCards.poll();
+            botCards.add(card);
             return card;
         } else return null;
     }

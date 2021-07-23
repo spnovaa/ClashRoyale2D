@@ -100,6 +100,7 @@ public class ChoosingRobotController extends Application {
             st.setString(1, String.valueOf(type));
             st.setString(2, String.valueOf(userModel.getId()));
             st.executeUpdate();
+            userModel.setBotType(type == 0 ? "smartBot" : "simpleBot");
         } catch (SQLException e) {
             e.printStackTrace();
 
@@ -123,5 +124,6 @@ public class ChoosingRobotController extends Application {
         }
         stage.setScene(menu);
     }
+
 
 }

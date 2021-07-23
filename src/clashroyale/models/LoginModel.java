@@ -47,10 +47,11 @@ public class LoginModel {
         try {
             Connection con = new DbConnect().getConnection();
             if (con == null) throw new SQLException("CONNECTION FAILED");
-            String insertion = "insert into users(username,password) VALUES (?,?)";
+            String insertion = "insert into users(username,password,level) VALUES (?,?,?)";
             PreparedStatement st = con.prepareStatement(insertion);
             st.setString(1, username);
             st.setString(2, password);
+            st.setString(3, "1");
             int res = st.executeUpdate();
             return (res > 0 ? 1 : 0);
         } catch (SQLException e) {

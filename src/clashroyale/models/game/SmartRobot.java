@@ -70,6 +70,7 @@ public class SmartRobot extends Robot {
      */
     public SmartRobot(int level) {
         super("smartBot", level);
+        botCards = new LinkedList<>();
         botCards = choosingSmartBotCards();
     }
 

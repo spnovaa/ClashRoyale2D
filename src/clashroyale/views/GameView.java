@@ -105,6 +105,16 @@ public class GameView extends Group {
 
     }
 
+    /**
+     * Instantiate towers.
+     *
+     * @param botKing        the bot king
+     * @param botLeftQueen   the bot left queen
+     * @param botRightQueen  the bot right queen
+     * @param userKing       the user king
+     * @param userLeftQueen  the user left queen
+     * @param userRightQueen the user right queen
+     */
     public void instantiateTowers(ImageView botKing, ImageView botLeftQueen, ImageView botRightQueen,
                                   ImageView userKing, ImageView userLeftQueen, ImageView userRightQueen) {
         arenaTowers = new ArrayList<>();
@@ -357,6 +367,9 @@ public class GameView extends Group {
     }
 
 
+    /**
+     * Update timer.
+     */
     public void updateTimer() {
         flag++;
         if (flag % 15 == 0) {
@@ -377,12 +390,27 @@ public class GameView extends Group {
 
     }
 
+    /**
+     * Update elixirs.
+     *
+     * @param userElixirCount the user elixir count
+     * @param botElixirCount  the bot elixir count
+     */
     public void updateElixirs(int userElixirCount, int botElixirCount) {
         userElixir.setText(Integer.toString(userElixirCount));
         botElixir.setText(Integer.toString(botElixirCount));
     }
 
-    public void updateLivingAssets(ArrayList<TroopsCard> existingTroops, ArrayList<Tower> existingTowers, ArrayList<Spells> existingSpells) {
+    /**
+     * Update living assets.
+     *
+     * @param existingTroops    the existing troops
+     * @param existingTowers    the existing towers
+     * @param existingSpells    the existing spells
+     * @param existingBuildings the existing buildings
+     */
+    public void updateLivingAssets(ArrayList<TroopsCard> existingTroops, ArrayList<Tower> existingTowers,
+                                   ArrayList<Spells> existingSpells, ArrayList<Building> existingBuildings) {
         for (ImageView asset : battleCards) {
             TroopsCard oldCard;
             Tower oldTower;
@@ -409,10 +437,11 @@ public class GameView extends Group {
                     }
                 }
             } else if (asset.getUserData() instanceof Building) {
-                ((Building) asset.getUserData()).decreaseLifeTime();
-                if (((Building) asset.getUserData()).getLifeTime() < 0) {
-                    ((Building) asset.getUserData()).setAlive(false);
-                    asset.setImage(null);
+                for (Building building : existingBuildings) {
+                    if (building.isAlive())
+                        System.out.println(building.getTitle() + " of " + building.getRelatedUser() + " hp : " + building.getHp());
+                    if (building.equals(asset.getUserData()) && !building.isAlive())
+                        asset.setImage(null);
                 }
             }
         }
@@ -515,27 +544,57 @@ public class GameView extends Group {
         this.chosenCardIndex = chosenCardIndex;
     }
 
+    /**
+     * Sets text time.
+     *
+     * @param textTime the text time
+     */
     public void setTextTime(Label textTime) {
         this.textTime = textTime;
         flag = 0;
     }
 
+    /**
+     * Sets user elixir.
+     *
+     * @param userElixir the user elixir
+     */
     public void setUserElixir(Label userElixir) {
         this.userElixir = userElixir;
     }
 
+    /**
+     * Sets bot elixir.
+     *
+     * @param botElixir the bot elixir
+     */
     public void setBotElixir(Label botElixir) {
         this.botElixir = botElixir;
     }
 
+    /**
+     * Sets bot crown.
+     *
+     * @param botCrown the bot crown
+     */
     public void setBotCrown(Label botCrown) {
         this.botCrown = botCrown;
     }
 
+    /**
+     * Sets player crown.
+     *
+     * @param playerCrown the player crown
+     */
     public void setPlayerCrown(Label playerCrown) {
         this.playerCrown = playerCrown;
     }
 
+    /**
+     * Sets arena towers.
+     *
+     * @param arenaTowers the arena towers
+     */
     public void setArenaTowers(ArrayList<Tower> arenaTowers) {
         this.arenaTowers = arenaTowers;
         for (Tower tower : arenaTowers) {
@@ -550,11 +609,22 @@ public class GameView extends Group {
         }
     }
 
+    /**
+     * Update crown.
+     *
+     * @param botCrown2    the bot crown 2
+     * @param playerCrown2 the player crown 2
+     */
     public void updateCrown(String botCrown2, String playerCrown2) {
         botCrown.setText(botCrown2);
         playerCrown.setText(playerCrown2);
     }
 
+    /**
+     * Gets left time.
+     *
+     * @return the left time
+     */
     public LeftTime getLeftTime() {
         return leftTime;
     }

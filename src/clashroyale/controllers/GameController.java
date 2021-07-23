@@ -365,7 +365,9 @@ public class GameController extends Application {
             ArrayList<TroopsCard> existingTroops = gameModel.getArenaExistingTroops();
             ArrayList<Tower> existingTowers = gameModel.getArenaExistingTowers();
             ArrayList<Spells> existingSpells = gameModel.getArenaExistingSpellCards();
-            gameView.updateLivingAssets(existingTroops, existingTowers, existingSpells);
+            ArrayList<Building> existingBuildings = gameModel.getArenaExistingBuildings();
+
+            gameView.updateLivingAssets(existingTroops, existingTowers, existingSpells, existingBuildings);
         } else if (!isAlertShown) {
             boolean isUserWinner = gameModel.getPlayerCrown() > gameModel.getRobotCrown()
                     || ((gameModel.getPlayerCrown() == gameModel.getRobotCrown()) &&

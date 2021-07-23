@@ -825,13 +825,17 @@ public class GameModel {
                 ((TroopsCard) targetCard).setHp(((TroopsCard) targetCard).getHp() - ((Building) attackerCard).getDamage());
                 if (((TroopsCard) targetCard).getHp() < 0) killCard(targetCard);
             }
-        } else if (targetCard instanceof Building) {
+        } else if (targetCard instanceof Building && targetCard.isAlive() && ((Building) targetCard).getHp() > 0) {
+            if (((Building) targetCard).getHp() <= 0 && targetCard.isAlive()) targetCard.setAlive(false);
             if (attackerCard instanceof TroopsCard) {
                 if (isBot) playerLostHP = (int) (playerLostHP + ((TroopsCard) attackerCard).getDamage());
                 else botLostHP = (int) (botLostHP + ((TroopsCard) attackerCard).getDamage());
 
                 ((Building) targetCard).setHp(((Building) targetCard).getHp() - ((TroopsCard) attackerCard).getDamage());
-                if (((Building) targetCard).getHp() < 0) killCard(targetCard);
+                if (((Building) targetCard).getHp() < 0) {
+                    killCard(targetCard);
+                    System.out.println("Killed " + targetCard.getTitle());
+                }
             } else if (attackerCard instanceof Building) {
                 if (isBot) playerLostHP = (int) (playerLostHP + ((Building) attackerCard).getDamage());
                 else botLostHP = (int) (botLostHP + ((Building) attackerCard).getDamage());
@@ -948,6 +952,7 @@ public class GameModel {
 
     private void killCard(Card card) {
         card.setAlive(false);
+        System.out.println(card.getTitle() + " alive : " + card.isAlive());
     }
 
     private synchronized void killTower(Tower tower) {

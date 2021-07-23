@@ -38,7 +38,6 @@ public class Building extends Card {
         this.range = range;
         this.target = target;
         this.lifeTime = lifeTime;
-        isAlive=true;
         fixLifeTime=lifeTime;
     }
 
@@ -200,11 +199,6 @@ public class Building extends Card {
      */
     public int getFixLifeTime() {
         return fixLifeTime;
-    }
-
-    @Override
-    public boolean isAlive() {
-        return isAlive;
     }
 
     public void setRelatedUser(String relatedUser) {

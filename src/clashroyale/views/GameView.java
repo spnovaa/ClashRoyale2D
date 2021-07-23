@@ -224,32 +224,34 @@ public class GameView extends Group {
         switch (title) {
             case "rage" -> {
                 imageView.setOpacity(0.3);
-                imageView.setX(x - (float) 50 / 2);
-                imageView.setY(y - (float) 50 / 2);
-                imageView.setFitWidth(50);
-                imageView.setFitHeight(50);
+                imageView.setX(x - (float) 87.5 / 2);
+                imageView.setY(y - (float) 87.5 / 2);
+                imageView.setFitWidth(87.5);
+                imageView.setFitHeight(87.5);
                 imageView.setUserData(chosenToDeployCard);
             }
             case "fireball" -> {
                 imageView.setOpacity(0.3);
-                imageView.setX(x - (float) 25 / 2);
-                imageView.setY(y - (float) 25 / 2);
-                imageView.setFitWidth(25);
-                imageView.setFitHeight(25);
+                imageView.setX(x - (float) 87.5 / 2);
+                imageView.setY(y - (float) 87.5 / 2);
+                imageView.setFitWidth(43.5);
+                imageView.setFitHeight(43.5);
                 imageView.setUserData(chosenToDeployCard);
             }
             case "arrows" -> {
                 imageView.setOpacity(0.3);
-                imageView.setX(x - (float) 40 / 2);
-                imageView.setY(y - (float) 40 / 2);
-                imageView.setFitWidth(40);
-                imageView.setFitHeight(40);
+                imageView.setX(x - (float) 70 / 2);
+                imageView.setY(y - (float) 70 / 2);
+                imageView.setFitWidth(70);
+                imageView.setFitHeight(70);
                 imageView.setUserData(chosenToDeployCard);
             }
-            case "cannon", "infernoTower" ->{ imageView.setX(x - (float) TROOPS_SIZE / 4);
+            case "cannon", "infernoTower" -> {
+                imageView.setX(x - (float) TROOPS_SIZE / 4);
                 imageView.setY(y - (float) TROOPS_SIZE / 4);
-                imageView.setFitWidth(TROOPS_SIZE/2);
-                imageView.setFitHeight(TROOPS_SIZE/2);}
+                imageView.setFitWidth(TROOPS_SIZE / 2);
+                imageView.setFitHeight(TROOPS_SIZE / 2);
+            }
 
 
             default -> {
@@ -288,32 +290,34 @@ public class GameView extends Group {
         switch (title) {
             case "rage" -> {
                 imageView.setOpacity(0.3);
-                imageView.setX(x - (float) 50 / 2);
-                imageView.setY(y - (float) 50 / 2);
-                imageView.setFitWidth(50);
-                imageView.setFitHeight(50);
+                imageView.setX(x - (float) 87.5 / 2);
+                imageView.setY(y - (float) 87.5 / 2);
+                imageView.setFitWidth(87.5);
+                imageView.setFitHeight(87.5);
                 imageView.setUserData(chosenToDeployCard);
             }
             case "fireball" -> {
                 imageView.setOpacity(0.3);
-                imageView.setX(x - (float) 25 / 2);
-                imageView.setY(y - (float) 25 / 2);
-                imageView.setFitWidth(25);
-                imageView.setFitHeight(25);
+                imageView.setX(x - (float) 43.5 / 2);
+                imageView.setY(y - (float) 43.5 / 2);
+                imageView.setFitWidth(43.5);
+                imageView.setFitHeight(43.5);
                 imageView.setUserData(chosenToDeployCard);
             }
             case "arrows" -> {
                 imageView.setOpacity(0.3);
-                imageView.setX(x - (float) 40 / 2);
-                imageView.setY(y - (float) 40 / 2);
-                imageView.setFitWidth(40);
-                imageView.setFitHeight(40);
+                imageView.setX(x - (float) 70 / 2);
+                imageView.setY(y - (float) 70 / 2);
+                imageView.setFitWidth(70);
+                imageView.setFitHeight(70);
                 imageView.setUserData(chosenToDeployCard);
             }
-            case "cannon", "infernoTower" ->{ imageView.setX(x - (float) TROOPS_SIZE / 4);
+            case "cannon", "infernoTower" -> {
+                imageView.setX(x - (float) TROOPS_SIZE / 4);
                 imageView.setY(y - (float) TROOPS_SIZE / 4);
-                imageView.setFitWidth(TROOPS_SIZE/2);
-                imageView.setFitHeight(TROOPS_SIZE/2);}
+                imageView.setFitWidth(TROOPS_SIZE / 2f);
+                imageView.setFitHeight(TROOPS_SIZE / 2f);
+            }
             default -> {
                 imageView.setX(x - (float) TROOPS_SIZE / 2);
                 imageView.setY(y - (float) TROOPS_SIZE / 2);

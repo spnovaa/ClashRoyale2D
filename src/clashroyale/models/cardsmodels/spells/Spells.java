@@ -21,10 +21,10 @@ public class Spells extends Card {
      */
     public Spells(String title, int cost, double radious, String thumbImage, String relatedUser) {
         super(title, cost, thumbImage, relatedUser);
-        this.radious = radious;
+        this.radious = radious * 1.75;
         System.out.println("Radius " + radious + "Set For " + title);
         isAlive = true;
-        time=45;
+        time = 45;
     }
 
     public double getRadious() {
@@ -62,7 +62,8 @@ public class Spells extends Card {
     public void setRelatedUser(String relatedUser) {
         this.relatedUser = relatedUser;
     }
-    public void  decreaseTime(){
+
+    public void decreaseTime() {
         time--;
     }
 

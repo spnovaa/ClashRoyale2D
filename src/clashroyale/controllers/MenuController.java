@@ -79,6 +79,9 @@ public class MenuController extends Application {
         stage.setScene(battleDeckScene);
     }
 
+    /**
+     * Go to arena.
+     */
     public void goToArena() {
         if (arenaScene == null) {
             try {
@@ -103,6 +106,9 @@ public class MenuController extends Application {
         stage.setScene(arenaScene);
     }
 
+    /**
+     * Go to history.
+     */
     public void goToHistory() {
         if (historyScene == null) {
             try {

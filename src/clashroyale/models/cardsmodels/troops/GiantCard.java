@@ -11,7 +11,8 @@ public class GiantCard extends TroopsCard {
     /**
      * Instantiates a new Giant.
      *
-     * @param level the level
+     * @param level       the level
+     * @param relatedUser the related user
      */
     public GiantCard(int level, String relatedUser) {
         super("giant", 5, 1, 1.5, Target.BUILDINGS, Range.MELEE, Speed.SLOW,

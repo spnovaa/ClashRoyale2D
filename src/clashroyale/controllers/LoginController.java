@@ -22,9 +22,15 @@ public class LoginController extends Application {
     private Scene menu;
     private MenuController menuController;
     private Stage stage;
+    /**
+     * The User model.
+     */
     public UserModel userModel;
     private LoginModel loginModel;
 
+    /**
+     * Instantiates a new Login controller.
+     */
     public LoginController() {
         loginModel = new LoginModel();
         userModel = new UserModel();

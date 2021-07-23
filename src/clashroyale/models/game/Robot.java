@@ -28,6 +28,12 @@ public class Robot {
     private int cupsCount;
     private int elixirCount;
 
+    /**
+     * Instantiates a new Robot.
+     *
+     * @param username the username
+     * @param level    the level
+     */
     public Robot(String username, int level) {
         this.username = username;
         this.level = level;
@@ -71,82 +77,182 @@ public class Robot {
         return cards;
     }
 
+    /**
+     * Gets level.
+     *
+     * @return the level
+     */
     public int getLevel() {
         return level;
     }
 
+    /**
+     * Sets level.
+     *
+     * @param level the level
+     */
     public void setLevel(int level) {
         this.level = level;
     }
 
+    /**
+     * Gets username.
+     *
+     * @return the username
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Sets username.
+     *
+     * @param username the username
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * Gets cards que.
+     *
+     * @return the cards que
+     */
     public Queue<Card> getCardsQue() {
         return cardsQue;
     }
 
+    /**
+     * Sets cards que.
+     *
+     * @param cardsQue the cards que
+     */
     public void setCardsQue(Queue<Card> cardsQue) {
         this.cardsQue = cardsQue;
     }
 
+    /**
+     * All cards array list.
+     *
+     * @return the array list
+     */
     public ArrayList<Card> allCards() {
         return allCards;
     }
 
+    /**
+     * Sets all cards.
+     *
+     * @param allCards the all cards
+     */
     public void setAllCards(ArrayList<Card> allCards) {
         this.allCards = allCards;
     }
 
+    /**
+     * Gets min y.
+     *
+     * @return the min y
+     */
     public float getMinY() {
         return minY;
     }
 
+    /**
+     * Sets min y.
+     *
+     * @param minY the min y
+     */
     public void setMinY(float minY) {
         this.minY = minY;
     }
 
+    /**
+     * Gets min x.
+     *
+     * @return the min x
+     */
     public float getMinX() {
         return minX;
     }
 
+    /**
+     * Sets min x.
+     *
+     * @param minX the min x
+     */
     public void setMinX(float minX) {
         this.minX = minX;
     }
 
+    /**
+     * Gets max y.
+     *
+     * @return the max y
+     */
     public float getMaxY() {
         return maxY;
     }
 
+    /**
+     * Sets max y.
+     *
+     * @param maxY the max y
+     */
     public void setMaxY(float maxY) {
         this.maxY = maxY;
     }
 
+    /**
+     * Gets max x.
+     *
+     * @return the max x
+     */
     public float getMaxX() {
         return maxX;
     }
 
+    /**
+     * Sets max x.
+     *
+     * @param maxX the max x
+     */
     public void setMaxX(float maxX) {
         this.maxX = maxX;
     }
 
+    /**
+     * Gets cups count.
+     *
+     * @return the cups count
+     */
     public int getCupsCount() {
         return cupsCount;
     }
 
+    /**
+     * Sets cups count.
+     *
+     * @param cupsCount the cups count
+     */
     public void setCupsCount(int cupsCount) {
         this.cupsCount = cupsCount;
     }
 
+    /**
+     * Gets elixir count.
+     *
+     * @return the elixir count
+     */
     public int getElixirCount() {
         return elixirCount;
     }
 
+    /**
+     * Sets elixir count.
+     *
+     * @param elixirCount the elixir count
+     */
     public void setElixirCount(int elixirCount) {
         this.elixirCount = elixirCount;
     }

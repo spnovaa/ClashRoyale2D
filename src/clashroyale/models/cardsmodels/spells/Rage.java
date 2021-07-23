@@ -1,4 +1,5 @@
 package clashroyale.models.cardsmodels.spells;
+
 /**
  * The type Rage.
  */
@@ -8,7 +9,8 @@ public class Rage extends Spells {
     /**
      * Instantiates a new Card.
      *
-     * @param level the level
+     * @param level       the level
+     * @param relatedUser the related user
      */
     public Rage(int level, String relatedUser) {
         super("rage", 3, 5, "/thumbCards/thumbrage.png", relatedUser);
@@ -27,6 +29,11 @@ public class Rage extends Spells {
         super.setPositionY(0);
     }
 
+    /**
+     * Gets duration.
+     *
+     * @return the duration
+     */
     public double getDuration() {
         return duration;
     }

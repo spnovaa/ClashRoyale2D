@@ -9,7 +9,8 @@ public class Fireball extends Spells {
     /**
      * Instantiates a new Card.
      *
-     * @param level the level
+     * @param level       the level
+     * @param relatedUser the related user
      */
     public Fireball(int level, String relatedUser) {
         super("fireball", 4, 2.5, "/thumbCards/thumbfireball.png", relatedUser);
@@ -28,10 +29,20 @@ public class Fireball extends Spells {
         super.setPositionY(0);
     }
 
+    /**
+     * Gets area damage.
+     *
+     * @return the area damage
+     */
     public double getAreaDamage() {
         return areaDamage;
     }
 
+    /**
+     * Sets area damage.
+     *
+     * @param areaDamage the area damage
+     */
     public void setAreaDamage(double areaDamage) {
         this.areaDamage = areaDamage;
     }

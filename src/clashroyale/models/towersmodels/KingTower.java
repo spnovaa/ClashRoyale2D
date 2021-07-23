@@ -1,4 +1,5 @@
 package clashroyale.models.towersmodels;
+
 /**
  * The type King tower.
  */
@@ -6,7 +7,12 @@ public class KingTower extends Tower {
     /**
      * Instantiates a new King tower.
      *
-     * @param level the level
+     * @param level    the level
+     * @param username the username
+     * @param centerX  the center x
+     * @param centerY  the center y
+     * @param radius   the radius
+     * @param title    the title
      */
     public KingTower(int level, String username, float centerX, float centerY, float radius, String title) {
         super(7, 1, username, centerX, centerY, radius, title);

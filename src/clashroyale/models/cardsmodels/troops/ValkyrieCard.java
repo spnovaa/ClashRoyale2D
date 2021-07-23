@@ -11,7 +11,8 @@ public class ValkyrieCard extends TroopsCard {
     /**
      * Instantiates a new Valkyrie card.
      *
-     * @param level the level
+     * @param level       the level
+     * @param relatedUser the related user
      */
     public ValkyrieCard(int level, String relatedUser) {
         super("valkyrie", 4, 1, 1.5, Target.GROUND, Range.MELEE, Speed.MEDIUM,

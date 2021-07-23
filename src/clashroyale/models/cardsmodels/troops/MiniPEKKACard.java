@@ -11,7 +11,8 @@ public class MiniPEKKACard extends TroopsCard {
     /**
      * Instantiates a new Mini pekka card.
      *
-     * @param level the level
+     * @param level       the level
+     * @param relatedUser the related user
      */
     public MiniPEKKACard(int level, String relatedUser) {
         super("miniPEKKA", 4, 1, 1.8, Target.GROUND, Range.MELEE, Speed.FAST,

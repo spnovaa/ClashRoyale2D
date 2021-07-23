@@ -87,19 +87,40 @@ public class GameController extends Application {
     @FXML
     Label time;
 
+    /**
+     * The Bot king.
+     */
     @FXML
     ImageView botKing;
+    /**
+     * The User king.
+     */
     @FXML
     ImageView userKing;
+    /**
+     * The Bot right queen.
+     */
     @FXML
     ImageView botRightQueen;
+    /**
+     * The User right queen.
+     */
     @FXML
     ImageView userRightQueen;
+    /**
+     * The Bot left queen.
+     */
     @FXML
     ImageView botLeftQueen;
+    /**
+     * The User left queen.
+     */
     @FXML
     ImageView userLeftQueen;
     private final static double FRAMES_PER_SECOND = 15.0;
+    /**
+     * The User elixir.
+     */
     @FXML
     Label userElixir;
     @FXML
@@ -110,12 +131,18 @@ public class GameController extends Application {
 
     private Stage stage;
     private UserModel userModel;
+    /**
+     * The Bot elixir.
+     */
     @FXML
     Label botElixir;
     private Scene gameScene;
     private Scene menu;
     private MenuController menuController;
 
+    /**
+     * The Bot max troops.
+     */
     int botMaxTroops = 800;
     private int userMinX;
     private int userMaxX;
@@ -399,6 +426,11 @@ public class GameController extends Application {
         }
     }
 
+    /**
+     * Sets game model.
+     *
+     * @param gameModel the game model
+     */
     public void setGameModel(GameModel gameModel) {
         this.gameModel = gameModel;
     }

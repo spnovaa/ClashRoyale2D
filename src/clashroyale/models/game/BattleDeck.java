@@ -18,6 +18,8 @@ public class BattleDeck {
 
     /**
      * Instantiates a new Battle deck.
+     *
+     * @param level the level
      */
     public BattleDeck(int level) {
         allCards = new ArrayList<>();

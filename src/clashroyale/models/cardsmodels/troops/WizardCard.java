@@ -13,7 +13,8 @@ public class WizardCard extends TroopsCard {
     /**
      * Instantiates a new Wizard card.
      *
-     * @param level the level
+     * @param level       the level
+     * @param relatedUser the related user
      */
     public WizardCard(int level, String relatedUser) {
         super("wizard", 5, 1, 1.7, Target.AIR_GROUND, Range.RANGED5, Speed.MEDIUM,

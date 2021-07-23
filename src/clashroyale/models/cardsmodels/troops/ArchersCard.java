@@ -13,7 +13,8 @@ public class ArchersCard extends TroopsCard {
     /**
      * Instantiates a new Archers card.
      *
-     * @param level the level
+     * @param level       the level
+     * @param relatedUser the related user
      */
     public ArchersCard(int level, String relatedUser) {
         super("archer", 3, 2, 1.2, Target.AIR_GROUND, Range.RANGED5, Speed.MEDIUM,

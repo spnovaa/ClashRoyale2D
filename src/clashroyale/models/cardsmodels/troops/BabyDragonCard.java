@@ -14,7 +14,8 @@ public class BabyDragonCard extends TroopsCard {
     /**
      * Instantiates a new Baby dragon card.
      *
-     * @param level the level
+     * @param level       the level
+     * @param relatedUser the related user
      */
     public BabyDragonCard(int level, String relatedUser) {
         super("babyDragon", 4, 1, 1.8, Target.AIR_GROUND, Range.RANGED3,

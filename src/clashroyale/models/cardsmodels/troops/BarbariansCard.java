@@ -12,7 +12,8 @@ public class BarbariansCard extends TroopsCard {
     /**
      * Instantiates a new Barbarians card.
      *
-     * @param level the level
+     * @param level       the level
+     * @param relatedUser the related user
      */
     public BarbariansCard(int level, String relatedUser) {
         super("barbarian", 5, 4, 1.5, Target.GROUND, Range.MELEE, Speed.MEDIUM,

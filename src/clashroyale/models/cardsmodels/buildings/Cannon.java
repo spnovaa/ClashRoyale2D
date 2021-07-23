@@ -13,7 +13,8 @@ public class Cannon extends Building {
     /**
      * Instantiates a new Cannon.
      *
-     * @param level the level
+     * @param level       the level
+     * @param relatedUser the related user
      */
     public Cannon(int level, String relatedUser) {
         super("cannon", 3, 5.5, 30*15, 0.8, Target.GROUND,

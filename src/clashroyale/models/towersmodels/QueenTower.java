@@ -7,7 +7,12 @@ public class QueenTower extends Tower{
     /**
      * Instantiates a new Queen tower.
      *
-     * @param level the level
+     * @param level    the level
+     * @param username the username
+     * @param centerX  the center x
+     * @param centerY  the center y
+     * @param radius   the radius
+     * @param title    the title
      */
     public QueenTower(int level, String username, float centerX, float centerY, float radius, String title) {
         super(7.5, 0.8, username, centerX, centerY, radius, title);

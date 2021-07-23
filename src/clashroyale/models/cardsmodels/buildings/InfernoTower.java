@@ -12,7 +12,8 @@ public class InfernoTower extends Building {
     /**
      * Instantiates a new Inferno tower.
      *
-     * @param level the level
+     * @param level       the level
+     * @param relatedUser the related user
      */
     public InfernoTower(int level, String relatedUser) {
         super("infernoTower", 5, 6, 40*15, 0.4, Target.AIR_GROUND,
@@ -39,7 +40,7 @@ public class InfernoTower extends Building {
             maxDamage = 532;
         } else if (level == 5) {
             super.setDamage(29);
-            minDamage=29;
+            minDamage = 29;
             super.setHp(1168);
             maxDamage = 584;
         }
@@ -47,10 +48,20 @@ public class InfernoTower extends Building {
         super.setPositionY(0);
     }
 
+    /**
+     * Gets max damage.
+     *
+     * @return the max damage
+     */
     public int getMaxDamage() {
         return maxDamage;
     }
 
+    /**
+     * Gets min damage.
+     *
+     * @return the min damage
+     */
     public int getMinDamage() {
         return minDamage;
     }

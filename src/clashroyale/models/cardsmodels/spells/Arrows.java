@@ -9,7 +9,8 @@ public class Arrows extends Spells {
     /**
      * Instantiates a new Card.
      *
-     * @param level the level
+     * @param level       the level
+     * @param relatedUser the related user
      */
     public Arrows(int level, String relatedUser) {
         super("arrows", 3, 4, "/thumbCards/thumbarrows.png", relatedUser);
@@ -28,6 +29,11 @@ public class Arrows extends Spells {
         super.setPositionY(0);
     }
 
+    /**
+     * Gets area damage.
+     *
+     * @return the area damage
+     */
     public double getAreaDamage() {
         return areaDamage;
     }

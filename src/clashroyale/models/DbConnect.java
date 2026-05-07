@@ -1,43 +1,34 @@
 package clashroyale.models;
 
+import clashroyale.persistence.ConnectionFactory;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * The type Db connect.
+ * Backwards-compatible shim around {@link ConnectionFactory}.
+ *
+ * <p>Existing call sites (e.g. {@code UserModel#getChosenCardsFromDB()})
+ * still construct a {@code DbConnect} and call {@code getConnection()};
+ * this delegates to the modern factory so credentials no longer live
+ * in source and connection setup is in one place.</p>
+ *
+ * @deprecated New code should depend on {@link ConnectionFactory#open()}
+ *             directly inside try-with-resources blocks.
  */
+@Deprecated
 public class DbConnect {
-    private Connection connection;
 
-    /**
-     * Instantiates a new Db connect.
-     */
-    public DbConnect() {
-        connection = null;
-    }
+    private static final Logger LOGGER = Logger.getLogger(DbConnect.class.getName());
 
-    /**
-     * Gets connection.
-     *
-     * @return the connection
-     */
     public Connection getConnection() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        String URL = "jdbc:mysql://localhost:3306/clashroyale2d";
-        String dbUsername = "root";
-        String dbPassword = "";
-        try {
-            connection = DriverManager.getConnection(URL, dbUsername, dbPassword);
+            return ConnectionFactory.open();
         } catch (SQLException e) {
-            e.printStackTrace();
-            connection = null;
+            LOGGER.log(Level.SEVERE, "Failed to open database connection", e);
+            return null;
         }
-        return connection;
     }
 }

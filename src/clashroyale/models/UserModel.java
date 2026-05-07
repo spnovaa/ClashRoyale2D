@@ -1,24 +1,28 @@
 package clashroyale.models;
 
-import clashroyale.models.cardsmodels.buildings.Cannon;
-import clashroyale.models.cardsmodels.spells.Fireball;
-import clashroyale.models.cardsmodels.buildings.InfernoTower;
-import clashroyale.models.cardsmodels.spells.Arrows;
+import clashroyale.constants.GameConstants;
 import clashroyale.models.cardsmodels.spells.Rage;
-import clashroyale.models.cardsmodels.troops.*;
+import clashroyale.models.cardsmodels.troops.Card;
+import clashroyale.models.factory.CardFactory;
 import clashroyale.models.game.BattleDeck;
 import clashroyale.models.game.GameHistory;
+import clashroyale.persistence.ConnectionFactory;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The type User model.
  */
 public class UserModel {
+
+    private static final Logger LOGGER = Logger.getLogger(UserModel.class.getName());
+
     private String id;
     private String username;
     private ArrayList<Card> cards;
@@ -31,60 +35,56 @@ public class UserModel {
     private String botType;
     private int elixirCount;
 
-    /**
-     * Instantiates a new User model.
-     */
     public UserModel() {
         cards = new ArrayList<>();
         chosenCardsList = new ArrayList<>();
-        elixirCount = 4;
+        elixirCount = GameConstants.ELIXIR_INITIAL;
     }
 
     private Card findByTitle(String string) {
+        if (string == null) return null;
         for (Card card : cards) {
             card.setRelatedUser(username);
-            if (card instanceof Rage)
-                System.out.println(card.getTitle() + " level " + ((Rage) card).getDuration());
-            if (card.getTitle().equals(string)) {
+            if (card instanceof Rage rage) {
+                LOGGER.fine(() -> "Rage at level " + rage.getDuration());
+            }
+            if (string.equals(card.getTitle())) {
                 return card;
             }
         }
-        System.out.println("Returned null");
+        LOGGER.fine(() -> "No card matched title '" + string + "'");
         return null;
     }
 
+    /**
+     * Seed this user's collection with one fresh instance of every card,
+     * scaled to their current level. Centralised in {@link CardFactory}.
+     */
     private void addAllCards() {
-        cards.add(new ArchersCard(getLevel(), username));
-        cards.add(new BarbariansCard(getLevel(), username));
-        cards.add(new BabyDragonCard(getLevel(), username));
-        cards.add(new GiantCard(getLevel(), username));
-        cards.add(new MiniPEKKACard(getLevel(), username));
-        cards.add(new ValkyrieCard(getLevel(), username));
-        cards.add(new WizardCard(getLevel(), username));
-        cards.add(new Cannon(getLevel(), username));
-        cards.add(new InfernoTower(getLevel(), username));
-        cards.add(new Fireball(getLevel(), username));
-        cards.add(new Rage(getLevel(), username));
-        cards.add(new Arrows(getLevel(), username));
+        cards.addAll(CardFactory.createAll(getLevel(), username));
     }
 
+    /**
+     * Loads the user's chosen 8-card deck from the database.
+     *
+     * <p>Hardened: parameterised query (no SQL injection), bounded
+     * {@code SELECT}, deterministic resource cleanup.</p>
+     */
     private void getChosenCardsFromDB() {
-        try {
-            Connection con = new DbConnect().getConnection();
-            if (con == null) throw new SQLException("CONNECTION FAILED!");
-            Statement statement = con.createStatement();
-            String query = "SELECT * FROM chosencards WHERE user_id ='" + id + "'";
-            ResultSet resultSet = statement.executeQuery(query);
-            if (resultSet.next()) {
-                for (int i = 1; i < 9; i++) {
-                    Card card = findByTitle(resultSet.getString("card_" + i));
-                    if (card != null) {
-                        chosenCardsList.add(card);
-                    }
+        final String sql = "SELECT card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8 "
+                         + "FROM chosencards WHERE user_id = ?";
+        try (Connection con = ConnectionFactory.open();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (!rs.next()) return;
+                for (int i = 1; i <= GameConstants.DECK_SIZE; i++) {
+                    Card card = findByTitle(rs.getString("card_" + i));
+                    if (card != null) chosenCardsList.add(card);
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed to load chosen cards for user " + id, e);
         }
     }
 

@@ -10,55 +10,54 @@ import javafx.geometry.Point2D;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 /**
- * The type Smart robot.
+ * AI opponent that deploys cards into whichever arena zone currently holds the
+ * most enemy troops.
+ *
+ * <p>Zone layout (top = bot half, bottom = player half):
+ * <pre>
+ *  Z1 (left,  top)   Z2 (right, top)
+ *  Z3 (left,  mid)   Z4 (right, mid)
+ *  [bridge zone — not a deployment target]
+ *  Z5 (left,  low)   Z6 (right, low)
+ *  Z7 (left,  bot)   Z8 (right, bot)
+ * </pre>
+ * Only zones Z1–Z4 are used for enemy-count analysis; Z5–Z8 describe the bot's
+ * own half and are computed from bridge coordinates at runtime.
+ * </p>
  */
 public class SmartRobot extends Robot {
-    private ArrayList<Card> smartBotCards;
-    private GameModel gameModel;
 
-    private int minX1;
-    private int maxX1;
-    private int minY1;
-    private int maxY1;
+    /**
+     * Immutable rectangular zone on the arena.
+     *
+     * <p>Replacing the eight groups of four {@code int} fields (minX1..maxY8)
+     * with a typed record eliminates 32 fields and makes zone iteration trivial.</p>
+     */
+    private record Zone(int minX, int maxX, int minY, int maxY) {
+        boolean contains(float x, float y) {
+            return x > minX && x < maxX && y > minY && y < maxY;
+        }
+        float randomX(Random rng) { return rng.nextFloat() * (maxX - minX) + minX; }
+        float randomY(Random rng) { return rng.nextFloat() * (maxY - minY) + minY; }
+    }
 
+    // ── Enemy-analysis zones (top half of the arena) ──────────────────────────
+    private static final Zone Z1 = new Zone( 25, 183,  35, 133);
+    private static final Zone Z2 = new Zone(183, 340,  35, 133);
+    private static final Zone Z3 = new Zone( 25, 183, 133, 230);
+    private static final Zone Z4 = new Zone(183, 340, 133, 230);
+    private static final List<Zone> ANALYSIS_ZONES = List.of(Z1, Z2, Z3, Z4);
 
-    private int minX2;
-    private int maxX2;
-    private int minY2;
-    private int maxY2;
+    // ── Bot deployment zones (bottom half — computed after setLiveData) ────────
+    private Zone[] deployZones;
 
-    private int minX3;
-    private int maxX3 ;
-    private int minY3;
-    private int maxY3 ;
-
-    private int minX4;
-    private int maxX4 ;
-    private int minY4;
-    private int maxY4;
-
-    private int minX5;
-    private int maxX5 ;
-    private int minY5;
-    private int maxY5;
-
-    private int minX6;
-    private int maxX6;
-    private int minY6;
-    private int maxY6;
-
-    private int minX7 ;
-    private int maxX7;
-    private int minY7;
-    private int maxY7;
-
-    private int minX8;
-    private int maxX8;
-    private int minY8;
-    private int maxY8;
+    private final ArrayList<Card> smartBotCards;
+    private GameModel             gameModel;
+    private final Random          random = new Random();
 
     /**
      * Instantiates a new Smart robot.
@@ -67,180 +66,115 @@ public class SmartRobot extends Robot {
      */
     public SmartRobot(int level) {
         super("smartBot", level);
-        smartBotCards = choosingSmartBotCards();
+        smartBotCards = buildDeck();
     }
 
+    // ── Public API ────────────────────────────────────────────────────────────
+
     /**
-     * Sets live data.
-     *
-     * @param gameModel the game model
+     * Supplies the current arena state so the bot can make informed decisions.
+     * Must be called before {@link #chooseCardToPlay()} and
+     * {@link #chooseCoordinatesToPlay(Card)} each tick.
      */
     public void setLiveData(GameModel gameModel) {
-        this.gameModel = gameModel;
-        initializePosition();
-    }
-
-    private void initializePosition() {
-        minX1 = 25;
-        maxX1 = 183;
-        minY1 = 35;
-        maxY1 = 133;
-
-
-        minX2 = 183;
-        maxX2 = 340;
-        minY2 = 35;
-        maxY2 = 133;
-
-        minX3 = 25;
-        maxX3 = 183;
-        minY3 = 133;
-        maxY3 = (int) (230 - gameModel.getBridgesEndY());
-
-        minX4 = 183;
-        maxX4 = 340;
-        minY4 = 133;
-        maxY4 = (int) (230 - gameModel.getBridgesEndY());
-
-        minX5 = 25;
-        maxX5 = 183;
-        minY5 = (int) (230 + gameModel.getBridgesStartY());
-        maxY5 = 340;
-
-        minX6 = 183;
-        maxX6 = 340;
-        minY6 = (int) (230 + gameModel.getBridgesStartY());
-        maxY6 = 340;
-
-        minX7 = 25;
-        maxX7 = 183;
-        minY7 = 340;
-        maxY7 = 450;
-
-        minX8 = 183;
-        maxX8 = 340;
-        minY8 = 340;
-        maxY8 = 450;
+        this.gameModel  = gameModel;
+        this.deployZones = buildDeployZones(gameModel);
     }
 
     /**
-     * Choosing smart bot cards array list.
+     * Randomly selects a card the bot can currently afford.
      *
-     * @return the array list
-     */
-    public ArrayList<Card> choosingSmartBotCards() {
-        ArrayList<Card> smartBotCards1 = new ArrayList();
-        int troop = 0;
-        int spell = 0;
-        int building = 0;
-        for (Card card : super.getAllCards()) {
-            if (card instanceof Building) {
-                smartBotCards1.add(card);
-            }
-            break;
-        }
-        for (Card card : super.getAllCards()) {
-            if (card instanceof TroopsCard) {
-                smartBotCards1.add(card);
-            }
-            troop++;
-            if (troop == 5) {
-                break;
-            }
-        }
-        for (Card card : super.getAllCards()) {
-            if (card instanceof Spells) {
-                smartBotCards1.add(card);
-            }
-            spell++;
-            if (spell == 2) {
-                break;
-            }
-        }
-        Collections.shuffle(smartBotCards1);
-        return smartBotCards1;
-    }
-
-    /**
-     * Choose card to play card.
-     *
-     * @return the card
+     * @return a playable card, or {@code null} if none can be afforded
      */
     public Card chooseCardToPlay() {
-
-        Card card = smartBotCards.get(new Random().nextInt(8));
-        if (card.getCost() < getElixirCount()) {
-            return card;
-        } else return null;
+        if (smartBotCards.isEmpty()) return null;
+        Card card = smartBotCards.get(random.nextInt(smartBotCards.size()));
+        return card.getCost() < getElixirCount() ? card : null;
     }
 
     /**
-     * Gets random number using next int.
-     *
-     * @param min the min
-     * @param max the max
-     * @return the random number using next int
+     * Returns deployment coordinates for the given card.
+     * Rage spells are placed on top of a friendly troop; other cards are
+     * deployed into the zone with the highest enemy presence.
      */
-    public float getRandomNumberUsingNextInt(float min, float max) {
-        Random random = new Random();
-        return random.nextFloat() * (max - min) + min;
+    public Point2D chooseCoordinatesToPlay(Card card) {
+        if (card instanceof Rage) return rageTarget();
+
+        Zone best = bestZone();
+        return best != null
+                ? new Point2D(best.randomX(random), best.randomY(random))
+                : new Point2D(deployZones[0].randomX(random), deployZones[0].randomY(random));
     }
 
+    // ── Deck building ─────────────────────────────────────────────────────────
+
     /**
-     * Choose coordinates to play point 2 d.
-     *
-     * @param botChosenCard the bot chosen card
-     * @return the point 2 d
+     * Assembles a deck of 1 building + 5 troops + 2 spells and shuffles it.
      */
-    public Point2D chooseCoordinatesToPlay(Card botChosenCard) {
-        int enemy1 = 0;
-        int enemy2 = 0;
-        int enemy3 = 0;
-        int enemy4 = 0;
+    private ArrayList<Card> buildDeck() {
+        ArrayList<Card> deck = new ArrayList<>();
+        int troops   = 0;
+        int spells   = 0;
+        int buildings = 0;
 
-        float deployedY = 0, deployedX = 0;
-        if (botChosenCard instanceof Rage) {
-            for (TroopsCard troopsCard : gameModel.getArenaExistingTroops()) {
-                if (troopsCard.getRelatedUser().equals("smartBot")) {
-                    deployedX = troopsCard.getCenterPositionX() + 1;
-                    deployedY = troopsCard.getCenterPositionY() + 1;
-                }
+        for (Card card : super.getAllCards()) {
+            if (card instanceof Building && buildings < 1) {
+                deck.add(card); buildings++;
+            } else if (card instanceof Spells && spells < 2) {
+                deck.add(card); spells++;
+            } else if (card instanceof TroopsCard && troops < 5) {
+                deck.add(card); troops++;
             }
-        } else {
-
-            for (TroopsCard troopsCard : gameModel.getArenaExistingTroops()) {
-                if (!troopsCard.getRelatedUser().equals("smartBot") && troopsCard.getCenterPositionX() > minX1 && troopsCard.getCenterPositionX() < maxX1 && troopsCard.getCenterPositionY() < maxY1 && troopsCard.getCenterPositionY() > minY1) {
-                    enemy1++;
-                }
-                if (!troopsCard.getRelatedUser().equals("smartBot") && troopsCard.getCenterPositionX() > minX2 && troopsCard.getCenterPositionX() < maxX2 && troopsCard.getCenterPositionY() < maxY2 && troopsCard.getCenterPositionY() > minY2) {
-                    enemy2++;
-                }
-                if (!troopsCard.getRelatedUser().equals("smartBot") && troopsCard.getCenterPositionX() > minX3 && troopsCard.getCenterPositionX() < maxX3 && troopsCard.getCenterPositionY() < maxY3 && troopsCard.getCenterPositionY() > minY3) {
-                    enemy3++;
-                }
-                if (!troopsCard.getRelatedUser().equals("smartBot") && troopsCard.getCenterPositionX() > minX4 && troopsCard.getCenterPositionX() < maxX4 && troopsCard.getCenterPositionY() < maxY4 && troopsCard.getCenterPositionY() > minY4) {
-                    enemy4++;
-                }
-            }
-            int maxEnemy = Math.max(Math.max(enemy1, enemy2), Math.max(enemy3, enemy4));
-            if (enemy1 == maxEnemy) {
-                deployedX = getRandomNumberUsingNextInt(minX1, maxX1);
-                deployedY = getRandomNumberUsingNextInt(minY1, maxY1);
-            } else if (enemy2 == maxEnemy) {
-                deployedX = getRandomNumberUsingNextInt(minX2, maxX2);
-                deployedY = getRandomNumberUsingNextInt(minY2, maxY2);
-            } else if (enemy3 == maxEnemy) {
-                deployedX = getRandomNumberUsingNextInt(minX3, maxX3);
-                deployedY = getRandomNumberUsingNextInt(minY3, maxY3);
-            } else if (enemy4 == maxEnemy) {
-                deployedX = getRandomNumberUsingNextInt(minX4, maxX4);
-                deployedY = getRandomNumberUsingNextInt(minY4, maxY4);
-            }
-
-
+            if (buildings >= 1 && spells >= 2 && troops >= 5) break;
         }
+        Collections.shuffle(deck);
+        return deck;
+    }
 
+    // ── Helpers ───────────────────────────────────────────────────────────────
 
-        return new Point2D(deployedX, deployedY);
+    /** Finds deployment coordinates that land on a friendly troop. */
+    private Point2D rageTarget() {
+        for (TroopsCard troop : gameModel.getArenaExistingTroops()) {
+            if ("smartBot".equals(troop.getRelatedUser())) {
+                return new Point2D(troop.getCenterPositionX() + 1,
+                                   troop.getCenterPositionY() + 1);
+            }
+        }
+        // Fallback: centre of first deploy zone
+        return new Point2D(deployZones[0].randomX(random), deployZones[0].randomY(random));
+    }
+
+    /** Returns the analysis zone with the highest number of enemy troops. */
+    private Zone bestZone() {
+        int[] counts = new int[ANALYSIS_ZONES.size()];
+        for (TroopsCard troop : gameModel.getArenaExistingTroops()) {
+            if ("smartBot".equals(troop.getRelatedUser())) continue;
+            for (int i = 0; i < ANALYSIS_ZONES.size(); i++) {
+                if (ANALYSIS_ZONES.get(i).contains(troop.getCenterPositionX(),
+                                                    troop.getCenterPositionY())) {
+                    counts[i]++;
+                }
+            }
+        }
+        int maxIdx = 0;
+        for (int i = 1; i < counts.length; i++) {
+            if (counts[i] > counts[maxIdx]) maxIdx = i;
+        }
+        return ANALYSIS_ZONES.get(maxIdx);
+    }
+
+    /**
+     * Computes bot deployment zones from the current bridge coordinates.
+     * The bot may only deploy in its own half (below the bridge).
+     */
+    private static Zone[] buildDeployZones(GameModel gm) {
+        int bridgeStart = (int) gm.getBridgesStartY();
+        return new Zone[]{
+            new Zone( 25, 183, bridgeStart,       340),
+            new Zone(183, 340, bridgeStart,       340),
+            new Zone( 25, 183,          340,      450),
+            new Zone(183, 340,          340,      450),
+        };
     }
 }

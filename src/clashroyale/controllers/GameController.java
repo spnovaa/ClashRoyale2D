@@ -1,20 +1,18 @@
 package clashroyale.controllers;
 
-import clashroyale.models.DbConnect;
 import clashroyale.models.GameModel;
 import clashroyale.models.UserModel;
 import clashroyale.models.cardsmodels.buildings.Building;
-import clashroyale.models.cardsmodels.buildings.Cannon;
-import clashroyale.models.cardsmodels.buildings.InfernoTower;
-import clashroyale.models.cardsmodels.spells.Arrows;
-import clashroyale.models.cardsmodels.spells.Fireball;
-import clashroyale.models.cardsmodels.spells.Rage;
 import clashroyale.models.cardsmodels.spells.Spells;
-import clashroyale.models.cardsmodels.troops.*;
+import clashroyale.models.cardsmodels.troops.Card;
+import clashroyale.models.cardsmodels.troops.TroopsCard;
+import clashroyale.models.enums.CardType;
+import clashroyale.models.factory.CardFactory;
 import clashroyale.models.game.Robot;
 import clashroyale.models.game.SimpleRobot;
 import clashroyale.models.game.SmartRobot;
 import clashroyale.models.towersmodels.Tower;
+import clashroyale.persistence.GameHistoryRepository;
 import clashroyale.views.AppAlerts;
 import clashroyale.views.GameView;
 import javafx.application.Application;
@@ -31,11 +29,7 @@ import javafx.stage.Stage;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -44,130 +38,96 @@ import java.util.logging.Logger;
 
 
 /**
- * The type Game controller.
+ * FXML controller for the game scene.
+ *
+ * <p>Responsibilities (intentionally limited):
+ * <ul>
+ *   <li>Wire FXML fields to {@link GameView} on scene setup.</li>
+ *   <li>Run the game timer and dispatch each tick to model + view.</li>
+ *   <li>Translate mouse clicks into card-deploy calls.</li>
+ *   <li>Delegate bot decisions to the bot, history saves to
+ *       {@link GameHistoryRepository}.</li>
+ * </ul>
+ * </p>
  */
 public class GameController extends Application {
-    /**
-     * The Game view.
-     */
-    @FXML
-    GameView gameView;
-    /**
-     * The Anchor pane.
-     */
-    @FXML
-    AnchorPane anchorPane;
-    /**
-     * The Displayed card 1.
-     */
-    @FXML
-    ImageView displayedCard1;
-    /**
-     * The Displayed card 2.
-     */
-    @FXML
-    ImageView displayedCard2;
-    /**
-     * The Displayed card 3.
-     */
-    @FXML
-    ImageView displayedCard3;
-    /**
-     * The Displayed card 4.
-     */
-    @FXML
-    ImageView displayedCard4;
-    /**
-     * The Next card.
-     */
-    @FXML
-    ImageView nextCard;
-    /**
-     * The left time.
-     */
-    @FXML
-    Label time;
 
-    @FXML
-    ImageView botKing;
-    @FXML
-    ImageView userKing;
-    @FXML
-    ImageView botRightQueen;
-    @FXML
-    ImageView userRightQueen;
-    @FXML
-    ImageView botLeftQueen;
-    @FXML
-    ImageView userLeftQueen;
-    private final static double FRAMES_PER_SECOND = 15.0;
-    @FXML
-    Label userElixir;
-    @FXML
-    private Label botCrown1;
+    private static final Logger LOG = Logger.getLogger(GameController.class.getName());
 
-    @FXML
-    private Label playerCrown1;
+    // ── FXML bindings ──────────────────────────────────────────────────────────
+    @FXML GameView    gameView;
+    @FXML AnchorPane  anchorPane;
+    @FXML ImageView   displayedCard1;
+    @FXML ImageView   displayedCard2;
+    @FXML ImageView   displayedCard3;
+    @FXML ImageView   displayedCard4;
+    @FXML ImageView   nextCard;
+    @FXML Label       time;
+    @FXML ImageView   botKing;
+    @FXML ImageView   userKing;
+    @FXML ImageView   botRightQueen;
+    @FXML ImageView   userRightQueen;
+    @FXML ImageView   botLeftQueen;
+    @FXML ImageView   userLeftQueen;
+    @FXML Label       userElixir;
+    @FXML Label       botElixir;
+    @FXML private Label botCrown1;
+    @FXML private Label playerCrown1;
 
-    private Stage stage;
-    private UserModel userModel;
-    @FXML
-    Label botElixir;
-    private Scene gameScene;
-    private Scene menu;
+    // ── Game state ────────────────────────────────────────────────────────────
+    private Stage      stage;
+    private UserModel  userModel;
+    private GameModel  gameModel;
+    private Robot      bot;
+    private Timer      timer;
+    private boolean    isGameRunning;
+    private boolean    isAlertShown;
+
+    // ── Bot deployment state ──────────────────────────────────────────────────
+    private Card    botChosenCard;
+    private Point2D botClickCoordinates;
+    private int     botActFlag;
+    private int     botMaxTroops;
+
+    // ── Player deployment bounds ──────────────────────────────────────────────
+    private static final int USER_MIN_X = 25;
+    private static final int USER_MAX_X = 340;
+    private static final int USER_MIN_Y = 255;
+    private static final int USER_MAX_Y = 450;
+
+    // ── Scene/menu cache ──────────────────────────────────────────────────────
+    private Scene          gameScene;
+    private Scene          menu;
     private MenuController menuController;
 
-    int botMaxTroops = 800;
-    private int userMinX;
-    private int userMaxX;
-    private int userMinY;
-    private int userMaxY;
-    private GameModel gameModel;
-    private Timer timer;
-    private boolean isGameRunning;
-    private Card botChosenCard;
-    private Point2D botClickCoordinates;
+    // ─────────────────────────────────────────────────────────────────────────
 
-    private ArrayList<Tower> arenaTowers;
-    private Robot bot;
-    private int botActFlag;
-    private boolean isAlertShown;
+    public GameController() {
+        isGameRunning = true;
+        isAlertShown  = false;
+        botActFlag    = 0;
+        botMaxTroops  = 800;
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
         this.stage = stage;
     }
 
-    /**
-     * Instantiates a new Game controller.
-     */
-    public GameController() {
-        isGameRunning = true;
-        userMinX = 25;
-        userMaxX = 340;
-        userMinY = 255;
-        userMaxY = 450;
-        arenaTowers = new ArrayList<>();
-        botActFlag = 0;
-        isAlertShown = false;
-    }
+    // ── Setup ─────────────────────────────────────────────────────────────────
+
+    public void setUserModel(UserModel userModel) { this.userModel = userModel; }
+    public void setGameModel(GameModel gameModel) { this.gameModel = gameModel; }
 
     /**
-     * Sets user model.
-     *
-     * @param userModel the user model
-     */
-    public void setUserModel(UserModel userModel) {
-        this.userModel = userModel;
-    }
-
-    /**
-     * Sets game scene.
-     *
-     * @param gameScene the game scene
+     * Wires all FXML nodes to the view, initialises towers, and starts the
+     * game timer. Must be called after both {@code setUserModel} and
+     * {@code setGameModel}.
      */
     public void setGameScene(Scene gameScene) {
         this.gameScene = gameScene;
-        addClickedLocationListener();
+        addClickListener();
+
         gameView = new GameView(userModel);
         gameView.setTextTime(time);
         gameView.setBotCrown(botCrown1);
@@ -177,293 +137,206 @@ public class GameController extends Application {
         gameView.setAnchorPane(anchorPane);
         gameView.instantiateCardsQueImageViews(displayedCard1, displayedCard2, displayedCard3, displayedCard4, nextCard);
         gameView.instantiateTowers(botKing, botLeftQueen, botRightQueen, userKing, userLeftQueen, userRightQueen);
-        arenaTowers = gameModel.getArenaTowers();
-        gameView.setArenaTowers(arenaTowers);
+        gameView.setArenaTowers(gameModel.getArenaTowers());
         gameView.prepareArena();
-        System.out.println(userModel.getLevel());
+
         this.bot = gameModel.getGameBot();
         startTimer();
     }
 
-    /**
-     * Add clicked location listener.
-     */
-    public void addClickedLocationListener() {
+    // ── Card-selection callbacks (called from FXML) ───────────────────────────
+
+    public void setChosenCardIndexOne()   { selectCard(displayedCard1, 1); }
+    public void setChosenCardIndexTwo()   { selectCard(displayedCard2, 2); }
+    public void setChosenCardIndexThree() { selectCard(displayedCard3, 3); }
+    public void setChosenCardIndexFour()  { selectCard(displayedCard4, 4); }
+
+    private void selectCard(ImageView slot, int index) {
+        gameView.setChosenCardIndex(index);
+        userModel.setChosenToDeployCard((Card) slot.getUserData());
+    }
+
+    // ── Mouse listener ────────────────────────────────────────────────────────
+
+    private void addClickListener() {
         gameScene.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                float x = (float) event.getSceneX();
-                float y = (float) event.getSceneY();
-                boolean isCardDeployed = deployClickedAt(x, y);
+                deployUserClickedAt((float) event.getSceneX(), (float) event.getSceneY());
             }
         });
-
     }
 
-    /**
-     * deploy intended card to intended position and change the view
-     *
-     * @param x clicked x
-     * @param y clicked y
-     */
-    private boolean deployClickedAt(float x, float y) {
+    // ── Card deployment ───────────────────────────────────────────────────────
+
+    private void deployUserClickedAt(float x, float y) {
         Card chosen = userModel.getChosenToDeployCard();
-        if (chosen != null) {
-            boolean isInRange = y < userMaxY && y > userMinY && x > userMinX && x < userMaxX
-                    || (chosen instanceof Spells && y < userMaxY);
-            boolean hasElixirs = false;
-            if (chosen != null)
-                hasElixirs = chosen.getCost() <= userModel.getElixirCount();
-            if (chosen != null && isInRange && hasElixirs) {
-                userModel.setElixirCount(userModel.getElixirCount() - chosen.getCost());
-                chosen = generateNewCard(chosen.getTitle(), userModel.getUsername());
-                gameView.deployTroops(x, y, chosen);
-                chosen.setCenterPositionX(x);
-                chosen.setCenterPositionY(y);
-                if (chosen instanceof Spells) {
-                    //add to existing spells
-                    gameModel.spellAction(chosen);
-                    gameModel.getArenaExistingSpellCards().add((Spells) chosen);
-                } else if (chosen instanceof TroopsCard) {
-                    //add to existing troops
-                    gameModel.getArenaExistingTroops().add((TroopsCard) chosen);
-                    System.out.println("Added : " + chosen.getUuid());
-                } else {
-                    //add to existing buildings
-                    gameModel.getArenaExistingBuildings().add((Building) chosen);
-                }
-                return true;
-            } else if (!hasElixirs) {
-                System.out.println("You Have " + userModel.getElixirCount() + " Elixirs and Card Costs " + chosen.getCost());
-                return false;
-            } else {
-                System.out.println("You Can't Deploy Cards There!");
-                return false;
-            }
-        }
-        return false;
+        if (chosen == null) return;
+
+        boolean inBounds   = (y < USER_MAX_Y && y > USER_MIN_Y && x > USER_MIN_X && x < USER_MAX_X)
+                             || (chosen instanceof Spells && y < USER_MAX_Y);
+        boolean hasElixir  = chosen.getCost() <= userModel.getElixirCount();
+
+        if (!inBounds)   { LOG.fine("Deploy rejected: out of bounds"); return; }
+        if (!hasElixir)  { LOG.fine(() -> "Deploy rejected: need " + chosen.getCost() + " have " + userModel.getElixirCount()); return; }
+
+        userModel.setElixirCount(userModel.getElixirCount() - chosen.getCost());
+        Card deployed = spawnCard(chosen.getTitle(), userModel.getUsername());
+        placeCard(x, y, deployed);
     }
 
     private void deployBotClickedAt(float x, float y) {
-//        System.out.println("Bot Clicked At: "+ x + " , "+ y);
-        if (botChosenCard != null && botChosenCard.getCost() <= bot.getElixirCount()) {
-            bot.setElixirCount(bot.getElixirCount() - botChosenCard.getCost());
-            String bot = userModel.getBotType();
-            botChosenCard = generateNewCard(botChosenCard.getTitle(), bot);
-//            System.out.println(botChosenCard.getRelatedUser());
-            gameView.deployTroops(x, y, botChosenCard);
-            botChosenCard.setCenterPositionX(x);
-            botChosenCard.setCenterPositionY(y);
-            if (botChosenCard instanceof Spells) {
-                //add to existing spells
-                gameModel.getArenaExistingSpellCards().add((Spells) botChosenCard);
-                gameModel.spellAction(botChosenCard);
-            } else if (botChosenCard instanceof TroopsCard) {
-                //add to existing troops
-                gameModel.getArenaExistingTroops().add((TroopsCard) botChosenCard);
-            } else {
-                //add to existing buildings
-                gameModel.getArenaExistingBuildings().add((Building) botChosenCard);
-            }
-        } else if (botChosenCard != null) System.out.println("Bot Chose" + botChosenCard.getTitle() + "with " +
-                botChosenCard.getCost() + " cost. but has " + bot.getElixirCount() + " elixirs.");
-        else System.out.println("Bot Card Is Null");
+        if (botChosenCard == null || botChosenCard.getCost() > bot.getElixirCount()) return;
+
+        bot.setElixirCount(bot.getElixirCount() - botChosenCard.getCost());
+        Card deployed = spawnCard(botChosenCard.getTitle(), userModel.getBotType());
+        placeCard(x, y, deployed);
+    }
+
+    /** Creates an image, adds it to the arena, and registers the card with the model. */
+    private void placeCard(float x, float y, Card card) {
+        gameView.deployTroops(x, y, card);
+        card.setCenterPositionX(x);
+        card.setCenterPositionY(y);
+        if (card instanceof Spells s) {
+            gameModel.spellAction(card);
+            gameModel.getArenaExistingSpellCards().add(s);
+        } else if (card instanceof TroopsCard tc) {
+            gameModel.getArenaExistingTroops().add(tc);
+        } else if (card instanceof Building b) {
+            gameModel.getArenaExistingBuildings().add(b);
+        }
     }
 
     /**
-     * Set chosen card index one.
+     * Creates a fresh card instance. Delegates to {@link CardFactory} via the
+     * {@link CardType} enum so there is no switch duplication.
      */
-    public void setChosenCardIndexOne() {
-        gameView.setChosenCardIndex(1);
-        userModel.setChosenToDeployCard((Card) displayedCard1.getUserData());
+    private Card spawnCard(String title, String username) {
+        CardType type = CardType.fromLegacyTitle(title);
+        if (type == null) {
+            LOG.warning(() -> "Unknown card title for spawn: " + title);
+            return null;
+        }
+        return CardFactory.create(type, gameModel.getUserLevel(), username);
     }
 
-    /**
-     * Set chosen card index two.
-     */
-    public void setChosenCardIndexTwo() {
-        gameView.setChosenCardIndex(2);
-        userModel.setChosenToDeployCard((Card) displayedCard2.getUserData());
-    }
+    // ── Game timer ────────────────────────────────────────────────────────────
 
-    /**
-     * Set chosen card index three.
-     */
-    public void setChosenCardIndexThree() {
-        gameView.setChosenCardIndex(3);
-        userModel.setChosenToDeployCard((Card) displayedCard3.getUserData());
-    }
-
-    /**
-     * Set chosen card index four.
-     */
-    public void setChosenCardIndexFour() {
-        gameView.setChosenCardIndex(4);
-        userModel.setChosenToDeployCard((Card) displayedCard4.getUserData());
-    }
-
-
-    /**
-     * Schedules the model to update based on the timer.
-     */
     private void startTimer() {
         this.timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
+        TimerTask task = new TimerTask() {
             public void run() {
                 if (!isGameRunning) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            saveGameHistoryToDB();
-                        }
-                    });
+                    Platform.runLater(() -> saveGameHistory());
                     timer.cancel();
                     timer.purge();
                 }
-                Platform.runLater(new Runnable() {
-                    public void run() {
-                        updateGame();
-                    }
-                });
+                Platform.runLater(() -> updateGame());
             }
         };
-
-        long frameTimeInMilliseconds = (long) (
-                1000.0 / FRAMES_PER_SECOND);
-        this.timer.schedule(timerTask, 0, frameTimeInMilliseconds);
+        this.timer.schedule(task, 0L, 1_000L / 15);
     }
 
     private synchronized void updateGame() {
-        isGameRunning =
-                !(gameModel.getRobotCrown() == 3
+        boolean timeUp = gameView.getLeftTime().getMinutes() == 0
+                      && gameView.getLeftTime().getSeconds() == 0;
+        isGameRunning  = !(gameModel.getRobotCrown() == 3
                         || gameModel.getPlayerCrown() == 3
-                        || (gameView.getLeftTime().getMinutes() == 0 && gameView.getLeftTime().getSeconds() == 0));
-        if (isGameRunning) {
-            gameView.updateTimer();
-            gameView.updateCrown(gameModel.getRobotCrown() + "", gameModel.getPlayerCrown() + "");
-            gameModel.updateElixirs();
-            gameView.updateElixirs(userModel.getElixirCount(), bot.getElixirCount());
-            bot = gameModel.getGameBot();
-            botActFlag++;
-            if (botActFlag % 15 == 0) actBot();
+                        || timeUp);
 
-            gameModel.updateGameModel();
-            ArrayList<TroopsCard> existingTroops = gameModel.getArenaExistingTroops();
-            ArrayList<Tower> existingTowers = gameModel.getArenaExistingTowers();
-            ArrayList<Spells> existingSpells = gameModel.getArenaExistingSpellCards();
-            ArrayList<Building> existingBuildings=gameModel.getArenaExistingBuildings();
-            gameView.updateLivingAssets(existingTroops, existingTowers, existingSpells,existingBuildings);
+        if (isGameRunning) {
+            tickModel();
+            tickView();
         } else if (!isAlertShown) {
-            boolean isUserWinner = gameModel.getPlayerCrown() > gameModel.getRobotCrown();
-            new AppAlerts("Game Finished!", " GGWP!", (isUserWinner ? " You Won And Received 3 Crowns!"
-                    : "Bot Won And You Received " + gameModel.getPlayerCrown() + " Crowns!") + "\n" +
-                    "Press OK To Redirect Menu!").showInformationAlert();
-            isGameRunning = false;
+            showEndAlert();
             isAlertShown = true;
         }
     }
 
+    private void tickModel() {
+        gameModel.updateElixirs();
+        bot = gameModel.getGameBot();
+        botActFlag++;
+        if (botActFlag % 15 == 0) actBot();
+        gameModel.updateGameModel();
+    }
+
+    private void tickView() {
+        gameView.updateTimer();
+        gameView.updateCrown(gameModel.getRobotCrown() + "", gameModel.getPlayerCrown() + "");
+        gameView.updateElixirs(userModel.getElixirCount(), bot.getElixirCount());
+
+        ArrayList<TroopsCard> troops    = gameModel.getArenaExistingTroops();
+        ArrayList<Tower>      towers    = gameModel.getArenaExistingTowers();
+        ArrayList<Spells>     spells    = gameModel.getArenaExistingSpellCards();
+        ArrayList<Building>   buildings = gameModel.getArenaExistingBuildings();
+        gameView.updateLivingAssets(troops, towers, spells, buildings);
+    }
+
+    // ── Bot AI ────────────────────────────────────────────────────────────────
+
     /**
-     * Robot act method
+     * Asks the active bot to choose a card and deployment location, then
+     * deploys it.  The {@code if/else} is now properly exclusive so a
+     * {@code SimpleRobot} can never trigger the {@code SmartRobot} branch.
      */
     private void actBot() {
-        if (bot instanceof SimpleRobot) {
-            botChosenCard = ((SimpleRobot) bot).chooseCardToPlay();
-            botClickCoordinates = ((SimpleRobot) bot).chooseCoordinatesToPlay();
-        } else
-            System.out.println("SmartBot Is Not Implemented Yet");
-        ((SmartRobot)bot).setLiveData(gameModel);
-        botChosenCard = ((SmartRobot) bot).chooseCardToPlay();
-        if (botChosenCard!=null){
-            botClickCoordinates = ((SmartRobot) bot).chooseCoordinatesToPlay(botChosenCard);
+        if (bot instanceof SmartRobot smart) {
+            smart.setLiveData(gameModel);
+            botChosenCard = smart.chooseCardToPlay();
+            if (botChosenCard != null) {
+                botClickCoordinates = smart.chooseCoordinatesToPlay(botChosenCard);
+            }
+        } else if (bot instanceof SimpleRobot simple) {
+            botChosenCard       = simple.chooseCardToPlay();
+            botClickCoordinates = simple.chooseCoordinatesToPlay();
         }
-//        System.out.println("Bot Chose: " + botChosenCard.getTitle() + " at " + botClickCoordinates.getX()+" : "+ botClickCoordinates.getY());
-        if (botMaxTroops > 0) {
+
+        if (botMaxTroops > 0 && botClickCoordinates != null) {
             deployBotClickedAt((float) botClickCoordinates.getX(), (float) botClickCoordinates.getY());
             botMaxTroops--;
         }
     }
 
-    public void setGameModel(GameModel gameModel) {
-        this.gameModel = gameModel;
+    // ── End-of-game ───────────────────────────────────────────────────────────
+
+    private void showEndAlert() {
+        boolean won = gameModel.getPlayerCrown() > gameModel.getRobotCrown();
+        String  msg = won
+                ? " You Won And Received 3 Crowns!"
+                : "Bot Won And You Received " + gameModel.getPlayerCrown() + " Crowns!";
+        new AppAlerts("Game Finished!", " GGWP!", msg + "\nPress OK To Redirect Menu!")
+                .showInformationAlert();
+        isGameRunning = false;
     }
 
-    private Card generateNewCard(String title, String username) {
-        Card card;
-        int level = gameModel.getUserLevel();
-        switch (title) {
-            case "cannon" -> card = new Cannon(level, username);
-            case "infernoTower" -> card = new InfernoTower(level, username);
-            case "arrows" -> card = new Arrows(level, username);
-            case "fireball" -> card = new Fireball(level, username);
-            case "rage" -> card = new Rage(level, username);
-            case "archer" -> card = new ArchersCard(level, username);
-            case "babyDragon" -> card = new BabyDragonCard(level, username);
-            case "barbarian" -> card = new BarbariansCard(level, username);
-            case "giant" -> card = new GiantCard(level, username);
-            case "miniPEKKA" -> card = new MiniPEKKACard(level, username);
-            case "valkyrie" -> card = new ValkyrieCard(level, username);
-            case "wizard" -> card = new WizardCard(level, username);
-            default -> card = null;
-        }
-        return card;
-    }
-
-    private void saveGameHistoryToDB() {
-        int leftSeconds = gameView.getLeftTime().getMinutes() * 60 + gameView.getLeftTime().getSeconds();
-        int durationSeconds = 180 - leftSeconds;
-        String duration = (durationSeconds / 60) + " : " + durationSeconds % 60;
-        System.out.println("Game Duration : " + duration);
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        String date = dtf.format(now);
+    private void saveGameHistory() {
         try {
-            Connection con = new DbConnect().getConnection();
-            if (con == null) throw new SQLException("CONNECTION FAILED");
-
-            String insertion =
-                    "INSERT INTO history(user_id,opponent,user_crowns,opponent_crowns,user_damage,opponent_damage,duration,game_time)" +
-                            " VALUES (?,?,?,?,?,?,?,?)";
-            PreparedStatement st = con.prepareStatement(insertion);
-            st.setInt(1, Integer.parseInt(userModel.getId()));
-            st.setString(2, bot.getUsername());
-            st.setInt(3, gameModel.getPlayerCrown());
-            st.setInt(4, gameModel.getRobotCrown());
-            st.setInt(5, gameModel.getPlayerLostHP());
-            st.setInt(6, gameModel.getBotLostHP());
-            st.setString(7, duration);
-            st.setString(8, date);
-            st.executeUpdate();
+            new GameHistoryRepository().save(userModel, bot, gameModel, gameView.getLeftTime());
             goToMenu();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.log(Level.SEVERE, "Failed to save game history", e);
             new AppAlerts("ERROR!", null, "An Error Occurred While saving To Database!")
                     .showInformationAlert();
         }
-
-
     }
-
 
     private void goToMenu() {
         if (menu == null) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/Menu.fxml"));
-                Parent menuRoot = loader.load();
+                Parent root = loader.load();
                 menuController = loader.getController();
                 menuController.setUserModel(userModel);
                 menuController.start(stage);
-
-                menu = new Scene(menuRoot);
-
-            } catch (Exception exception) {
-                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, exception);
-                exception.printStackTrace();
+                menu = new Scene(root);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "Failed to load menu scene", e);
             }
         }
         stage.setHeight(538);
         stage.setWidth(320);
         stage.setScene(menu);
     }
-
 }

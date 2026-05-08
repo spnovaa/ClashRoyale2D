@@ -12,8 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -22,39 +20,44 @@ import java.util.Stack;
 
 
 /**
- * The type Game view.
+ * Renders the game arena and card queue on the JavaFX scene graph.
+ *
+ * <p>Responsibilities:
+ * <ul>
+ *   <li>Display the player's card hand and cycle cards after deployment.</li>
+ *   <li>Add / remove / reposition {@link ImageView}s for every live entity.</li>
+ *   <li>Update HUD labels (timer, crowns, elixir).</li>
+ * </ul>
+ * </p>
+ *
+ * <p>The two formerly-duplicate {@code deployBotClick} / {@code deployUserClick}
+ * methods have been merged into a single {@link #deployCard} helper.
+ * Image look-up and layout are each handled by a dedicated private method so
+ * they can be changed independently.</p>
  */
 public class GameView extends Group {
 
-    //---------------------------------------------------------------------------------------------------------
-    //---------------------------------------------------------------------------------------------------------
-    //------------------------------------------Global Variables-----------------------------------------------
-    //---------------------------------------------------------------------------------------------------------
-    //---------------------------------------------------------------------------------------------------------
+    // ── Constants ─────────────────────────────────────────────────────────────
+    private static final int TROOPS_SIZE = 60;
 
-    /**
-     * The Troops size.
-     */
-    final int TROOPS_SIZE = 60;
-    /**
-     * The User model.
-     */
-    UserModel userModel;
-    /**
-     * The Cards que.
-     */
-    Queue<Card> cardsQue;
+    // ── Model reference ───────────────────────────────────────────────────────
+    private final UserModel userModel;
+
+    // ── HUD labels ────────────────────────────────────────────────────────────
     private Label textTime;
     private Label botCrown;
     private Label playerCrown;
     private Label userElixir;
     private Label botElixir;
-    private AnchorPane anchorPane;
+
+    // ── Card-queue image views ────────────────────────────────────────────────
     private ImageView displayedCard1;
     private ImageView displayedCard2;
     private ImageView displayedCard3;
     private ImageView displayedCard4;
+    private ImageView nextCard;
 
+    // ── Tower image views ─────────────────────────────────────────────────────
     private ImageView botKing;
     private ImageView botLeftQueen;
     private ImageView botRightQueen;
@@ -62,497 +65,318 @@ public class GameView extends Group {
     private ImageView userLeftQueen;
     private ImageView userRightQueen;
 
-    private ImageView nextCard;
-    private int flag;
-    private int chosenCardIndex;
-    private LeftTime leftTime;
+    // ── Arena state ───────────────────────────────────────────────────────────
+    private AnchorPane         anchorPane;
+    private Queue<Card>        cardsQue;
     private ArrayList<ImageView> battleCards;
-    private ArrayList<Tower> arenaTowers;
+    private ArrayList<Tower>   arenaTowers;
 
-    //---------------------------------------------------------------------------------------------------------
-    //---------------------------------------------------------------------------------------------------------
-    //------------------------------------Constructor And Initializations--------------------------------------
-    //---------------------------------------------------------------------------------------------------------
-    //---------------------------------------------------------------------------------------------------------
+    // ── Misc ──────────────────────────────────────────────────────────────────
+    private LeftTime leftTime;
+    private int      timerFrames;
+    private int      chosenCardIndex;
 
-    /**
-     * Instantiates a new Game view.
-     *
-     * @param userModel the user model
-     */
+    // ─────────────────────────────────────────────────────────────────────────
+
     public GameView(UserModel userModel) {
-        this.userModel = userModel;
-        leftTime = new LeftTime();
-        battleCards = new ArrayList<>();
+        this.userModel   = userModel;
+        this.leftTime    = new LeftTime();
+        this.battleCards = new ArrayList<>();
     }
 
-    /**
-     * Instantiate cards que image views.
-     *
-     * @param displayedCard1 the displayed card 1
-     * @param displayedCard2 the displayed card 2
-     * @param displayedCard3 the displayed card 3
-     * @param displayedCard4 the displayed card 4
-     * @param nextCard       the next card
-     */
-    public void instantiateCardsQueImageViews(ImageView displayedCard1, ImageView displayedCard2, ImageView displayedCard3,
-                                              ImageView displayedCard4, ImageView nextCard) {
-        this.displayedCard1 = displayedCard1;
-        this.displayedCard2 = displayedCard2;
-        this.displayedCard3 = displayedCard3;
-        this.displayedCard4 = displayedCard4;
-        this.nextCard = nextCard;
+    // ── Setup / wiring ────────────────────────────────────────────────────────
 
+    public void instantiateCardsQueImageViews(ImageView card1, ImageView card2,
+                                              ImageView card3, ImageView card4,
+                                              ImageView next) {
+        this.displayedCard1 = card1;
+        this.displayedCard2 = card2;
+        this.displayedCard3 = card3;
+        this.displayedCard4 = card4;
+        this.nextCard       = next;
     }
 
     public void instantiateTowers(ImageView botKing, ImageView botLeftQueen, ImageView botRightQueen,
                                   ImageView userKing, ImageView userLeftQueen, ImageView userRightQueen) {
-        arenaTowers = new ArrayList<>();
-        this.botKing = botKing;
+        this.botKing      = botKing;
         this.botLeftQueen = botLeftQueen;
-        this.botRightQueen = botRightQueen;
-        this.userKing = userKing;
-        this.userLeftQueen = userLeftQueen;
-        this.userRightQueen = userRightQueen;
+        this.botRightQueen= botRightQueen;
+        this.userKing     = userKing;
+        this.userLeftQueen= userLeftQueen;
+        this.userRightQueen=userRightQueen;
+        this.arenaTowers  = new ArrayList<>();
     }
 
-    /**
-     * Sets anchor pane.
-     *
-     * @param anchorPane the anchor pane
-     */
-    public void setAnchorPane(AnchorPane anchorPane) {
-        this.anchorPane = anchorPane;
-    }
+    public void setAnchorPane(AnchorPane anchorPane) { this.anchorPane = anchorPane; }
 
-    /**
-     * Prepare arena.
-     */
+    /** Populates the initial 4-card hand and the "next" slot from the deck. */
     public void prepareArena() {
         cardsQue = new LinkedList<>(userModel.getChosenCardsList());
-        Image[] initialCardsImages = new Image[5];
-        for (int i = 0; i < 4; i++) {
+
+        ImageView[] slots = {displayedCard1, displayedCard2, displayedCard3, displayedCard4};
+        for (ImageView slot : slots) {
             Card card = cardsQue.poll();
             if (card != null) {
-                Image cardImage = getCardImageByTitle(card.getTitle());
-                initialCardsImages[i] = cardImage;
-                switch (i) {
-                    case 0 -> displayedCard1.setUserData(card);
-                    case 1 -> displayedCard2.setUserData(card);
-                    case 2 -> displayedCard3.setUserData(card);
-                    case 3 -> displayedCard4.setUserData(card);
-                }
+                slot.setImage(cardQueueImage(card.getTitle()));
+                slot.setUserData(card);
             }
         }
-        Card card = cardsQue.poll();
-        if (card != null) {
-            Image cardImage = getCardImageByTitle(card.getTitle());
-            initialCardsImages[4] = cardImage;
-            nextCard.setUserData(card);
+        Card next = cardsQue.poll();
+        if (next != null) {
+            nextCard.setImage(cardQueueImage(next.getTitle()));
+            nextCard.setUserData(next);
         }
-        setInitialImages(initialCardsImages);
+    }
+
+    // ── Card deployment ───────────────────────────────────────────────────────
+
+    /**
+     * Adds an {@link ImageView} for the deployed card to the arena.
+     * User deployments additionally rotate the card queue.
+     */
+    public void deployTroops(float x, float y, Card card) {
+        boolean isUser = !card.getRelatedUser().equals("simpleBot")
+                      && !card.getRelatedUser().equals("smartBot");
+        deployCard(x, y, card, isUser);
+    }
+
+    private void deployCard(float x, float y, Card card, boolean isUser) {
+        Image     image = unitImage(card.getTitle(), isUser);
+        ImageView iv    = new ImageView(image);
+        applyLayout(iv, card.getTitle(), x, y, isUser);
+        iv.setUserData(card);
+        anchorPane.getChildren().add(iv);
+        battleCards.add(iv);
+        if (isUser) rotateCardQueue();
+    }
+
+    // ── Image loading ─────────────────────────────────────────────────────────
+
+    /**
+     * Returns the unit sprite for a card.
+     * Troops show a different animation frame depending on which side deployed them.
+     */
+    private Image unitImage(String title, boolean isUser) {
+        String path = switch (title) {
+            case "cannon"       -> "chr/cannon/cannon1.png";
+            case "infernoTower" -> "chr/inferno/building_inferno_tower_sprite_2.png";
+            case "arrows"       -> "Ski_trail_rating_symbol_red_circle.png";
+            case "fireball"     -> "png-transparent-computer-icons-circle-circle-orange-sphere-desktop-wallpaper-thumbnail.png";
+            case "rage"         -> "Pan_Blue_Circle.png";
+            case "archer"       -> isUser ? "chr/archer/chr_archer_sprite_069.png"
+                                          : "chr/archer/chr_archer_sprite_000.png";
+            case "babyDragon"   -> isUser ? "chr/babydragon/chr_baby_dragon_sprite_111.png"
+                                          : "chr/babydragon/chr_baby_dragon_sprite_003.png";
+            case "barbarian"    -> isUser ? "chr/barbarian/chr_barbarian_sprite_0251.png"
+                                          : "chr/barbarian/chr_barbarian_sprite_0252.png";
+            case "giant"        -> isUser ? "chr/giant/chr_giant_sprite_134.png"
+                                          : "chr/giant/chr_giant_sprite_000.png";
+            case "miniPEKKA"    -> isUser ? "chr/minipekka/chr_mini_pekka_sprite_104.png"
+                                          : "chr/minipekka/chr_mini_pekka_sprite_002.png";
+            case "valkyrie"     -> isUser ? "chr/valkyrie/chr_valkyrie_sprite_060.png"
+                                          : "chr/valkyrie/chr_valkyrie_sprite_004.png";
+            case "wizard"       -> isUser ? "chr/wizard/chr_wizard_sprite_070.png"
+                                          : "chr/wizard/chr_wizard_sprite_004.png";
+            default             -> "ui/0.png";
+        };
+        return new Image(getClass().getResourceAsStream("../resources/" + path));
     }
 
     /**
-     * initializes starting cards images for player
-     *
-     * @param initialCardsImages images to set
+     * Returns the thumbnail image shown in the card-queue HUD slots.
      */
-    private void setInitialImages(Image[] initialCardsImages) {
-        displayedCard1.setImage(initialCardsImages[0]);
-        displayedCard2.setImage(initialCardsImages[1]);
-        displayedCard3.setImage(initialCardsImages[2]);
-        displayedCard4.setImage(initialCardsImages[3]);
-        nextCard.setImage(initialCardsImages[4]);
+    private Image cardQueueImage(String title) {
+        String path = switch (title) {
+            case "cannon"       -> "cardsWithLabel/cannon.png";
+            case "infernoTower" -> "cardsWithLabel/inferno-tower.png";
+            case "arrows"       -> "cardsWithLabel/arrows.png";
+            case "fireball"     -> "thumbCards/thumbfireball.png";
+            case "rage"         -> "cardsWithLabel/rage.png";
+            case "archer"       -> "cardsWithLabel/archers.png";
+            case "babyDragon"   -> "cardsWithLabel/baby-dragon.png";
+            case "barbarian"    -> "cardsWithLabel/barbarians.png";
+            case "giant"        -> "cardsWithLabel/giant.png";
+            case "miniPEKKA"    -> "cardsWithLabel/mini-pekka.png";
+            case "valkyrie"     -> "cardsWithLabel/valkyrie.png";
+            case "wizard"       -> "cardsWithLabel/wizard.png";
+            default             -> null;
+        };
+        return path != null ? new Image(getClass().getResourceAsStream("../resources/" + path)) : null;
     }
 
-
-    //---------------------------------------------------------------------------------------------------------
-    //---------------------------------------------------------------------------------------------------------
-    //-----------------------------------------View Main Methods-----------------------------------------------
-    //---------------------------------------------------------------------------------------------------------
-    //---------------------------------------------------------------------------------------------------------
+    // ── Layout sizing ─────────────────────────────────────────────────────────
 
     /**
-     * Deploy troops.
-     *
-     * @param x                  the x
-     * @param y                  the y
-     * @param chosenToDeployCard the chosen to deploy card
+     * Positions and sizes an {@link ImageView} according to card type.
+     * Bot buildings are rendered at half size to give visual distinction.
      */
-    public void deployTroops(float x, float y, Card chosenToDeployCard) {
-        String user = chosenToDeployCard.getRelatedUser();
-        if (!user.equals("simpleBot") && !user.equals("SmartBot"))
-            deployUserClick(x, y, chosenToDeployCard);
-//            System.out.println(user+ "Not Equal Condition");
-        else {
-            deployBotClick(x, y, chosenToDeployCard);
-        }
-    }
-
-    private void deployBotClick(float x, float y, Card chosenToDeployCard) {
-        ImageView imageView;
-        String title = chosenToDeployCard.getTitle();
-        Image image;
-        switch (title) {
-            case "cannon" -> image = new Image(getClass().getResourceAsStream("../resources/chr/cannon/cannon1.png"));
-            case "infernoTower" -> image = new Image(getClass().getResourceAsStream("../resources/chr/inferno" +
-                    "/building_inferno_tower_sprite_2.png"));
-            case "arrows" -> image = new Image(getClass().getResourceAsStream("../resources/Ski_trail_rating_symbol_red_circle.png"));
-            case "fireball" -> image = new Image(getClass().getResourceAsStream("../resources/png-transparent-computer-icons-circle-circle-orange-sphere-desktop-wallpaper-thumbnail.png"));
-            case "rage" -> image = new Image(getClass().getResourceAsStream("../resources/Pan_Blue_Circle.png"));
-            case "archer" -> image = new Image(getClass().getResourceAsStream("../resources/chr/archer/chr_archer_sprite_000.png"));
-            case "babyDragon" -> image = new Image(getClass().getResourceAsStream("../resources/chr/babydragon/chr_baby_dragon_sprite_003.png"));
-            case "barbarian" -> image = new Image(getClass().getResourceAsStream("../resources/chr/barbarian/chr_barbarian_sprite_0252.png"));
-            case "giant" -> image = new Image(getClass().getResourceAsStream("../resources/chr/giant/chr_giant_sprite_000.png"));
-            case "miniPEKKA" -> image = new Image(getClass().getResourceAsStream("../resources/chr/minipekka/chr_mini_pekka_sprite_002.png"));
-            case "valkyrie" -> image = new Image(getClass().getResourceAsStream("../resources/chr/valkyrie/chr_valkyrie_sprite_004.png"));
-            case "wizard" -> image = new Image(getClass().getResourceAsStream("../resources/chr/wizard/chr_wizard_sprite_004.png"));
-            default -> image = new Image(getClass().getResourceAsStream("../resources/ui/0.png"));
-        }
-        imageView = new ImageView(image);
+    private void applyLayout(ImageView iv, String title, float x, float y, boolean isUser) {
         switch (title) {
             case "rage" -> {
-                imageView.setOpacity(0.3);
-                imageView.setX(x - (float) 50 / 2);
-                imageView.setY(y - (float) 50 / 2);
-                imageView.setFitWidth(50);
-                imageView.setFitHeight(50);
-                imageView.setUserData(chosenToDeployCard);
+                iv.setOpacity(0.3);
+                iv.setX(x - 25); iv.setY(y - 25);
+                iv.setFitWidth(50); iv.setFitHeight(50);
             }
             case "fireball" -> {
-                imageView.setOpacity(0.3);
-                imageView.setX(x - (float) 25 / 2);
-                imageView.setY(y - (float) 25 / 2);
-                imageView.setFitWidth(25);
-                imageView.setFitHeight(25);
-                imageView.setUserData(chosenToDeployCard);
+                iv.setOpacity(0.3);
+                iv.setX(x - 12.5f); iv.setY(y - 12.5f);
+                iv.setFitWidth(25); iv.setFitHeight(25);
             }
             case "arrows" -> {
-                imageView.setOpacity(0.3);
-                imageView.setX(x - (float) 40 / 2);
-                imageView.setY(y - (float) 40 / 2);
-                imageView.setFitWidth(40);
-                imageView.setFitHeight(40);
-                imageView.setUserData(chosenToDeployCard);
+                iv.setOpacity(0.3);
+                iv.setX(x - 20); iv.setY(y - 20);
+                iv.setFitWidth(40); iv.setFitHeight(40);
             }
-            case "cannon", "infernoTower" ->{ imageView.setX(x - (float) TROOPS_SIZE / 4);
-                imageView.setY(y - (float) TROOPS_SIZE / 4);
-                imageView.setFitWidth(TROOPS_SIZE/2);
-                imageView.setFitHeight(TROOPS_SIZE/2);}
-
-
-            default -> {
-                imageView.setX(x - (float) TROOPS_SIZE / 2);
-                imageView.setY(y - (float) TROOPS_SIZE / 2);
-                imageView.setFitWidth(TROOPS_SIZE);
-                imageView.setFitHeight(TROOPS_SIZE);
-            }
-        }
-        imageView.setUserData(chosenToDeployCard);
-        anchorPane.getChildren().add(imageView);
-        battleCards.add(imageView);
-    }
-
-    private void deployUserClick(float x, float y, Card chosenToDeployCard) {
-        ImageView imageView;
-        Image image;
-        String title = chosenToDeployCard.getTitle();
-        switch (title) {
-            case "cannon" -> image = new Image(getClass().getResourceAsStream("../resources/chr/cannon/cannon1.png"));
-            case "infernoTower" -> image = new Image(getClass().getResourceAsStream("../resources/chr/inferno" +
-                    "/building_inferno_tower_sprite_2.png"));
-            case "arrows" -> image = new Image(getClass().getResourceAsStream("../resources/Ski_trail_rating_symbol_red_circle.png"));
-            case "fireball" -> image = new Image(getClass().getResourceAsStream("../resources/png-transparent-computer-icons-circle-circle-orange-sphere-desktop-wallpaper-thumbnail.png"));
-            case "rage" -> image = new Image(getClass().getResourceAsStream("../resources/Pan_Blue_Circle.png"));
-            case "archer" -> image = new Image(getClass().getResourceAsStream("../resources/chr/archer/chr_archer_sprite_069.png"));
-            case "babyDragon" -> image = new Image(getClass().getResourceAsStream("../resources/chr/babydragon/chr_baby_dragon_sprite_111.png"));
-            case "barbarian" -> image = new Image(getClass().getResourceAsStream("../resources/chr/barbarian/chr_barbarian_sprite_0251.png"));
-            case "giant" -> image = new Image(getClass().getResourceAsStream("../resources/chr/giant/chr_giant_sprite_134.png"));
-            case "miniPEKKA" -> image = new Image(getClass().getResourceAsStream("../resources/chr/minipekka/chr_mini_pekka_sprite_104.png"));
-            case "valkyrie" -> image = new Image(getClass().getResourceAsStream("../resources/chr/valkyrie/chr_valkyrie_sprite_060.png"));
-            case "wizard" -> image = new Image(getClass().getResourceAsStream("../resources/chr/wizard/chr_wizard_sprite_070.png"));
-            default -> image = new Image(getClass().getResourceAsStream("../resources/ui/0.png"));
-        }
-        imageView = new ImageView(image);
-        switch (title) {
-            case "rage" -> {
-                imageView.setOpacity(0.3);
-                imageView.setX(x - (float) 50 / 2);
-                imageView.setY(y - (float) 50 / 2);
-                imageView.setFitWidth(50);
-                imageView.setFitHeight(50);
-                imageView.setUserData(chosenToDeployCard);
-            }
-            case "fireball" -> {
-                imageView.setOpacity(0.3);
-                imageView.setX(x - (float) 25 / 2);
-                imageView.setY(y - (float) 25 / 2);
-                imageView.setFitWidth(25);
-                imageView.setFitHeight(25);
-                imageView.setUserData(chosenToDeployCard);
-            }
-            case "arrows" -> {
-                imageView.setOpacity(0.3);
-                imageView.setX(x - (float) 40 / 2);
-                imageView.setY(y - (float) 40 / 2);
-                imageView.setFitWidth(40);
-                imageView.setFitHeight(40);
-                imageView.setUserData(chosenToDeployCard);
+            case "cannon", "infernoTower" -> {
+                // Bot buildings rendered at half scale
+                float scale = isUser ? 0.5f : 0.25f;
+                float size  = TROOPS_SIZE * scale;
+                iv.setX(x - size / 2); iv.setY(y - size / 2);
+                iv.setFitWidth(size);  iv.setFitHeight(size);
             }
             default -> {
-                imageView.setX(x - (float) TROOPS_SIZE / 2);
-                imageView.setY(y - (float) TROOPS_SIZE / 2);
-                imageView.setFitWidth(TROOPS_SIZE);
-                imageView.setFitHeight(TROOPS_SIZE);
+                iv.setX(x - (float) TROOPS_SIZE / 2);
+                iv.setY(y - (float) TROOPS_SIZE / 2);
+                iv.setFitWidth(TROOPS_SIZE);
+                iv.setFitHeight(TROOPS_SIZE);
             }
         }
-        imageView.setUserData(chosenToDeployCard);
-        anchorPane.getChildren().add(imageView);
-        battleCards.add(imageView);
-        replaceDeployedCardWithNext();
     }
 
-    /**
-     * switches cards after deployment with next card.
-     */
-    private void replaceDeployedCardWithNext() {
+    // ── Card-queue rotation ───────────────────────────────────────────────────
 
-        String title1 = ((Card) displayedCard1.getUserData()).getTitle();
-        String title2 = ((Card) displayedCard2.getUserData()).getTitle();
-        String title3 = ((Card) displayedCard3.getUserData()).getTitle();
-        String title4 = ((Card) displayedCard4.getUserData()).getTitle();
-        String nextTitle = ((Card) nextCard.getUserData()).getTitle();
+    /** Replaces the deployed card's slot with the "next" card and pulls a new next from the queue. */
+    private void rotateCardQueue() {
+        Card deployed = userModel.getChosenToDeployCard();
+        if (deployed == null) return;
 
-        if (userModel.getChosenToDeployCard().getTitle().equals(title1)) {
-            displayedCard1.setImage(getCardImageByTitle(nextTitle));
-            displayedCard1.setUserData(nextCard.getUserData());
-        } else if (userModel.getChosenToDeployCard().getTitle().equals(title2)) {
-            displayedCard2.setImage(getCardImageByTitle(nextTitle));
-            displayedCard2.setUserData(nextCard.getUserData());
-        } else if (userModel.getChosenToDeployCard().getTitle().equals(title3)) {
-            displayedCard3.setImage(getCardImageByTitle(nextTitle));
-            displayedCard3.setUserData(nextCard.getUserData());
-        } else if (userModel.getChosenToDeployCard().getTitle().equals(title4)) {
-            displayedCard4.setImage(getCardImageByTitle(nextTitle));
-            displayedCard4.setUserData(nextCard.getUserData());
-        } else {
-            System.out.println("Unable To Recon Chosen Card");
+        ImageView[] slots = {displayedCard1, displayedCard2, displayedCard3, displayedCard4};
+        for (ImageView slot : slots) {
+            Card slotCard = (Card) slot.getUserData();
+            if (slotCard != null && slotCard.getTitle().equals(deployed.getTitle())) {
+                slot.setImage(cardQueueImage(((Card) nextCard.getUserData()).getTitle()));
+                slot.setUserData(nextCard.getUserData());
+                break;
+            }
         }
 
-        Card newNextCard = cardsQue.poll();
-        if (newNextCard != null) {
-            nextCard.setUserData(newNextCard);
-            nextCard.setImage(getCardImageByTitle(newNextCard.getTitle()));
-            cardsQue.add(userModel.getChosenToDeployCard());
-            userModel.setChosenToDeployCard(null);
-        } else {
-            System.out.println("Unable To Recon Next Card");
+        Card newNext = cardsQue.poll();
+        if (newNext != null) {
+            nextCard.setUserData(newNext);
+            nextCard.setImage(cardQueueImage(newNext.getTitle()));
+            cardsQue.add(deployed);
         }
-
+        userModel.setChosenToDeployCard(null);
     }
 
+    // ── Per-tick HUD updates ──────────────────────────────────────────────────
 
     public void updateTimer() {
-        flag++;
-        if (flag % 15 == 0) {
-            int minutes = leftTime.getMinutes();
-            int seconds = leftTime.getSeconds();
-            if (!(minutes == 0 && seconds == 0)) {
+        timerFrames++;
+        if (timerFrames % 15 == 0) {
+            if (!(leftTime.getMinutes() == 0 && leftTime.getSeconds() == 0)) {
                 leftTime.decrease();
             }
         }
-
-        String time1;
-        if (leftTime.getSeconds() < 10) {
-            time1 = leftTime.getMinutes() + ":0" + leftTime.getSeconds();
-        } else {
-            time1 = leftTime.getMinutes() + ":" + leftTime.getSeconds();
-        }
-        textTime.setText(time1);
-
+        String display = leftTime.getMinutes() + (leftTime.getSeconds() < 10 ? ":0" : ":") + leftTime.getSeconds();
+        textTime.setText(display);
     }
 
-    public void updateElixirs(int userElixirCount, int botElixirCount) {
-        userElixir.setText(Integer.toString(userElixirCount));
-        botElixir.setText(Integer.toString(botElixirCount));
+    public void updateElixirs(int userCount, int botCount) {
+        userElixir.setText(Integer.toString(userCount));
+        botElixir.setText(Integer.toString(botCount));
     }
 
-    public void updateLivingAssets(ArrayList<TroopsCard> existingTroops, ArrayList<Tower> existingTowers, ArrayList<Spells> existingSpells,ArrayList<Building> existingBuilding) {
+    public void updateCrown(String botCrownText, String playerCrownText) {
+        botCrown.setText(botCrownText);
+        playerCrown.setText(playerCrownText);
+    }
+
+    /**
+     * Repositions live-entity images and clears images for dead entities /
+     * towers.
+     */
+    public void updateLivingAssets(ArrayList<TroopsCard> troops,
+                                   ArrayList<Tower>      towers,
+                                   ArrayList<Spells>     spells,
+                                   ArrayList<Building>   buildings) {
+        syncBattleCards(troops, spells, buildings);
+        syncTowerImages(towers);
+    }
+
+    // ── Asset sync helpers ────────────────────────────────────────────────────
+
+    private void syncBattleCards(ArrayList<TroopsCard> troops,
+                                 ArrayList<Spells>     spells,
+                                 ArrayList<Building>   buildings) {
         for (ImageView asset : battleCards) {
-            TroopsCard oldCard;
-            Tower oldTower;
-
-            if (asset.getUserData() instanceof TroopsCard) {
-                oldCard = (TroopsCard) asset.getUserData();
-                for (TroopsCard card : existingTroops) {
-                    if (card.getUuid().equals(oldCard.getUuid())) {
-                        if (!card.isAlive()) {
-                            asset.setImage(null);
-                            asset.setUserData(null);
-                            System.out.println("Dead Troop Image Removed");
-                        } else {
-                            asset.setX(card.getCenterPositionX() - (float) TROOPS_SIZE / 2);
-                            asset.setY(card.getCenterPositionY() - (float) TROOPS_SIZE / 2);
-                            asset.setUserData(card);
-                        }
-                    }
-                }
-            } else if (asset.getUserData() instanceof Spells) {
-                for (Spells spell : existingSpells) {
-                    if (spell.equals(asset.getUserData()) && !spell.isAlive()) {
-                        asset.setImage(null);
-                    }
-                }
-            }
-              else if (asset.getUserData() instanceof Building){
-                for (Building building : existingBuilding) {
-                    if (building.equals(asset.getUserData()) && !(building.isAlive())) {
-                        asset.setImage(null);
-                    }
-                }
-            }
-        }
-
-        for (Tower tower : existingTowers) {
-            if (!tower.isAlive()) {
-                switch (tower.getTitle()) {
-                    case "userKingTower" -> userKing.setImage(null);
-                    case "userRightQueenTower" -> userRightQueen.setImage(null);
-                    case "userLeftQueenTower" -> userLeftQueen.setImage(null);
-                    case "botKingTower" -> botKing.setImage(null);
-                    case "botLeftQueenTower" -> botLeftQueen.setImage(null);
-                    case "botRightQueenTower" -> botRightQueen.setImage(null);
-                }
-            }
-
-        }
-    }
-
-
-    //---------------------------------------------------------------------------------------------------------
-    //---------------------------------------------------------------------------------------------------------
-    //-----------------------------------------Helper Methods--------------------------------------------------
-    //---------------------------------------------------------------------------------------------------------
-    //---------------------------------------------------------------------------------------------------------
-
-    private void reverseQueue() {
-        Stack<Card> stack = new Stack<>();
-        while (!cardsQue.isEmpty()) {
-            stack.add(cardsQue.peek());
-            cardsQue.remove();
-        }
-        while (!stack.isEmpty()) {
-            cardsQue.add(stack.peek());
-            stack.pop();
-        }
-    }
-
-    private void removeCardFromQue(Card card) {
-        System.out.println("New Queue");
-        for (Card card2 : cardsQue) {
-            System.out.println(card2.getTitle());
-        }
-        Queue<Card> temp = new LinkedList<>();
-        for (Card card1 : cardsQue) {
-            if (!card1.getTitle().equals(card.getTitle()))
-                temp.add(card1);
-        }
-        cardsQue = temp;
-
-        reverseQueue();
-        cardsQue.add(card);
-
-    }
-
-    /**
-     * @param title title of requested image
-     * @return an image of card with elixir cost attached
-     */
-    private Image getCardImageByTitle(String title) {
-        return switch (title) {
-            case "cannon" -> new Image(getClass().getResourceAsStream("../resources/cardsWithLabel/cannon.png"));
-            case "infernoTower" -> new Image(getClass().getResourceAsStream("../resources/cardsWithLabel/inferno-tower.png"));
-            case "arrows" -> new Image(getClass().getResourceAsStream("../resources/cardsWithLabel/arrows.png"));
-            case "fireball" -> new Image(getClass().getResourceAsStream("../resources/thumbCards/thumbfireball.png"));
-            case "rage" -> new Image(getClass().getResourceAsStream("../resources/cardsWithLabel/rage.png"));
-            case "archer" -> new Image(getClass().getResourceAsStream("../resources/cardsWithLabel/archers.png"));
-            case "babyDragon" -> new Image(getClass().getResourceAsStream("../resources/cardsWithLabel/baby-dragon.png"));
-            case "barbarian" -> new Image(getClass().getResourceAsStream("../resources/cardsWithLabel/barbarians.png"));
-            case "giant" -> new Image(getClass().getResourceAsStream("../resources/cardsWithLabel/giant.png"));
-            case "miniPEKKA" -> new Image(getClass().getResourceAsStream("../resources/cardsWithLabel/mini-pekka.png"));
-            case "valkyrie" -> new Image(getClass().getResourceAsStream("../resources/cardsWithLabel/valkyrie.png"));
-            case "wizard" -> new Image(getClass().getResourceAsStream("../resources/cardsWithLabel/wizard.png"));
-            default -> null;
-        };
-    }
-
-
-    //---------------------------------------------------------------------------------------------------------
-    //---------------------------------------------------------------------------------------------------------
-    //---------------------------------------Getters And Setters-----------------------------------------------
-    //---------------------------------------------------------------------------------------------------------
-    //---------------------------------------------------------------------------------------------------------
-
-    /**
-     * Gets chosen card index.
-     *
-     * @return the chosen card index
-     */
-    public int getChosenCardIndex() {
-        return chosenCardIndex;
-    }
-
-    /**
-     * Sets chosen card index.
-     *
-     * @param chosenCardIndex the chosen card index
-     */
-    public void setChosenCardIndex(int chosenCardIndex) {
-        this.chosenCardIndex = chosenCardIndex;
-    }
-
-    public void setTextTime(Label textTime) {
-        this.textTime = textTime;
-        flag = 0;
-    }
-
-    public void setUserElixir(Label userElixir) {
-        this.userElixir = userElixir;
-    }
-
-    public void setBotElixir(Label botElixir) {
-        this.botElixir = botElixir;
-    }
-
-    public void setBotCrown(Label botCrown) {
-        this.botCrown = botCrown;
-    }
-
-    public void setPlayerCrown(Label playerCrown) {
-        this.playerCrown = playerCrown;
-    }
-
-    public void setArenaTowers(ArrayList<Tower> arenaTowers) {
-        this.arenaTowers = arenaTowers;
-        for (Tower tower : arenaTowers) {
-            switch (tower.getTitle()) {
-                case "userKingTower" -> userKing.setUserData(tower);
-                case "userRightQueenTower" -> userRightQueen.setUserData(tower);
-                case "userLeftQueenTower" -> userLeftQueen.setUserData(tower);
-                case "botKingTower" -> botKing.setUserData(tower);
-                case "botLeftQueenTower" -> botLeftQueen.setUserData(tower);
-                case "botRightQueenTower" -> botRightQueen.setUserData(tower);
+            Object data = asset.getUserData();
+            if (data instanceof TroopsCard tc) {
+                syncTroop(asset, tc, troops);
+            } else if (data instanceof Spells s) {
+                if (spells.stream().anyMatch(sp -> sp.equals(s) && !sp.isAlive())) asset.setImage(null);
+            } else if (data instanceof Building b) {
+                if (buildings.stream().anyMatch(bld -> bld.equals(b) && !bld.isAlive())) asset.setImage(null);
             }
         }
     }
 
-    public void updateCrown(String botCrown2, String playerCrown2) {
-        botCrown.setText(botCrown2);
-        playerCrown.setText(playerCrown2);
+    private void syncTroop(ImageView asset, TroopsCard old, ArrayList<TroopsCard> troops) {
+        for (TroopsCard current : troops) {
+            if (!current.getUuid().equals(old.getUuid())) continue;
+            if (!current.isAlive()) {
+                asset.setImage(null);
+                asset.setUserData(null);
+            } else {
+                asset.setX(current.getCenterPositionX() - (float) TROOPS_SIZE / 2);
+                asset.setY(current.getCenterPositionY() - (float) TROOPS_SIZE / 2);
+                asset.setUserData(current);
+            }
+            break;
+        }
     }
 
-    public LeftTime getLeftTime() {
-        return leftTime;
+    private void syncTowerImages(ArrayList<Tower> towers) {
+        for (Tower tower : towers) {
+            if (tower.isAlive()) continue;
+            ImageView iv = switch (tower.getTitle()) {
+                case "userKingTower"       -> userKing;
+                case "userRightQueenTower" -> userRightQueen;
+                case "userLeftQueenTower"  -> userLeftQueen;
+                case "botKingTower"        -> botKing;
+                case "botLeftQueenTower"   -> botLeftQueen;
+                case "botRightQueenTower"  -> botRightQueen;
+                default                   -> null;
+            };
+            if (iv != null) iv.setImage(null);
+        }
+    }
+
+    // ── Getters / setters ─────────────────────────────────────────────────────
+
+    public LeftTime getLeftTime()             { return leftTime; }
+    public int      getChosenCardIndex()      { return chosenCardIndex; }
+    public void     setChosenCardIndex(int i) { this.chosenCardIndex = i; }
+
+    public void setTextTime(Label l)   { this.textTime = l; timerFrames = 0; }
+    public void setUserElixir(Label l) { this.userElixir = l; }
+    public void setBotElixir(Label l)  { this.botElixir  = l; }
+    public void setBotCrown(Label l)   { this.botCrown   = l; }
+    public void setPlayerCrown(Label l){ this.playerCrown = l; }
+
+    public void setArenaTowers(ArrayList<Tower> towers) {
+        this.arenaTowers = towers;
+        for (Tower t : towers) {
+            ImageView iv = switch (t.getTitle()) {
+                case "userKingTower"       -> userKing;
+                case "userRightQueenTower" -> userRightQueen;
+                case "userLeftQueenTower"  -> userLeftQueen;
+                case "botKingTower"        -> botKing;
+                case "botLeftQueenTower"   -> botLeftQueen;
+                case "botRightQueenTower"  -> botRightQueen;
+                default                   -> null;
+            };
+            if (iv != null) iv.setUserData(t);
+        }
     }
 }
